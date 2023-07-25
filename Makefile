@@ -1,4 +1,8 @@
-all: build_x
+all: start
+
+start:
+	npm start
+
 
 build_x:
 	npm run build
@@ -8,3 +12,7 @@ build_x:
 run:
 	make build_x
 	serve -s /data/workspace/mycube-ui/build
+
+run_go:
+	make build_x
+	go run main.go 3000

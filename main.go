@@ -7,6 +7,9 @@
 package main
 
 import (
+	"fmt"
+	"os"
+
 	"github.com/gin-gonic/gin"
 )
 
@@ -20,5 +23,5 @@ func main() {
 	})
 
 	// Start and run the server
-	router.Run(":3000")
+	router.Run(fmt.Sprintf(":%s", os.Args[1]))
 }
