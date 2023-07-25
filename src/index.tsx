@@ -3,19 +3,18 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import './css/best.css'
 
 // index
-import React, {Component} from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom/client';
 import {BrowserRouter, NavLink, Route, Routes} from "react-router-dom";
 import Home from "./pages/Home";
 import About from "./pages/about/About";
 import Best from "./pages/best/Best";
 import Sor from "./pages/best/Sor";
-import Contest from "./pages/contest/Contest";
 import Player from "./pages/player/Player";
 import Players from "./pages/players/Players";
 import Admin from "./pages/admin/admin";
 import Contests from "./pages/contests/Contests";
-import asyncComponent from "./components/async";
+import ContestPage from "./pages/contest/Contest";
 
 const root = ReactDOM.createRoot(
     document.getElementById('root') as HTMLElement
@@ -36,7 +35,7 @@ root.render(
             <Route path="/about" Component={About}/> {/*关于*/}
             <Route path="/best" Component={Best}/> {/*最佳成绩汇总*/}
             <Route path="/sor" Component={Sor}/> {/*最佳成绩汇总*/}
-            <Route path="/contest" Component={Contest}/> {/*比赛*/}
+            <Route path="/contest" Component={ContestPage}/> {/*比赛*/}
             <Route path="/contests" Component={Contests}/>{/*比赛列表*/}
             <Route path="/player" Component={Player}/>{/*玩家*/}
             <Route path="/players" Component={Players}/>{/*玩家列表*/}

@@ -27,10 +27,11 @@ export enum Project {
 export type Contest = {
     ID: number;
     Name: string;
-    Description: string | null;
+    IsEnd: boolean;
+    Description: string;
     RoundIdsVal: number[] | null;
-    StartTime: string | null;
-    EndTime: string | null;
+    StartTime: string ;
+    EndTime: string;
 }
 
 export type Round = {
@@ -85,6 +86,17 @@ export type Record = {
 }
 
 
+export type RoutesScores = {
+    Round: Round;
+    Scores: Score[];
+}
+
+export type SorScore = {
+    Player: Player;
+    SingleCount: number;
+    AvgCount: number;
+}
+
 // resp
 export type GetContestsResponseContest = {
     Contest: Contest;
@@ -114,4 +126,13 @@ export type GetTokenResponse = {
 export type GetBestScoreResponse = {
     BestSingle: Map<Project, Score>;
     BestAvg: Map<Project, Score>;
+}
+
+export type GetContestSorResponse = {
+    Single: SorScore[];
+    Avg: SorScore[];
+}
+
+export type GetContestScore = {
+    Scores: Map<Project, RoutesScores[]>
 }
