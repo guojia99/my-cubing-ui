@@ -1,7 +1,6 @@
-import axios from "axios";
+import axios from 'axios';
 import Cookies from 'js-cookie';
 import {Contest, GetBestScoreResponse, GetContestScore, GetContestSorResponse, GetContestsResponse, GetTokenResponse, PlayersResponse, ProjectMap} from './api_model';
-import contest from "../../pages/contest/Contest";
 
 
 export class apiCore {
@@ -27,8 +26,8 @@ export class apiCore {
         return result.data
     }
 
-    async GetContests(): Promise<GetContestsResponse> {
-        let uri = this.uri + "/contest"
+    async GetContests(page: number, size: number): Promise<GetContestsResponse> {
+        let uri = this.uri + "/contest?page=" + page + "&size=" + size
         const result = await axios.get(uri, {headers: {Accept: 'application/json'}})
         return result.data
     }

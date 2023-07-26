@@ -29,6 +29,7 @@ export type Contest = {
     Name: string;
     IsEnd: boolean;
     Description: string;
+    Type: string;
     RoundIdsVal: number[] | null;
     StartTime: string ;
     EndTime: string;

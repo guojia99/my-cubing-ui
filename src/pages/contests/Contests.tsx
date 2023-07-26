@@ -1,7 +1,9 @@
 import React from 'react';
 import {API} from "../../components/api/api";
-import {GetContestsResponse, Contest, GetContestsResponseContest} from "../../components/api/api_model";
+import {GetContestsResponse, GetContestsResponseContest} from "../../components/api/api_model";
 import {Link} from "react-router-dom";
+import {GetLocationQueryParams} from "../../components/utils/utils";
+import {PageNav, PageNavValue} from "../../components/utils/page";
 
 
 class Contests extends React.Component {
@@ -10,21 +12,51 @@ class Contests extends React.Component {
     }
 
     componentDidMount() {
-        API.GetContests().then(value => {
+        const query = GetLocationQueryParams()
+        const page = isNaN(Number(query['page'])) ? 1 : Number(query['page'])
+        const size = isNaN(Number(query['size'])) ? 20 : Number(query['size'])
+
+        API.GetContests(page, size).then(value => {
             this.setState({data: value})
         })
     }
 
-
     render() {
-        if (this.state.data === null) {
-            return (<div></div>)
+        return this.renderPage()
+    }
+
+
+    private contestTrBody(c: GetContestsResponseContest) {
+        let status = "进行中"
+        if (c.Contest.IsEnd) {
+            status = "已结束"
         }
 
-        let data = this.state.data as GetContestsResponse
-        console.log(data)
+        function convertDateString(input: string): string {
+            const inputDate = new Date(input);
+            const year = inputDate.getFullYear();
+
+            if (year < 2000) {
+                return '-';
+            }
+            const month = inputDate.getMonth() + 1;
+            const date = inputDate.getDate();
+            return `${year}年${month}月${date}号`;
+        }
 
 
+        return (
+            <tr>
+                <td scope="col">{convertDateString(c.Contest.StartTime)}</td>
+                <td scope="col">{convertDateString(c.Contest.EndTime)}</td>
+                <td scope="col">{c.Contest.Name}</td>
+                <td scope="col">{status}</td>
+                <th scope="col"><Link to={"/contest?id=" + c.Contest.ID} className={"btn btn-success btn-sm"}>前往</Link></th>
+            </tr>
+        )
+    }
+
+    private renderTable(data: GetContestsResponse) {
         return (
             <table className="table text-center table-striped table-hover">
                 <thead>
@@ -37,45 +69,47 @@ class Contests extends React.Component {
                 </tr>
                 </thead>
                 <tbody>
-                {data.Contests.map(item => (
-                    contest(item)
-                ))}
+                {data.Contests.map(item => (this.contestTrBody(item)))}
                 </tbody>
             </table>
         )
     }
-}
 
-function contest(c: GetContestsResponseContest) {
-    let status = "进行中"
-    if (c.Contest.IsEnd){
-        status = "已结束"
+
+    private readerPageNav() {
+        if (this.state.data === null) {
+             return (<div></div>)
+        }
+        const query = GetLocationQueryParams()
+        const page = isNaN(Number(query['page'])) ? 1 : Number(query['page'])
+        const size = isNaN(Number(query['size'])) ? 20 : Number(query['size'])
+
+        const p: PageNavValue = {
+            Id: "contests_page",
+            Count: 103,
+            CurPage: page,
+            Size: 20,
+            Link: "/contests",
+        }
+        return PageNav(p)
     }
 
-    return (
-        <tr>
-            <th scope="col">{convertDateString(c.Contest.StartTime)}</th>
-            <th scope="col">{convertDateString(c.Contest.EndTime)}</th>
-            <th scope="col">{c.Contest.Name}</th>
-            <th scope="col">{status}</th>
-            <th scope="col"><Link to={"/contest?id=" + c.Contest.ID} className={"btn btn-success btn-sm"}>前往</Link></th>
-        </tr>
-    )
-}
 
-function convertDateString(input: string): string {
-    const inputDate = new Date(input);
-    const year = inputDate.getFullYear();
+    private renderPage() {
+        if (this.state.data === null) {
+            return (<div></div>)
+        }
 
-    if (year < 2000) {
-        return '-';
+        let data = this.state.data as GetContestsResponse
+        return (
+            <div>
+                {this.renderTable(data)}
+                {this.readerPageNav()}
+            </div>
+        )
     }
 
-    const month = inputDate.getMonth() + 1;
-    const date = inputDate.getDate();
 
-    return `${year}年${month}月${date}号`;
 }
-
 
 export default Contests;
