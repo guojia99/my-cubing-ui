@@ -57,7 +57,7 @@ export const TabNav = (tb: TabNavsValue) => {
 export const TabNavsHorizontal = (tb: TabNavsValue) => {
     return (
         <div className="d-flex">
-            <div className="nav nav-tabs flex-column nav-pills col-lg-2" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+            <div className="nav nav-tabs flex-column nav-pills col-3 col-lg-1" id="v-pills-tab" role="tablist" aria-orientation="vertical">
                 {Array.from(Array(tb.Pages.length), (e, i) => {
                     const active = i === 0 ? "active" : ""
                     return (
@@ -74,7 +74,7 @@ export const TabNavsHorizontal = (tb: TabNavsValue) => {
                     )
                 })}
             </div>
-            <div className="tab-content flex-column col-9" style={{paddingLeft: "10px"}}>
+            <div className="tab-content flex-column col-9 col-lg-11" style={{paddingLeft: "10px"}}>
                 {Array.from(Array(tb.Pages.length), (e, i) => {
                     const active = i === 0 ? "active" : ""
                     return (

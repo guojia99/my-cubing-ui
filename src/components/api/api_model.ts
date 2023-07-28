@@ -1,27 +1,4 @@
-import {MapHTMLAttributes} from "react";
-import Sor from "../../pages/Sor";
-
-export enum Project {
-    Cube222 = 1,
-    Cube333,
-    Cube444,
-    Cube555,
-    Cube666,
-    Cube777,
-    CubeSk,
-    CubePy,
-    CubeSq1,
-    CubeMinx,
-    CubeClock,
-    Cube333OH,
-    Cube333FM,
-    Cube333BF,
-    Cube444BF,
-    Cube555BF,
-    Cube333MBF,
-    JuBaoHaoHao,
-    OtherCola
-}
+import {Cubes} from "../cube/cube";
 
 
 export type Contest = {
@@ -31,14 +8,14 @@ export type Contest = {
     Description: string;
     Type: string;
     RoundIdsVal: number[] | null;
-    StartTime: string ;
+    StartTime: string;
     EndTime: string;
 }
 
 export type Round = {
     ID: number;
     ContestID: number;
-    Project: Project;
+    Project: Cubes;
     Number: number;
     Name: string;
     Final: boolean;
@@ -58,7 +35,7 @@ export type Score = {
     PlayerName: string;
     ContestID: number;
     RouteID: number;
-    Project: Project;
+    Project: Cubes;
     R1: number;
     R2: number;
     R3: number;
@@ -110,9 +87,9 @@ export type GetContestsResponse = {
 }
 
 export type ProjectMap = {
-    Projects: Project[];
-    En: Map<Project, string>;
-    Cn: Map<Project, string>;
+    Projects: Cubes[];
+    En: any; // Map<Cubes, string>
+    Cn: any; // Map<Cubes, string>
 }
 
 export type PlayersResponse = {
@@ -125,8 +102,8 @@ export type GetTokenResponse = {
 }
 
 export type GetBestScoreResponse = {
-    BestSingle: Map<Project, Score>;
-    BestAvg: Map<Project, Score>;
+    BestSingle: any; // Map<Cubes, Score>
+    BestAvg: any; // Map<Cubes, Score>
 }
 
 export type GetContestSorResponse = {
@@ -134,6 +111,13 @@ export type GetContestSorResponse = {
     Avg: SorScore[];
 }
 
-export type GetContestScore = {
-    Scores: Map<Project, RoutesScores[]>
+export type GetContestScoreResponse = {
+    Scores: any; //  Map<Project, RoutesScores[]>
+}
+
+export type ContestRecord = {
+    Record: Record;
+    Player: Player;
+    Score: Score;
+    Contest: Contest;
 }

@@ -47,11 +47,11 @@ class Contests extends React.Component {
 
         return (
             <tr>
-                <td scope="col">{convertDateString(c.Contest.StartTime)}</td>
-                <td scope="col">{convertDateString(c.Contest.EndTime)}</td>
-                <td scope="col">{c.Contest.Name}</td>
-                <td scope="col">{status}</td>
-                <th scope="col"><Link to={"/contest?id=" + c.Contest.ID} className={"btn btn-success btn-sm"}>前往</Link></th>
+                <td>{convertDateString(c.Contest.StartTime)}</td>
+                <td>{convertDateString(c.Contest.EndTime)}</td>
+                <td>{c.Contest.Name}</td>
+                <td>{status}</td>
+                <th><Link to={"/contest?id=" + c.Contest.ID} className={"btn btn-success btn-sm"}>前往</Link></th>
             </tr>
         )
     }
@@ -75,20 +75,19 @@ class Contests extends React.Component {
         )
     }
 
-
     private readerPageNav() {
         if (this.state.data === null) {
              return (<div></div>)
         }
         const query = GetLocationQueryParams()
         const page = isNaN(Number(query['page'])) ? 1 : Number(query['page'])
-        const size = isNaN(Number(query['size'])) ? 20 : Number(query['size'])
 
+        const resp = this.state.data as GetContestsResponse
         const p: PageNavValue = {
             Id: "contests_page",
-            Count: 103,
+            Count: resp.Count,
             CurPage: page,
-            Size: 20,
+            Size: resp.Size,
             Link: "/contests",
         }
         return PageNav(p)

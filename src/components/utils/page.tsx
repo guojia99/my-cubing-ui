@@ -25,8 +25,7 @@ export const PageNav = (p: PageNavValue) => {
         // Middle elements
         const maxDisplayedPages = 7;
         let startPage = Math.max(1, CurPage - Math.floor(maxDisplayedPages / 2));
-        let endPage = Math.min(Count, startPage + maxDisplayedPages - 1);
-        console.log(CurPage, endPage, lastPage)
+        let endPage = Math.min(lastPage, startPage + maxDisplayedPages - 1);
 
         if (endPage - startPage < maxDisplayedPages - 1) {
             startPage = Math.max(1, endPage - maxDisplayedPages + 1);
@@ -34,9 +33,7 @@ export const PageNav = (p: PageNavValue) => {
 
         for (let i = startPage; i <= endPage; i++) {
             if (i <= lastPage) {
-                paginationItems.push(
-                    <Pagination.Item key={`${Id}-page-${i}`} active={i === CurPage} href={`${Link}?page=${i}`}>{i}</Pagination.Item>
-                );
+                paginationItems.push(<Pagination.Item key={`${Id}-page-${i}`} active={i === CurPage} href={`${Link}?page=${i}`}>{i}</Pagination.Item>);
             }
         }
 

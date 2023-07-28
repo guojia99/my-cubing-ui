@@ -1,6 +1,16 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
-import {Contest, GetBestScoreResponse, GetContestScore, GetContestSorResponse, GetContestsResponse, GetTokenResponse, PlayersResponse, ProjectMap} from './api_model';
+import {
+    Contest,
+    ContestRecord,
+    GetBestScoreResponse,
+    GetContestScoreResponse,
+    GetContestSorResponse,
+    GetContestsResponse,
+    GetTokenResponse,
+    PlayersResponse,
+    ProjectMap
+} from './api_model';
 
 
 export class apiCore {
@@ -67,8 +77,15 @@ export class apiCore {
         return result.data
     }
 
-    async GetContestScore(contestID: number): Promise<GetContestScore> {
+    async GetContestScore(contestID: number): Promise<GetContestScoreResponse> {
         let uri = this.uri + "/report/contest/" + contestID + "/score"
+        const result = await axios.get(uri, {headers: {Accept: 'application/json'}})
+        return result.data
+    }
+
+    async GetContestRecord(contestID: number): Promise<ContestRecord[]>{
+        let uri = this.uri + "/report/contest/" + contestID + "/record"
+        console.log()
         const result = await axios.get(uri, {headers: {Accept: 'application/json'}})
         return result.data
     }

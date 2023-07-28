@@ -6,3 +6,8 @@ a{
 h1{
     margin-bottom: 30px;
 }
+
+.accordion-button:not(.collapsed){
+    color: #ffffff;
+    background-color: #47606b;
+}
