@@ -1,4 +1,4 @@
-import {Cubes} from "../cube/cube";
+import {Cubes} from "../cube/score/cube";
 
 
 export type Contest = {
@@ -120,4 +120,16 @@ export type ContestRecord = {
     Player: Player;
     Score: Score;
     Contest: Contest;
+}
+
+export type ContestPodiums = {
+    Player: Player;
+    Gold: number;
+    Silver: number;
+    Bronze: number;
+}
+
+export type GetContestResponse = {
+    Contest: Contest;
+    Rounds: Round[];
 }

@@ -1,8 +1,10 @@
-import {ContestRecord, Score} from "../api/api_model";
+import './tables.css'
+
+import {ContestRecord, Score} from "../../api/api_model";
 import {Cubes} from "./cube";
 import {Link} from "react-router-dom";
 import {FormatTime} from "./cube_timeformat";
-import {Record, SelfBestRecord} from "./cube_record";
+import {PR_And_GR_Record} from "./cube_record";
 
 export const CubeScoresTable = (pj: Cubes, Scores: Score[], records: ContestRecord[]) => {
     const cubeHandlers: { [_ in Cubes]: (pj: Cubes, Scores: Score[], records: Map<string, ContestRecord>) => JSX.Element } = {
@@ -84,11 +86,11 @@ const DefaultResultCubeScoresTable = (pj: Cubes, Scores: Score[], records: Map<s
             }
 
             items.push(
-                <tr>
-                    <td>{i + 1}</td>
+                <tr className={i < 3 ? "table-success" : ""}>
+                    <td className="idxTd">{i + 1}</td>
                     <td><Link to={"/player?id=" + score.PlayerID}>{score.PlayerName}</Link></td>
-                    <td>{FormatTime(score.Best, pj)}{SelfBestRecord(score.IsBestSingle)}{Record(isSingleBestRecord)}</td>
-                    <td>{FormatTime(score.Avg, Cubes.Cube333)}{SelfBestRecord(score.IsBestAvg)}{Record(isAvgBestRecord)}</td>
+                    <td>{PR_And_GR_Record(score.IsBestSingle, isSingleBestRecord)}{FormatTime(score.Best, pj)}</td>
+                    <td>{PR_And_GR_Record(score.IsBestAvg, isAvgBestRecord)}{FormatTime(score.Avg, Cubes.Cube333)}</td>
                     <td>{FormatTime(score.R1, pj)}</td>
                     <td>{FormatTime(score.R2, pj)}</td>
                     <td>{FormatTime(score.R3, pj)}</td>
@@ -99,18 +101,20 @@ const DefaultResultCubeScoresTable = (pj: Cubes, Scores: Score[], records: Map<s
         return items
     }
     return (
-        <table className="table table-bordered table-striped table-hover">
-            <thead>
-            <tr>
-                <th>排名</th>
-                <th>选手</th>
-                <th>单次</th>
-                <th>平均</th>
-                <th colSpan={tdNum}>详情</th>
-            </tr>
-            </thead>
-            <tbody>{getItems()}</tbody>
-        </table>
+        <div style={{overflowX: "auto"}}>
+            <table className="table table-bordered table-striped table-hover text-center" style={{minWidth: "800px"}}>
+                <thead>
+                <tr>
+                    <th>排名</th>
+                    <th>选手</th>
+                    <th>单次</th>
+                    <th>平均</th>
+                    <th colSpan={tdNum} >详情</th>
+                </tr>
+                </thead>
+                <tbody>{getItems()}</tbody>
+            </table>
+        </div>
     )
 }
 
@@ -125,7 +129,7 @@ const MBFCube333ScoreTable = (pj: Cubes, Scores: Score[], records: Map<string, C
                 <tr>
                     <td>{i + 1}</td>
                     <td><Link to={"/player?id=" + score.PlayerID}>{score.PlayerName}</Link></td>
-                    <td>{FormatTime(score.R2 - score.R1, pj)}{SelfBestRecord(score.IsBestSingle)}{Record(isSingleBestRecord)}</td>
+                    <td>{FormatTime(score.R1 - score.R2, pj)} ({score.R1} / {score.R2}){PR_And_GR_Record(score.IsBestSingle, isSingleBestRecord)}</td>
                     <td>{FormatTime(score.R1, pj)}</td>
                     <td>{FormatTime(score.R2, pj)}</td>
                     <td>{FormatTime(score.R3, Cubes.Cube333)}</td>

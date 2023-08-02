@@ -1,0 +1,8 @@
+.idxTd{
+    width: 2em;
+    max-width: 3em;
+}
+
+td {
+    min-width: 5em;
+}

@@ -15,11 +15,11 @@ import Players from "./pages/players/Players";
 import Admin from "./pages/admin/admin";
 import Contests from "./pages/contests/Contests";
 import ContestPage from "./pages/contest/Contest";
+import Debug from "./pages/debug/debug";
 
 const root = ReactDOM.createRoot(
     document.getElementById('root') as HTMLElement
 );
-
 root.render(
     <BrowserRouter>
         <ul className="nav nav-underline" style={{marginBottom: '20px'}}>
@@ -40,7 +40,7 @@ root.render(
             <Route path="/player" Component={Player}/>{/*玩家*/}
             <Route path="/players" Component={Players}/>{/*玩家列表*/}
             <Route path="/xadmin" Component={Admin}/>
-
+            <Route path="/debug" Component={Debug}/>
         </Routes>
     </BrowserRouter>
 );

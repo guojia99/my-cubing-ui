@@ -1,5 +1,5 @@
 import {apiCore, authApiCore} from "./api_core";
-import {Cubes} from "../cube/cube";
+import {Cubes} from "../cube/score/cube";
 
 
 function getAPIUrl() {

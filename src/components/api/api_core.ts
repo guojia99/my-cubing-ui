@@ -1,9 +1,9 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import {
-    Contest,
+    ContestPodiums,
     ContestRecord,
-    GetBestScoreResponse,
+    GetBestScoreResponse, GetContestResponse,
     GetContestScoreResponse,
     GetContestSorResponse,
     GetContestsResponse,
@@ -30,7 +30,7 @@ export class apiCore {
         }
     }
 
-    async GetContest(contestID: number):Promise<Contest>{
+    async GetContest(contestID: number):Promise<GetContestResponse>{
         let uri = this.uri + "/contest/" + contestID
         const result = await axios.get(uri, {headers: {Accept: 'application/json'}})
         return result.data
@@ -85,12 +85,14 @@ export class apiCore {
 
     async GetContestRecord(contestID: number): Promise<ContestRecord[]>{
         let uri = this.uri + "/report/contest/" + contestID + "/record"
-        console.log()
         const result = await axios.get(uri, {headers: {Accept: 'application/json'}})
         return result.data
     }
 
-    async GetContestPodium(contestID: number) {
+    async GetContestPodium(contestID: number): Promise<ContestPodiums[]> {
+        let uri = this.uri + "/report/contest/" + contestID + "/podium"
+        const result = await axios.get(uri, {headers: {Accept: 'application/json'}})
+        return result.data
     }
 
     async GetPlayerPodium(playerName: string) {
