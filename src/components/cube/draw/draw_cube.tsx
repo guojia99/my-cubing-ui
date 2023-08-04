@@ -1,16 +1,24 @@
 import {baseTurn, ParseScramble} from "./scramble";
 import {DrawPolygon} from "./utils";
-import {useEffect, useRef} from "react";
+import React, {JSX} from "react";
 
 class NumberCubeDrawerUtils {
     private colors = [
-        '#ffff00',
-        '#ffaa00',
-        '#0000ff',
-        '#ffffff',
-        '#ff0000',
-        '#00dd00'
+        '#ff0', // 实际是绿色
+        '#fa0', // 实际红色
+        '#00f', // 实际白色
+        '#fff', // 实际蓝色
+        '#f00', // 实际橙色
+        '#0d0' // 实际是黄色
     ]
+    // private colors = [
+    //     '#00dd00',
+    //     '#ff0000',
+    //     '#ffffff',
+    //     '#0000ff',
+    //     '#ffaa00',
+    //     '#ffff00'
+    // ]
 
     /**
      *  f: face, [ D L B U R F ]
@@ -63,8 +71,6 @@ class NumberCubeDrawerUtils {
                         f3 = s2 - 1 - d * size - i;
                         f4 = 4 * s2 + d + size * i;
                         break
-                    default:
-                        break
                 }
                 const c: number = posit[f1];
                 posit[f1] = posit[f2];
@@ -105,7 +111,7 @@ class NumberCubeDrawerUtils {
                 posit[cnt++] = i
             }
         }
-        const moves = ParseScramble(scramble, baseTurn)
+        const moves = ParseScramble(scramble, "DLBURF")
         for (let s = 0; s < moves.length; s++) {
             for (let d = 0; d < moves[s][1]; d++) {
                 posit = this.doSlice(posit, moves[s][0], d, moves[s][2], size)
@@ -174,7 +180,10 @@ class NumberCubeDrawerUtils {
     // seq: 打乱
     // width: 图像宽度
     draw(ctx: CanvasRenderingContext2D, size: number, seq: string, width: number) {
+        seq = seq || ''
+        // seq = "z2" + ' ' + seq
         const posit = this.genPosit(size, seq)
+        console.log(posit, seq)
         ctx.lineWidth = 0.5 + size / 2 // 阶数越大纹路加粗
         for (let i = 0; i < 6; i++) {
             this.drawFace(ctx, width, posit, size, i)
@@ -182,23 +191,30 @@ class NumberCubeDrawerUtils {
     }
 }
 
-export const DrawNumberCube = (id: string, size: number, imageWidth: number, seq: string) => {
+export const DrawNumberCubeCanvas = (size: number, imageWidth: number, seq: string) : HTMLCanvasElement => {
     const imgSize = (imageWidth / 100)
-
-    const canvasRef = useRef<HTMLCanvasElement>(null)
-    useEffect(() => {
-        const canvas = canvasRef.current as HTMLCanvasElement
-        let ctx = canvas.getContext('2d') as CanvasRenderingContext2D
-        const numberCubeDrawerUtils = new NumberCubeDrawerUtils()
-        numberCubeDrawerUtils.draw(ctx, size, seq, imageWidth)
-    }, [imageWidth, id, size, seq]);
-
     const canvasW = (39 * size / 9 + 0.2) * imageWidth
     const canvasH = (29 * size / 9 + 0.2) * imageWidth
+
+    // 初始化
+    const canvas: HTMLCanvasElement = document.createElement("canvas")
+    canvas.width = canvasW
+    canvas.height = canvasH
+    canvas.style.width = 39 * imgSize + "em"
+    canvas.style.height = 29 * imgSize + "em"
+
+    // 绘制
+    let ctx = canvas.getContext('2d') as CanvasRenderingContext2D
+    const numberCubeDrawerUtils = new NumberCubeDrawerUtils()
+    numberCubeDrawerUtils.draw(ctx, size, seq, imageWidth)
+
+    return canvas
+}
+
+
+export const DrawNumberCubeImage = (id: string, size: number, imageWidth: number, seq: string) : JSX.Element => {
+    const canvas = DrawNumberCubeCanvas(size, imageWidth, seq)
     return (
-        <canvas id={id} key={id} ref={canvasRef} defaultValue={seq}
-                width={canvasW} height={canvasH}
-                style={{width: 39 * imgSize + 'em', height: 29 * imgSize + 'em'}}>
-        </canvas>
+        <img src={canvas.toDataURL()} alt={id + ".jpeg"} id={id} key={id}/>
     )
 }

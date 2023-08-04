@@ -8,8 +8,9 @@ import {Contest, ContestPodiums, ContestRecord, GetContestResponse, GetContestSc
 import {Link} from "react-router-dom";
 import {TabNav, TabNavsHorizontal, TabNavsPage} from "../../components/utils/tabs";
 import {GetCubeIcon} from "../../components/cube/icon/cube_icon";
-import {Cubes} from "../../components/cube/score/cube";
-import {CubeScoresTable} from "../../components/cube/score/tabels";
+import {Cubes} from "../../components/cube/components/cube";
+import {CubeScoresTable} from "../../components/cube/components/cube_score_tabels";
+import {RoundTables} from "../../components/cube/components/rounds";
 
 class ContestPage extends React.Component {
     state = {
@@ -258,17 +259,6 @@ class ContestPage extends React.Component {
             roundMap.set(pj, oldRounds)
         }
 
-
-        const drawRoundTables = (pj: Cubes, round: Round[]) => {
-
-            // todo !!!!!!!!!!!!
-            // 1. 同一轮打乱放在一个地方
-            // 2. 打乱表格抽一个公共组件 -》 3轮的，3-2搭配， 5轮的 5-2搭配， 多盲， 有多少公式出多少
-
-            return <div>111</div>
-        }
-
-
         const drawRounds = (pj: Cubes, rounds: Round[]) => {
             // 分开每一轮的数据
             let roundNumberMap = new Map<number, Round[]>()
@@ -283,11 +273,11 @@ class ContestPage extends React.Component {
                 roundNumberMap.set(num, oldRounds)
             }
 
+
             // 循环
             const items: JSX.Element[] = []
             roundNumberMap.forEach((rs, id) => {
                 const rFirst = rs[0]
-                console.log(id, rs)
                 items.push(
                     <div className="accordion-item" key={"drawRounds_" + rFirst.ID + "_item"}>
                         <h2 className="accordion-header">
@@ -299,7 +289,7 @@ class ContestPage extends React.Component {
                         </h2>
                         <div id={"drawRounds_accordion-item-body" + rFirst.ID} className="accordion-collapse collapse show">
                             <div className="accordion-body">
-                                {drawRoundTables(pj, rs)}
+                                {RoundTables(rs)}
                             </div>
                         </div>
                     </div>

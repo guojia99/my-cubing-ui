@@ -1,4 +1,4 @@
-import {Cubes} from "../cube/score/cube";
+import {Cubes} from "../cube/components/cube";
 
 
 export type Contest = {
@@ -17,6 +17,7 @@ export type Round = {
     ContestID: number;
     Project: Cubes;
     Number: number;
+    Part: number;
     Name: string;
     Final: boolean;
     UpsetsVal: string[];

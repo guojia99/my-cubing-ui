@@ -1,4 +1,4 @@
-import './tables.css'
+import './cube_score_tables.css'
 
 import {ContestRecord, Score} from "../../api/api_model";
 import {Cubes} from "./cube";

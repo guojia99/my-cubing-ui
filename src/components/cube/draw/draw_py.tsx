@@ -1,9 +1,7 @@
 import {ParseScramble} from "./scramble";
 import {Circle, DrawPolygon, hsq3} from "./utils";
-import {useEffect, useRef} from "react";
-
-// import {Circle}  from  './utils_js'
-
+import React, {JSX} from "react";
+import {DrawNumberCubeCanvas} from "./draw_cube";
 class PyCubeDrawerUtils {
 
     private colors = [
@@ -84,26 +82,28 @@ class PyCubeDrawerUtils {
 }
 
 
-export const DrawPyCube = (id: string, imageWidth: number, seq: string) => {
-    const canvasRef = useRef<HTMLCanvasElement>(null)
-
-    useEffect(() => {
-        const canvas = canvasRef.current as HTMLCanvasElement
-        let ctx = canvas.getContext('2d') as CanvasRenderingContext2D
-
-        const pyCubeDrawerUtils = new PyCubeDrawerUtils()
-        pyCubeDrawerUtils.draw(ctx, seq, imageWidth)
-    }, [id, imageWidth, seq])
-
+export const DrawPyCubeCanvas = (imageWidth: number, seq: string):HTMLCanvasElement => {
     const imageSize = (imageWidth / 20)
-    const hsq3 = Math.sqrt(3) / 2;
     const canvasW = 7 * imageWidth
     const canvasH = 6.5 * hsq3 * imageWidth
 
+    const canvas: HTMLCanvasElement = document.createElement("canvas")
+    canvas.width = canvasW
+    canvas.height = canvasH
+    canvas.style.width = 7 * imageSize + 'em'
+    canvas.style.height = 6.5 * hsq3 * imageSize + 'em'
+
+
+    let ctx = canvas.getContext('2d') as CanvasRenderingContext2D
+    const pyCubeDrawerUtils = new PyCubeDrawerUtils()
+    pyCubeDrawerUtils.draw(ctx, seq, imageWidth)
+
+    return canvas
+}
+
+export const DrawPyCubeImage = (id: string, imageWidth: number, seq: string) => {
+    const canvas = DrawPyCubeCanvas(imageWidth, seq)
     return (
-        <canvas id={id} key={id} ref={canvasRef} defaultValue={seq}
-                width={canvasW} height={canvasH}
-                style={{width: 7 * imageSize + 'em', height: 6.5 * hsq3 * imageSize + 'em'}}>
-        </canvas>
+        <img src={canvas.toDataURL()} alt={id + ".jpeg"} id={id} key={id}/>
     )
 }

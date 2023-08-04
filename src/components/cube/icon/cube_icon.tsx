@@ -1,6 +1,6 @@
 import './cube_icon_base.css'
 import './cube_icon.css'
-import {Cubes} from "../score/cube"
+import {Cubes} from "../components/cube"
 
 
 
