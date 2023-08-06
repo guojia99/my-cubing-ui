@@ -1,7 +1,8 @@
 import {ParseScramble} from "./scramble";
 import {Circle, DrawPolygon, hsq3} from "./utils";
-import React, {JSX} from "react";
-import {DrawNumberCubeCanvas} from "./draw_cube";
+import React from "react";
+
+
 class PyCubeDrawerUtils {
 
     private colors = [
@@ -92,7 +93,6 @@ export const DrawPyCubeCanvas = (imageWidth: number, seq: string):HTMLCanvasElem
     canvas.height = canvasH
     canvas.style.width = 7 * imageSize + 'em'
     canvas.style.height = 6.5 * hsq3 * imageSize + 'em'
-
 
     let ctx = canvas.getContext('2d') as CanvasRenderingContext2D
     const pyCubeDrawerUtils = new PyCubeDrawerUtils()

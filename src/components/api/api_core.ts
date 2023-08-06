@@ -7,9 +7,8 @@ import {
     GetContestScoreResponse,
     GetContestSorResponse,
     GetContestsResponse,
-    GetTokenResponse,
+    GetTokenResponse, Player, PlayerBestScoreResponse,
     PlayersResponse,
-    ProjectMap
 } from './api_model';
 
 
@@ -20,46 +19,41 @@ export class apiCore {
         this.uri = uri;
     }
 
-    async GetProjectMap(): Promise<ProjectMap> {
-        try {
-            let uri = this.uri + "/project_map"
-            return await axios.get(uri, {headers: {Accept: 'application/json'}})
-        } catch (error) {
-            console.log('GetContest error' + error)
-            return {} as ProjectMap
-        }
-    }
-
     async GetContest(contestID: number):Promise<GetContestResponse>{
         let uri = this.uri + "/contest/" + contestID
         const result = await axios.get(uri, {headers: {Accept: 'application/json'}})
         return result.data
     }
 
-    async GetContests(page: number, size: number): Promise<GetContestsResponse> {
-        let uri = this.uri + "/contest?page=" + page + "&size=" + size
+
+    async GetPlayers(): Promise<PlayersResponse> {
+        let uri = this.uri + "/player"
         const result = await axios.get(uri, {headers: {Accept: 'application/json'}})
         return result.data
     }
 
-    async GetPlayers(): Promise<PlayersResponse> {
-        try {
-            let uri = this.uri + "/player"
-            return await axios.get(uri, {headers: {Accept: 'application/json'}})
-        } catch (error) {
-            console.log('GetPlayers error' + error)
-            return {} as PlayersResponse
-        }
+    async GetPlayer(id: number): Promise<Player>{
+        let uri = this.uri + "/player/" + id
+        const result = await axios.get(uri, {headers: {Accept: 'application/json'}})
+        return result.data
+    }
+
+    async GetPlayerBestScoreReport(id: number): Promise<PlayerBestScoreResponse>{
+        let uri = this.uri + "/report/player/" + id + "/best"
+        const result = await axios.get(uri, {headers: {Accept: 'application/json'}})
+        return result.data
+    }
+
+    async GetPlayerPodium(playerName: string) {
+    }
+
+    async GetPlayerScore(playerName: string) {
     }
 
     async GetBestScore(): Promise<GetBestScoreResponse> {
-        try {
-            let uri = this.uri + "/report/best/score"
-            return await axios.get(uri, {headers: {Accept: 'application/json'}})
-        } catch (error) {
-            console.log('GetBestScore error' + error)
-            return {} as GetBestScoreResponse
-        }
+        let uri = this.uri + "/report/best/score"
+        const result = await axios.get(uri, {headers: {Accept: 'application/json'}})
+        return result.data
     }
 
     async GetBestByAllScores() {
@@ -69,6 +63,13 @@ export class apiCore {
     }
 
     async GetBestPodium() {
+    }
+
+
+    async GetContests(page: number, size: number): Promise<GetContestsResponse> {
+        let uri = this.uri + "/contest?page=" + page + "&size=" + size
+        const result = await axios.get(uri, {headers: {Accept: 'application/json'}})
+        return result.data
     }
 
     async GetContestSor(contestID: number): Promise<GetContestSorResponse> {
@@ -93,12 +94,6 @@ export class apiCore {
         let uri = this.uri + "/report/contest/" + contestID + "/podium"
         const result = await axios.get(uri, {headers: {Accept: 'application/json'}})
         return result.data
-    }
-
-    async GetPlayerPodium(playerName: string) {
-    }
-
-    async GetPlayerScore(playerName: string) {
     }
 }
 

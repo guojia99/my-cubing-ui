@@ -28,6 +28,7 @@ export type Player = {
     Name: string;
     WcaID: string | null;
     ActualName: string | null;
+    TitlesVal: string[] ;
 }
 
 export type Score = {
@@ -66,7 +67,7 @@ export type Record = {
 
 
 export type RoutesScores = {
-    Round: Round;
+    Round: Round[];
     Scores: Score[];
 }
 
@@ -133,4 +134,14 @@ export type ContestPodiums = {
 export type GetContestResponse = {
     Contest: Contest;
     Rounds: Round[];
+}
+
+export type RankScore = {
+    Rank: number;
+    Score: Score;
+}
+
+export type PlayerBestScoreResponse = {
+    Best: any; // Map<Cubes, RankScore>
+    Avg: any; // Map<Cubes, RankScore>
 }

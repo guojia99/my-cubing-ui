@@ -2,11 +2,17 @@ import {Cubes} from "../components/cube";
 import {DrawNumberCubeImage} from "./draw_cube";
 import {JSX} from "react";
 import {DrawPyCubeImage} from "./draw_py";
+import {DrawSkCubeImage} from "./draw_skewb";
+import {DrawClockCubeImage} from "./draw_clock";
 
 
-export const DrawByCubeImage = (id: string, cube: Cubes,imageWidth: number, seq: string) :JSX.Element=> {
+export const DrawByCubeImage = (id: string, cube: Cubes, imageWidth: number, seq: string): JSX.Element => {
+    if (seq === undefined || seq === ""){
+        return <p>no cube {cube} image</p>
+    }
+
     // todo 其他项目
-    switch (cube){
+    switch (cube) {
         case Cubes.Cube222:
             return DrawNumberCubeImage(id, 2, imageWidth, seq)
         case Cubes.Cube333:
@@ -25,10 +31,12 @@ export const DrawByCubeImage = (id: string, cube: Cubes,imageWidth: number, seq:
             return DrawNumberCubeImage(id, 6, imageWidth, seq)
         case Cubes.Cube777:
             return DrawNumberCubeImage(id, 7, imageWidth, seq)
-        // case Cubes.CubeSk:
-        //     return DrawSkCube(id, imageWidth, seq)
+        case Cubes.CubeSk:
+            return DrawSkCubeImage(id, imageWidth, seq)
         case Cubes.CubePy:
             return DrawPyCubeImage(id, imageWidth, seq)
+        case Cubes.CubeClock:
+            return DrawClockCubeImage(id, imageWidth, seq)
     }
-    return <p>no cube image</p>
+    return <p>no cube {cube} image</p>
 }

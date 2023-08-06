@@ -183,7 +183,6 @@ class NumberCubeDrawerUtils {
         seq = seq || ''
         // seq = "z2" + ' ' + seq
         const posit = this.genPosit(size, seq)
-        console.log(posit, seq)
         ctx.lineWidth = 0.5 + size / 2 // 阶数越大纹路加粗
         for (let i = 0; i < 6; i++) {
             this.drawFace(ctx, width, posit, size, i)

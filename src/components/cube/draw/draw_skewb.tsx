@@ -1,6 +1,6 @@
 import {ParseScramble} from "./scramble";
 import {Circle, DrawPolygon, hsq3} from "./utils";
-import {useEffect, useRef} from "react";
+import React from "react";
 
 // import {Circle}  from  './utils_js'
 
@@ -19,32 +19,32 @@ export class SkCubeDrawerUtils {
         for (let p = 0; p < power; p++) {
             switch (axis) {
                 case 0: //R
-                   posit = Circle(posit, 2 * 5 + 0, 1 * 5 + 0, 3 * 5 + 0);
+                    posit = Circle(posit, 2 * 5 + 0, 1 * 5 + 0, 3 * 5 + 0);
                     posit = Circle(posit, 2 * 5 + 4, 1 * 5 + 3, 3 * 5 + 2);
-                    posit =Circle(posit, 2 * 5 + 2, 1 * 5 + 4, 3 * 5 + 1);
-                    posit =Circle(posit, 2 * 5 + 3, 1 * 5 + 1, 3 * 5 + 4);
+                    posit = Circle(posit, 2 * 5 + 2, 1 * 5 + 4, 3 * 5 + 1);
+                    posit = Circle(posit, 2 * 5 + 3, 1 * 5 + 1, 3 * 5 + 4);
                     posit = Circle(posit, 4 * 5 + 4, 0 * 5 + 4, 5 * 5 + 3);
                     break;
                 case 1: //U
-                    posit =Circle(posit, 0 * 5 + 0, 5 * 5 + 0, 1 * 5 + 0);
+                    posit = Circle(posit, 0 * 5 + 0, 5 * 5 + 0, 1 * 5 + 0);
                     posit = Circle(posit, 0 * 5 + 2, 5 * 5 + 1, 1 * 5 + 2);
-                    posit =  Circle(posit, 0 * 5 + 4, 5 * 5 + 2, 1 * 5 + 4);
+                    posit = Circle(posit, 0 * 5 + 4, 5 * 5 + 2, 1 * 5 + 4);
                     posit = Circle(posit, 0 * 5 + 1, 5 * 5 + 3, 1 * 5 + 1);
-                    posit =Circle(posit, 4 * 5 + 1, 3 * 5 + 4, 2 * 5 + 2);
+                    posit = Circle(posit, 4 * 5 + 1, 3 * 5 + 4, 2 * 5 + 2);
                     break;
                 case 2: //L
-                    posit =Circle(posit, 4 * 5 + 0, 3 * 5 + 0, 5 * 5 + 0);
+                    posit = Circle(posit, 4 * 5 + 0, 3 * 5 + 0, 5 * 5 + 0);
                     posit = Circle(posit, 4 * 5 + 3, 3 * 5 + 3, 5 * 5 + 4);
-                    posit =Circle(posit, 4 * 5 + 1, 3 * 5 + 1, 5 * 5 + 3);
-                    posit =Circle(posit, 4 * 5 + 4, 3 * 5 + 4, 5 * 5 + 2);
-                    posit =Circle(posit, 2 * 5 + 3, 1 * 5 + 4, 0 * 5 + 1);
+                    posit = Circle(posit, 4 * 5 + 1, 3 * 5 + 1, 5 * 5 + 3);
+                    posit = Circle(posit, 4 * 5 + 4, 3 * 5 + 4, 5 * 5 + 2);
+                    posit = Circle(posit, 2 * 5 + 3, 1 * 5 + 4, 0 * 5 + 1);
                     break;
                 case 3: //B
                     posit = Circle(posit, 1 * 5 + 0, 5 * 5 + 0, 3 * 5 + 0);
                     posit = Circle(posit, 1 * 5 + 4, 5 * 5 + 3, 3 * 5 + 4);
                     posit = Circle(posit, 1 * 5 + 3, 5 * 5 + 1, 3 * 5 + 3);
-                    posit =Circle(posit, 1 * 5 + 2, 5 * 5 + 4, 3 * 5 + 2);
-                    posit =Circle(posit, 0 * 5 + 2, 4 * 5 + 3, 2 * 5 + 4);
+                    posit = Circle(posit, 1 * 5 + 2, 5 * 5 + 4, 3 * 5 + 2);
+                    posit = Circle(posit, 0 * 5 + 2, 4 * 5 + 3, 2 * 5 + 4);
                     break;
             }
         }
@@ -88,29 +88,31 @@ export class SkCubeDrawerUtils {
 
     draw(ctx: CanvasRenderingContext2D, seq: string, width: number) {
         const posit = this.genPosit(seq)
-        for (let i = 0; i < 6; i++){
+        for (let i = 0; i < 6; i++) {
             this.drawFace(ctx, width, posit, i)
         }
     }
 }
 
-export const DrawSkCube = (id: string, imageWidth: number, seq: string) => {
-    const canvasRef = useRef<HTMLCanvasElement>(null)
-    useEffect(() => {
-        const canvas = canvasRef.current as HTMLCanvasElement
-        let ctx = canvas.getContext('2d') as CanvasRenderingContext2D
-        const pyCubeDrawerUtils = new SkCubeDrawerUtils()
-        pyCubeDrawerUtils.draw(ctx, seq, imageWidth)
-    }, [id, imageWidth, seq])
-
+export const DrawSkCubeCanvas = (imageWidth: number, seq: string): HTMLCanvasElement => {
     const imageSize = (imageWidth / 20)
     const canvasW = (8 * hsq3 + 0.3) * imageWidth + 1
-    const canvasH =  6.2 * imageWidth + 1
+    const canvasH = 6.2 * imageWidth + 1
+    const canvas: HTMLCanvasElement = document.createElement("canvas")
 
-    return (
-        <canvas id={id} key={id} ref={canvasRef} defaultValue={seq}
-                width={canvasW} height={canvasH}
-                style={{width: (8 * hsq3 + 0.3) * imageSize + 'em', height: 6.2 * imageSize + 'em'}}>
-        </canvas>
-    )
+    canvas.width = canvasW
+    canvas.height = canvasH
+    canvas.style.width = (8 * hsq3 + 0.3) * imageSize + 'em'
+    canvas.style.height = 6.2 * imageSize + 'em'
+
+    let ctx = canvas.getContext('2d') as CanvasRenderingContext2D
+    const pyCubeDrawerUtils = new SkCubeDrawerUtils()
+    pyCubeDrawerUtils.draw(ctx, seq, imageWidth)
+
+    return canvas
+}
+
+export const DrawSkCubeImage = (id: string, imageWidth: number, seq: string) => {
+    const canvas = DrawSkCubeCanvas(imageWidth, seq)
+    return ( <img src={canvas.toDataURL()} alt={id + ".jpeg"} id={id} key={id}/>)
 }

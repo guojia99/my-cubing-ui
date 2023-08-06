@@ -49,12 +49,12 @@ const RoundTable = (round: Round) => {
     }
 
     return (
-        <div style={{overflowX: "auto"}}>
+        <div style={{overflowX: "auto"}} key={round.ID + "round_table"}>
             <h5 style={{margin: "20px 0px"}}>{"打乱" + round.Part}</h5>
             <table className="table table-bordered table-striped table-hover text-center align-items-center"
                    style={{minWidth: "800px"}}>
                 <thead>
-                <tr>
+                <tr key={round.ID + "round_table_head_tr"}>
                     <th colSpan={1} style={{maxWidth: "1em"}}>序号</th>
                     <th colSpan={1}>打乱</th>
                     <th colSpan={1}>打乱图</th>

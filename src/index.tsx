@@ -10,12 +10,12 @@ import Home from "./pages/Home";
 import About from "./pages/about/About";
 import Best from "./pages/best/Best";
 import Sor from "./pages/best/Sor";
-import Player from "./pages/player/Player";
 import Players from "./pages/players/Players";
 import Admin from "./pages/admin/admin";
 import Contests from "./pages/contests/Contests";
 import ContestPage from "./pages/contest/Contest";
 import Debug from "./pages/debug/debug";
+import PlayerPage from "./pages/player/Player";
 
 const root = ReactDOM.createRoot(
     document.getElementById('root') as HTMLElement
@@ -37,7 +37,7 @@ root.render(
             <Route path="/sor" Component={Sor}/> {/*最佳成绩汇总*/}
             <Route path="/contest" Component={ContestPage}/> {/*比赛*/}
             <Route path="/contests" Component={Contests}/>{/*比赛列表*/}
-            <Route path="/player" Component={Player}/>{/*玩家*/}
+            <Route path="/player" Component={PlayerPage}/>{/*玩家*/}
             <Route path="/players" Component={Players}/>{/*玩家列表*/}
             <Route path="/xadmin" Component={Admin}/>
             <Route path="/debug" Component={Debug}/>

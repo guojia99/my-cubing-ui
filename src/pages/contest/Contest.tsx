@@ -4,13 +4,13 @@ import React, {JSX} from 'react';
 import {API, WCAProjectList} from "../../components/api/api";
 import {WaitGroup} from "../../components/utils/async";
 import {GetLocationQueryParams} from "../../components/utils/utils";
-import {Contest, ContestPodiums, ContestRecord, GetContestResponse, GetContestScoreResponse, GetContestSorResponse, Round, RoutesScores, SorScore} from "../../components/api/api_model";
+import { ContestPodiums, ContestRecord, GetContestResponse, GetContestScoreResponse, GetContestSorResponse, Round, RoutesScores, SorScore} from "../../components/api/api_model";
 import {Link} from "react-router-dom";
 import {TabNav, TabNavsHorizontal, TabNavsPage} from "../../components/utils/tabs";
 import {GetCubeIcon} from "../../components/cube/icon/cube_icon";
 import {Cubes} from "../../components/cube/components/cube";
 import {CubeScoresTable} from "../../components/cube/components/cube_score_tabels";
-import {RoundTables} from "../../components/cube/components/rounds";
+import {RoundTables} from "../../components/cube/components/cube_rounds";
 
 class ContestPage extends React.Component {
     state = {
@@ -150,26 +150,26 @@ class ContestPage extends React.Component {
 
 
         // 循环渲染每个项目
-        // todo !!!!!!!!!!!!!!!!!! 非常重要， 打乱number相同算同一个组
-        const drawRoutesScores = (pj: Cubes, score: RoutesScores[]) => {
+        const drawRoutesScores = (pj: Cubes, scores: RoutesScores[]) => {
             let items = [];
             const records = this.state.record as ContestRecord[]
-            for (let i = 0; i < score.length; i++) {
-                const routes = score[i]
+            for (let i = 0; i < scores.length; i++) {
+                const routes = scores[i]
                 if (routes === undefined) {
                     continue
                 }
 
+                const id = routes.Round[0].ID
                 items.push(
-                    <div className="accordion-item" key={"drawRoutesScores_" + routes.Round.ID + "_item"}>
+                    <div className="accordion-item" key={"drawRoutesScores_" + id+ "_item"}>
                         <h2 className="accordion-header">
                             <button className="accordion-button" type="button" data-bs-toggle="collapse"
-                                    data-bs-target={"#accordion-item-body" + routes.Round.ID} aria-expanded="true"
-                                    aria-controls={"accordion-item-body" + routes.Round.ID}>
-                                {routes.Round.Name}
+                                    data-bs-target={"#accordion-item-body" + id} aria-expanded="true"
+                                    aria-controls={"accordion-item-body" + id}>
+                                {routes.Round[0].Name}
                             </button>
                         </h2>
-                        <div id={"accordion-item-body" + routes.Round.ID} className="accordion-collapse collapse show">
+                        <div id={"accordion-item-body" + id} className="accordion-collapse collapse show">
                             <div className="accordion-body">
                                 {CubeScoresTable(pj, routes.Scores, records)}
                             </div>
@@ -320,6 +320,11 @@ class ContestPage extends React.Component {
     }
 
     render() {
+        const contest = this.state.contest as GetContestResponse
+        if (contest.Contest === undefined){
+            return <div></div>
+        }
+        document.title = contest.Contest.Name + " | 魔缘赛事系统"
         const pages: TabNavsPage[] = [
             {
                 Id: "tab_nav_score",
@@ -342,11 +347,9 @@ class ContestPage extends React.Component {
                 Page: this.readerRound(),
             },
         ]
-
-        const contest = this.state.contest as Contest
         return (
             <div>
-                <div><h1 className="text-center">{contest.Name}</h1></div>
+                <div><h1 className="text-center">{contest.Contest.Name}</h1></div>
                 <TabNavsHorizontal Id="contest_nav" SelectedKey="contest_tab" Pages={pages}/>
             </div>
         )
