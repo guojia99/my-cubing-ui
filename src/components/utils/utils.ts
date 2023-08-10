@@ -22,3 +22,12 @@ export function UpdateBrowserURL(key: string, value: string): void {
     const newURL = window.location.pathname + "?" + urlParams.toString();
     window.history.pushState({ path: newURL }, "", newURL);
 }
+
+export function IsSubPath(p: string) : boolean{
+    console.log(window.location.pathname, p)
+    return window.location.pathname.startsWith(p)
+}
+
+export function SetTitleName(name: string) {
+    document.title = name + "| 魔缘赛事系统"
+}

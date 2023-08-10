@@ -3,7 +3,7 @@ import './contest.css'
 import React, {JSX} from 'react';
 import {API, WCAProjectList} from "../../components/api/api";
 import {WaitGroup} from "../../components/utils/async";
-import {GetLocationQueryParams} from "../../components/utils/utils";
+import {GetLocationQueryParams, SetTitleName} from "../../components/utils/utils";
 import { ContestPodiums, ContestRecord, GetContestResponse, GetContestScoreResponse, GetContestSorResponse, Round, RoutesScores, SorScore} from "../../components/api/api_model";
 import {Link} from "react-router-dom";
 import {TabNav, TabNavsHorizontal, TabNavsPage} from "../../components/utils/tabs";
@@ -198,7 +198,7 @@ class ContestPage extends React.Component {
             })
         }
 
-        return (<><TabNav Id="constest_socre" SelectedKey="score_cubes" Pages={pages}/></>)
+        return (<TabNav Id="constest_socre" SelectedKey="score_cubes" Pages={pages}  Center={false}/>)
     }
 
     private readerPodiums() {
@@ -316,7 +316,7 @@ class ContestPage extends React.Component {
                 Page: drawRounds(pj, rounds),
             })
         }
-        return (<><TabNav Id="constest_round" SelectedKey="round_cubes" Pages={pages}/></>)
+        return (<><TabNav Id="constest_round" SelectedKey="round_cubes" Pages={pages} Center={false} /></>)
     }
 
     render() {
@@ -324,7 +324,8 @@ class ContestPage extends React.Component {
         if (contest.Contest === undefined){
             return <div></div>
         }
-        document.title = contest.Contest.Name + " | 魔缘赛事系统"
+        SetTitleName(contest.Contest.Name)
+
         const pages: TabNavsPage[] = [
             {
                 Id: "tab_nav_score",
@@ -350,7 +351,7 @@ class ContestPage extends React.Component {
         return (
             <div>
                 <div><h1 className="text-center">{contest.Contest.Name}</h1></div>
-                <TabNavsHorizontal Id="contest_nav" SelectedKey="contest_tab" Pages={pages}/>
+                <TabNavsHorizontal Id="contest_nav" SelectedKey="contest_tab" Pages={pages}  Center={false}/>
             </div>
         )
 

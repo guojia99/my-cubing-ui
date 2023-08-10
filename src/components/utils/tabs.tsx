@@ -13,6 +13,8 @@ export type TabNavsValue = {
     Id: string;
     SelectedKey: string;
     Pages: TabNavsPage[];
+
+    Center: boolean;
 }
 
 
@@ -28,9 +30,10 @@ export const TabNav = (tb: TabNavsValue) => {
     const p = GetLocationQueryParams()
     const selected = p[tb.SelectedKey] === undefined ? tb.Pages[0].Id : p[tb.SelectedKey]
 
+    const center = tb.Center ? " justify-content-center" : ""
     return (
         <div key={tb.Id}>
-            <ul className="nav nav-tabs" role="tablist" key={"tab_tabs_base_ul" + tb.Id}>
+            <ul className={"nav nav-tabs" + center} role="tablist" key={"tab_tabs_base_ul" + tb.Id}>
                 {Array.from(Array(tb.Pages.length), (e, i) => {
                     const active = tb.Pages[i].Id === selected ? "active" : ""
                     return (

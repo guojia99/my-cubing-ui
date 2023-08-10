@@ -49,9 +49,8 @@ class Contests extends React.Component {
             <tr>
                 <td>{convertDateString(c.Contest.StartTime)}</td>
                 <td>{convertDateString(c.Contest.EndTime)}</td>
-                <td>{c.Contest.Name}</td>
-                <td>{status}</td>
-                <th><Link to={"/contest?id=" + c.Contest.ID} className={"btn btn-success btn-sm"}>前往</Link></th>
+                <td><Link to={"/contest?id=" + c.Contest.ID}>{c.Contest.Name}</Link></td>
+                <td style={{color: c.Contest.IsEnd ? "red" : "green"}}>{status}</td>
             </tr>
         )
     }
@@ -65,7 +64,6 @@ class Contests extends React.Component {
                     <th scope="col">结束时间</th>
                     <th scope="col">比赛名称</th>
                     <th scope="col">状态</th>
-                    <th scope="col">查看详情</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -77,7 +75,7 @@ class Contests extends React.Component {
 
     private readerPageNav() {
         if (this.state.data === null) {
-             return (<div></div>)
+            return (<div></div>)
         }
         const query = GetLocationQueryParams()
         const page = isNaN(Number(query['page'])) ? 1 : Number(query['page'])

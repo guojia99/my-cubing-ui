@@ -54,7 +54,7 @@ function RecordsToMap(records: ContestRecord[]) {
     return m
 }
 
-enum RecordType {
+export enum RecordType {
     RecordByAvg = 1,
     RecordBySingle = 2
 }
@@ -70,8 +70,8 @@ const DefaultResultCubeScoresTable = (pj: Cubes, Scores: Score[], records: Map<s
             const isAvgBestRecord = records !== undefined && records.get(score.ID.toString() + RecordType.RecordByAvg.toString()) !== undefined
 
             let cube5Td = (<>
-                <td>{FormatTime(score.R4, Cubes.Cube333)}</td>
-                <td>{FormatTime(score.R5, Cubes.Cube333)}</td>
+                <td>{FormatTime(score.R4, pj)}</td>
+                <td>{FormatTime(score.R5, pj)}</td>
             </>)
             switch (pj) {
                 case Cubes.Cube666:

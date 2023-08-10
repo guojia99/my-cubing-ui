@@ -28,7 +28,10 @@ export type Player = {
     Name: string;
     WcaID: string | null;
     ActualName: string | null;
-    TitlesVal: string[] ;
+    TitlesVal: string[];
+    ContestNumber: number; // 比赛次数
+    RecoveryNumber: number; // 还原次数
+    ValidRecoveryNumber: number; // 还原失败数
 }
 
 export type Score = {
@@ -48,6 +51,7 @@ export type Score = {
     IsBestSingle: boolean;
     IsBestAvg: boolean;
     RouteValue: Round;
+    Rank: number;
 }
 
 
@@ -75,6 +79,27 @@ export type SorScore = {
     Player: Player;
     SingleCount: number;
     AvgCount: number;
+}
+
+export type ScoresByContest = {
+    Contest: Contest;
+    Scores: Score[];
+    Rounds: Round[];
+}
+
+
+export type RecordMessage = {
+    Record: Record;
+    Player: Player;
+    Score: Score;
+    Contest: Contest;
+}
+
+export type Podiums = {
+    Player: Player;
+    Gold: number;
+    Silver: number;
+    Bronze: number;
 }
 
 // resp
@@ -145,3 +170,11 @@ export type PlayerBestScoreResponse = {
     Best: any; // Map<Cubes, RankScore>
     Avg: any; // Map<Cubes, RankScore>
 }
+
+export type GetPlayerAllScoreResponse = {
+    BestSingle: Score[];
+    BestAvg: Score[];
+    Scores: ScoresByContest[];
+}
+
+export type GetPlayerRecord = RecordMessage[];

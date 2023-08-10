@@ -6,9 +6,9 @@ import {
     GetBestScoreResponse, GetContestResponse,
     GetContestScoreResponse,
     GetContestSorResponse,
-    GetContestsResponse,
+    GetContestsResponse, GetPlayerAllScoreResponse, GetPlayerRecord,
     GetTokenResponse, Player, PlayerBestScoreResponse,
-    PlayersResponse,
+    PlayersResponse, Podiums,
 } from './api_model';
 
 
@@ -44,7 +44,22 @@ export class apiCore {
         return result.data
     }
 
-    async GetPlayerPodium(playerName: string) {
+    async GetPlayerAllScore(id: number) : Promise<GetPlayerAllScoreResponse>{
+        let uri = this.uri + "/report/player/" + id + "/score"
+        const result = await axios.get(uri, {headers: {Accept: 'application/json'}})
+        return result.data
+    }
+
+    async GetPlayerRecord(id: number) : Promise<GetPlayerRecord> {
+        let uri = this.uri + "/report/player/" + id + "/record"
+        const result = await axios.get(uri, {headers: {Accept: 'application/json'}})
+        return result.data
+    }
+
+    async GetPlayerPodium(id: number): Promise<Podiums> {
+        let uri = this.uri + "/report/player/" + id + "/podium"
+        const result = await axios.get(uri, {headers: {Accept: 'application/json'}})
+        return result.data
     }
 
     async GetPlayerScore(playerName: string) {

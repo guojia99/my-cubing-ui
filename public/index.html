@@ -31,12 +31,17 @@
         footer .footer_content {
             display: flex;
             flex-wrap: wrap;
-            padding: 0 9%;
-            justify-content: space-between;
+            /*justify-content: space-between;*/
+            justify-content: center;
             color: #666;
         }
 
-        body{
+        footer p {
+            min-width: 400px;
+            margin: 0 !important;
+        }
+
+        body {
             /*background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('./hao.jpg') no-repeat 0 20%/ cover;*/
         }
     </style>
@@ -49,22 +54,18 @@
     <div class="row">
         <div class="col-md-0 col-lg-1"></div>
         <div id="root" style="min-height: 90vh" class="col-md-12 col-lg-10"></div>
-        <div class="col-md-0 col-lg-1" ></div>
+        <div class="col-md-0 col-lg-1"></div>
     </div>
 </div>
 <footer>
     <div class="footer_content text-center">
-        <div class="footer_right">Copyright © 2023 广州魔缘魔方赛事
-            <a href="https://beian.miit.gov.cn/">粤ICP备2023083788号</a>
-        </div>
-        <div>
-            Powered by <a href="https://github.com/guojia99" target="_black">郭泽嘉</a>
-        </div>
+        <p>Copyright © 2023 广州魔缘魔方赛事 </p>
+        <p>Powered by <a href="https://github.com/guojia99" target="_black">郭泽嘉</a></p>
+        <p><a href="https://beian.miit.gov.cn/" class="text-center">粤ICP备2023083788号</a></p>
     </div>
 </footer>
 
-
-<script src="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/5.2.3/js/bootstrap.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/5.2.3/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
 </body>
 </html>
