@@ -19,6 +19,7 @@ export const CubeScoresTable = (pj: Cubes, Scores: Score[], records: ContestReco
         [Cubes.CubeMinx]: DefaultResultCubeScoresTable,
         [Cubes.CubeClock]: DefaultResultCubeScoresTable,
         [Cubes.Cube333OH]: DefaultResultCubeScoresTable,
+        [Cubes.Cube333Ft]: DefaultResultCubeScoresTable,
         // 3
         [Cubes.Cube666]: DefaultResultCubeScoresTable,
         [Cubes.Cube777]: DefaultResultCubeScoresTable,
@@ -109,7 +110,7 @@ const DefaultResultCubeScoresTable = (pj: Cubes, Scores: Score[], records: Map<s
                     <th>选手</th>
                     <th>单次</th>
                     <th>平均</th>
-                    <th colSpan={tdNum} >详情</th>
+                    <th colSpan={tdNum}>详情</th>
                 </tr>
                 </thead>
                 <tbody>{getItems()}</tbody>

@@ -1,5 +1,4 @@
 import {Cubes} from "./cube";
-import player from "../../../pages/player/Player";
 
 export function FormatTime(result: number, pj: Cubes) {
     if (pj === Cubes.Cube333MBF) {

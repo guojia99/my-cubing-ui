@@ -95,11 +95,17 @@ export type RecordMessage = {
     Contest: Contest;
 }
 
+export type PodiumsResult = {
+    Contest: Contest;
+    Score: Score;
+}
+
 export type Podiums = {
     Player: Player;
     Gold: number;
     Silver: number;
     Bronze: number;
+    PodiumsResults: PodiumsResult[];
 }
 
 // resp

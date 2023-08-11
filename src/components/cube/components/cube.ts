@@ -16,10 +16,11 @@ export enum Cubes {
     Cube444BF = "444bf",
     Cube555BF = "555bf",
     Cube333MBF = "333mbf",
+    Cube333Ft = "333ft",
 }
 
-export const CubesCn = (c: Cubes) =>{
-    switch (c){
+export const CubesCn = (c: Cubes) => {
+    switch (c) {
         case Cubes.Cube222:
             return "二阶"
         case Cubes.Cube333:
@@ -54,6 +55,9 @@ export const CubesCn = (c: Cubes) =>{
             return "斜转"
         case Cubes.CubeSq1:
             return "Square-1"
+        case Cubes.Cube333Ft:
+            return "脚拧"
+        default:
+            return ""
     }
-    return ""
 }

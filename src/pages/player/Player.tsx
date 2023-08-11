@@ -4,7 +4,7 @@ import './Player.css'
 import React, {JSX} from 'react';
 import {API, WCAProjectList} from "../../components/api/api";
 import {GetLocationQueryParams, SetTitleName} from "../../components/utils/utils";
-import {GetPlayerAllScoreResponse, GetPlayerRecord, Player, PlayerBestScoreResponse, Podiums, RankScore, RecordMessage, Round, ScoresByContest} from "../../components/api/api_model";
+import {GetPlayerAllScoreResponse, GetPlayerRecord, Player, PlayerBestScoreResponse, Podiums, RankScore, RecordMessage, Contest, Round, Score, ScoresByContest} from "../../components/api/api_model";
 import {GetCubeIcon} from "../../components/cube/icon/cube_icon";
 import {FormatRank, FormatTime} from "../../components/cube/components/cube_timeformat";
 import {Cubes, CubesCn} from "../../components/cube/components/cube";
@@ -13,6 +13,8 @@ import {Link} from "react-router-dom";
 import {WaitGroup} from "../../components/utils/async";
 import {PR_And_GR_Record} from "../../components/cube/components/cube_record";
 import {RecordType} from "../../components/cube/components/cube_score_tabels";
+import {ScoreChat} from "../../components/cube/components/cube_scores_echarts";
+
 
 class PlayerPage extends React.Component {
     state = {
@@ -49,12 +51,12 @@ class PlayerPage extends React.Component {
             wg.done()
         })
         API.GetPlayerRecord(id).then(value => {
-            const record = value as GetPlayerRecord
-            console.log(record)
+            let record = value as GetPlayerRecord
             if (record === null || record === undefined) {
                 wg.done()
                 return
             }
+            record = record.reverse()
             for (let i = 0; i < record.length; i++) {
                 this.state.recordMap.set(record[i].Score.ID + "_" + record[i].Record.RType, record[i])
             }
@@ -96,7 +98,7 @@ class PlayerPage extends React.Component {
                     </thead>
                     <tbody>
                     <tr>
-                        <td><Link to={"https://www.worldcubeassociation.org/persons/" + player.WcaID ? player.WcaID : "-"}>{player.WcaID ? player.WcaID : "-"}</Link></td>
+                        <td><Link to={"https://www.worldcubeassociation.org/persons/" + player.WcaID}>{player.WcaID ? player.WcaID : "-"}</Link></td>
                         <td>{player.ActualName ? player.ActualName : player.Name}</td>
                         <td>{player.ContestNumber}</td>
                         <td>{player.RecoveryNumber - player.ValidRecoveryNumber} / {player.RecoveryNumber}</td>
@@ -170,21 +172,21 @@ class PlayerPage extends React.Component {
         )
     }
 
-    renderPodiumsTable(){
+    renderPodiumsTable() {
 
-        if (this.state.podium === null){
+        if (this.state.podium === null) {
             return <div></div>
         }
 
         const podium = this.state.podium as Podiums
 
         let body: JSX.Element[] = []
-        if (podium !== undefined){
+        if (podium !== undefined) {
             body.push(
-                <tr>
-                    <td>{podium.Gold ? podium.Gold: 0}</td>
-                    <td>{podium.Silver? podium.Silver: 0}</td>
-                    <td>{podium.Bronze? podium.Bronze : 0}</td>
+                <tr key={"podium_" + podium.Player.ID}>
+                    <td>{podium.Gold ? podium.Gold : 0}</td>
+                    <td>{podium.Silver ? podium.Silver : 0}</td>
+                    <td>{podium.Bronze ? podium.Bronze : 0}</td>
                 </tr>
             )
         }
@@ -195,7 +197,7 @@ class PlayerPage extends React.Component {
                 <h4 style={{textAlign: "center", fontWeight: 700}}>领奖台</h4>
                 <table className="table table-striped table-hover text-center" id="best_score_table">
                     <thead>
-                    <tr>
+                    <tr key={"renderPodiumsTable_head_tr"}>
                         <th colSpan={1}>金牌</th>
                         <th colSpan={1}>银牌</th>
                         <th colSpan={1}>铜牌</th>
@@ -264,7 +266,7 @@ class PlayerPage extends React.Component {
             }
 
 
-            const drawScoresBaseTables = (pj: Cubes, scores: ScoresByContest[]) => {
+            const drawScoresBaseTablesAndChart = (pj: Cubes, scores: ScoresByContest[]) => {
                 let tdNum = 5
                 let items = []
                 switch (pj) {
@@ -313,10 +315,17 @@ class PlayerPage extends React.Component {
                         )
                     }
                 }
-
-
+                let ss: Score[] = []
+                let ContestMap = new Map<number, Contest>()
+                for (let idx = scores.length - 1; idx >= 0; idx--) {
+                    ContestMap.set(scores[idx].Contest.ID, scores[idx].Contest)
+                    for (let idk = 0; idk < scores[idx].Scores.length; idk++) {
+                        ss.push(scores[idx].Scores[idk])
+                    }
+                }
                 return (
                     <div style={{overflowX: "auto"}}>
+                        <ScoreChat Project={pj} ContestMap={ContestMap}  scores={ss} key={"scores_chat_by_pj_" + pj}/>
                         <table className="table table-striped table-hover" style={{minWidth: "600px", marginTop: "20px", marginBottom: "30px"}}>
                             <thead>
                             <tr key={"renderPageByScore_thead"}>
@@ -339,6 +348,9 @@ class PlayerPage extends React.Component {
 
             const drawScore333MBFTables = (scores: ScoresByContest[]) => {
                 let items = []
+                items.push(<tr key={"drawScore333MBFTables" + "score_key"}>
+                    <td colSpan={5}>{GetCubeIcon(Cubes.Cube333MBF)} {CubesCn(Cubes.Cube333MBF)}</td>
+                </tr>)
                 for (let i = 0; i < scores.length; i++) {
                     const contest = scores[i].Contest
                     const ss = scores[i].Scores
@@ -368,8 +380,8 @@ class PlayerPage extends React.Component {
                                 <th>详情</th>
                             </tr>
                             </thead>
+
                             <tbody>
-                            <td colSpan={5}>{GetCubeIcon(Cubes.Cube333MBF)} {CubesCn(Cubes.Cube333MBF)}</td>
                             {items}
                             </tbody>
                         </table>
@@ -399,7 +411,7 @@ class PlayerPage extends React.Component {
                 pages.push({
                     Id: "scores_" + pj,
                     Name: GetCubeIcon(pj),
-                    Page: drawScoresBaseTables(pj, scores)
+                    Page: drawScoresBaseTablesAndChart(pj, scores)
                 })
             }
             return (
@@ -407,11 +419,6 @@ class PlayerPage extends React.Component {
                     <TabNav Id="socres" SelectedKey="score_cubes" Pages={pages} Center={true}/>
                 </div>
             )
-        }
-
-
-        const renderPageByScoreLineChart = () => {
-            return <div>111</div>
         }
 
         const renderPageByRecord = () => {
@@ -441,10 +448,10 @@ class PlayerPage extends React.Component {
                     <table className="table table-striped table-hover" style={{minWidth: "600px", marginTop: "20px", marginBottom: "30px"}}>
                         <thead>
                         <tr key={"renderPageByRecord_thead"}>
-                            <td>项目</td>
-                            <td>比赛</td>
-                            <td>单次</td>
-                            <td>平均</td>
+                            <th>项目</th>
+                            <th>比赛</th>
+                            <th>单次</th>
+                            <th>平均</th>
                         </tr>
                         </thead>
                         <tbody>{items}</tbody>
@@ -453,10 +460,95 @@ class PlayerPage extends React.Component {
             )
         }
 
-
         const renderPageByPodium = () => {
-            console.log(this.state.allScore)
-            return <div>333</div>
+            if (this.state.podium === null) {
+                return <div></div>
+            }
+
+            const podium = this.state.podium as Podiums
+            let items: JSX.Element[] = []
+            if (podium.PodiumsResults !== null) {
+                let lastContestID = -1
+                podium.PodiumsResults = podium.PodiumsResults.reverse()
+                for (let i = 0; i < podium.PodiumsResults.length; i++) {
+
+                    let p = podium.PodiumsResults[i]
+                    if (lastContestID !== p.Contest.ID) {
+                        lastContestID = p.Contest.ID
+                        items.push(<tr className="table-danger" key={"renderPageByPodium_contest" + p.Contest.ID}>
+                            <td style={{color: "darkred"}} colSpan={9}>
+                                <Link to={"/contest?id=" + p.Contest.ID}>{p.Contest.Name}</Link>
+                            </td>
+                        </tr>)
+                    }
+
+                    let pd = (
+                        <>
+                            <td>{FormatTime(p.Score.R1, p.Score.Project)}</td>
+                            <td>{FormatTime(p.Score.R2, p.Score.Project)}</td>
+                            <td>{FormatTime(p.Score.R3, p.Score.Project)}</td>
+                            <td>{FormatTime(p.Score.R4, p.Score.Project)}</td>
+                            <td>{FormatTime(p.Score.R5, p.Score.Project)}</td>
+                        </>
+                    )
+
+                    switch (p.Score.Project) {
+                        case Cubes.Cube666:
+                        case Cubes.Cube777:
+                        case Cubes.Cube333BF:
+                        case Cubes.Cube444BF:
+                        case Cubes.Cube555BF:
+                        case Cubes.Cube333FM:
+                            pd = (
+                                <>
+                                    <td>{FormatTime(p.Score.R1, p.Score.Project)}</td>
+                                    <td>{FormatTime(p.Score.R2, p.Score.Project)}</td>
+                                    <td>{FormatTime(p.Score.R3, p.Score.Project)}</td>
+                                    <td></td>
+                                    <td></td>
+                                </>
+                            )
+                            break
+                        case Cubes.Cube333MBF:
+                            pd = (
+                                <>
+                                    <td>{p.Score.R1} / {p.Score.R2} </td>
+                                    <td>{FormatTime(p.Score.R3, Cubes.Cube333)}</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </>
+                            )
+                    }
+
+                    items.push(
+                        <tr key={"renderPageByPodium_value" + p.Score.ID}>
+                            <td>{GetCubeIcon(p.Score.Project)} {CubesCn(p.Score.Project)}</td>
+                            <td>{p.Score.Rank}</td>
+                            <td style={{fontWeight: 700}}>{FormatTime(p.Score.Best, p.Score.Project)}</td>
+                            <td style={{fontWeight: 700}}>{FormatTime(p.Score.Avg, p.Score.Project)}</td>
+                            {pd}
+                        </tr>
+                    )
+                }
+            }
+
+            return (
+                <div style={{overflowX: "auto"}}>
+                    <table className="table table-striped table-hover" style={{minWidth: "600px", marginTop: "20px", marginBottom: "30px"}}>
+                        <thead>
+                        <tr key={"renderPageByRecord_thead"}>
+                            <th>项目</th>
+                            <th>排名</th>
+                            <th>单次</th>
+                            <th>平均</th>
+                            <th colSpan={5}>详情</th>
+                        </tr>
+                        </thead>
+                        <tbody>{items}</tbody>
+                    </table>
+                </div>
+            )
         }
 
         const tabs: TabNavsPage[] = [
@@ -464,11 +556,6 @@ class PlayerPage extends React.Component {
                 Id: "score",
                 Name: (<h4>成绩</h4>),
                 Page: renderPageByScore(),
-            },
-            {
-                Id: "score_line_chart",
-                Name: (<h4>成长曲线</h4>),
-                Page: renderPageByScoreLineChart(),
             },
             {
                 Id: "record",
