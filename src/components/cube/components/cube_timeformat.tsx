@@ -25,10 +25,10 @@ export function FormatTime(result: number, pj: Cubes) {
 
 export function FormatRank(result: number) {
     if (result === 0 || result === undefined) {
-        return (<a style={{color: "grey"}}>DNF</a>)
+        return (<i style={{color: "grey"}}>DNF</i>)
     }
     if (result === -1) {
-        return (<a style={{color: "grey"}}>DNS</a>)
+        return (<i style={{color: "grey"}}>DNS</i>)
     }
-    return (<a style={{color: result === 1 ? "red" : ""}}>{result}</a>)
+    return (<i style={{color: result === 1 ? "red" : ""}}>{result}</i>)
 }

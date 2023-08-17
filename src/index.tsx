@@ -6,7 +6,8 @@ import './index.css'
 // index
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import {BrowserRouter,  NavLink, Route, Routes} from "react-router-dom";
+import {BrowserRouter, Link, NavLink, Route, Routes} from "react-router-dom";
+import Auth from "./pages/admin/auth";
 import Home from "./pages/Home";
 import About from "./pages/about/About";
 import Best from "./pages/best/Best";
@@ -30,7 +31,8 @@ root.render(
             <li className="nav-item"><NavLink className="nav-link" to="/players">玩家</NavLink></li>
 
             <li className="nav-item dropdown">
-                <a className="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" href="#" aria-expanded="false">统计</a>
+                <Link to="#" className="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false">统计</Link>
+                {/*<a className="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" href="#" aria-expanded="false">统计</a>*/}
                 <ul className="dropdown-menu">
                     <li><NavLink className="dropdown-item" to="/statistics/sor">排位分数</NavLink></li>
                     <li><NavLink className="dropdown-item" to="/statistics/best">最佳成绩</NavLink></li>
@@ -43,6 +45,7 @@ root.render(
 
             {/*管理员*/}
             <Route path="/xadmin" Component={Admin}/>
+            <Route path="/xauth" Component={Auth} />
             <Route path="/debug" Component={Debug}/>
 
             <Route path="/contest" Component={ContestPage}/> {/*比赛*/}

@@ -12,6 +12,11 @@ export function GetLocationQueryParams(): Record<string, string>{
     return GetAllQueryParams(window.location.href)
 }
 
+export function GetLocationQueryParam(key: string) : string{
+    const q = GetLocationQueryParams()
+    return q[key] ? q[key] : ""
+}
+
 export function UpdateBrowserURL(key: string, value: string): void {
     const urlParams = new URLSearchParams(window.location.search);
     if (urlParams.has(key)) {

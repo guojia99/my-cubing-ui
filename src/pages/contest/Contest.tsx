@@ -1,7 +1,8 @@
 import './contest.css'
 
 import React, {JSX} from 'react';
-import {API, WCAProjectList} from "../../components/api/api";
+import {API} from "../../components/api/api";
+import {WCAProjectList} from "../../components/cube/cube";
 import {WaitGroup} from "../../components/utils/async";
 import {GetLocationQueryParams, SetTitleName} from "../../components/utils/utils";
 import { ContestPodiums, ContestRecord, GetContestResponse, GetContestScoreResponse, GetContestSorResponse, Round, RoutesScores, SorScore} from "../../components/api/api_model";

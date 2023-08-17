@@ -2,8 +2,9 @@ import React from 'react';
 import {API} from "../../components/api/api";
 import {GetContestsResponse, GetContestsResponseContest} from "../../components/api/api_model";
 import {Link} from "react-router-dom";
-import {GetLocationQueryParams} from "../../components/utils/utils";
+import {GetLocationQueryParam, GetLocationQueryParams, UpdateBrowserURL} from "../../components/utils/utils";
 import {PageNav, PageNavValue} from "../../components/utils/page";
+import Select from 'react-select'
 
 
 class Contests extends React.Component {
@@ -11,14 +12,22 @@ class Contests extends React.Component {
         data: null,
     }
 
-    componentDidMount() {
+    getData() {
         const query = GetLocationQueryParams()
         const page = isNaN(Number(query['page'])) ? 1 : Number(query['page'])
         const size = isNaN(Number(query['size'])) ? 20 : Number(query['size'])
-
-        API.GetContests(page, size).then(value => {
+        const typ = query["type"] ? query["type"] : ""
+        API.GetContests(page, size, typ).then(value => {
             this.setState({data: value})
         })
+    }
+
+    componentWillReceiveProps(nextProps: Readonly<{}>, nextContext: any) {
+        this.getData()
+    }
+
+    componentDidMount() {
+        this.getData()
     }
 
     render() {
@@ -49,6 +58,7 @@ class Contests extends React.Component {
             <tr>
                 <td>{convertDateString(c.Contest.StartTime)}</td>
                 <td>{convertDateString(c.Contest.EndTime)}</td>
+                <td>{ContestTypeCn(c.Contest.Type)}</td>
                 <td><Link to={"/contest?id=" + c.Contest.ID}>{c.Contest.Name}</Link></td>
                 <td style={{color: c.Contest.IsEnd ? "red" : "green"}}>{status}</td>
             </tr>
@@ -62,6 +72,7 @@ class Contests extends React.Component {
                 <tr>
                     <th scope="col">开始时间</th>
                     <th scope="col">结束时间</th>
+                    <th scope="col">形式</th>
                     <th scope="col">比赛名称</th>
                     <th scope="col">状态</th>
                 </tr>
@@ -91,6 +102,48 @@ class Contests extends React.Component {
         return PageNav(p)
     }
 
+    private renderSelect() {
+
+        const options = [
+            {value: "", label: "所有"},
+            {value: 'online', label: '线上'},
+            {value: 'offline', label: '线下'},
+            {value: 'official', label: '线下正式'}
+        ]
+
+        const query = GetLocationQueryParams()
+        const typ = query["type"] ? query["type"] : ""
+        let idx = 0
+        for (let i = 0; i < options.length; i++) {
+            if (options[i].value === typ) {
+                idx = i
+            }
+        }
+
+        return (
+            <div style={{
+                // position: "absolute",
+                float: "right",
+                maxWidth: "250px",
+            }}>
+                <Select
+                    defaultValue={options[idx]}
+                    options={options}
+                    onChange={(newValue) => {
+                        if (newValue === null) {
+                            return
+                        }
+                        const typ = GetLocationQueryParam("type")
+                        if (newValue.value === typ) {
+                            return;
+                        }
+                        UpdateBrowserURL("type", newValue.value)
+                        this.getData()
+                    }}
+                />
+            </div>
+        )
+    }
 
     private renderPage() {
         if (this.state.data === null) {
@@ -100,13 +153,29 @@ class Contests extends React.Component {
         let data = this.state.data as GetContestsResponse
         return (
             <div>
+                {this.renderSelect()}
                 {this.renderTable(data)}
                 {this.readerPageNav()}
             </div>
         )
     }
-
-
 }
+
+
+const ContestTypeCn = (t: string) => {
+    switch (t) {
+        case "":
+            return "所有"
+        case "online":
+            return "线上"
+        case "offline":
+            return "线下"
+        case "official":
+            return "线下正式"
+        default:
+            return "其他"
+    }
+}
+
 
 export default Contests;

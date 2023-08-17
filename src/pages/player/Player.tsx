@@ -2,7 +2,8 @@ import './Player.css'
 
 
 import React, {JSX} from 'react';
-import {API, WCAProjectList} from "../../components/api/api";
+import {API} from "../../components/api/api";
+import {WCAProjectList} from "../../components/cube/cube";
 import {GetLocationQueryParams, SetTitleName} from "../../components/utils/utils";
 import {GetPlayerAllScoreResponse, GetPlayerRecord, Player, PlayerBestScoreResponse, Podiums, RankScore, RecordMessage, Contest, Round, Score, ScoresByContest} from "../../components/api/api_model";
 import {GetCubeIcon} from "../../components/cube/icon/cube_icon";
@@ -348,7 +349,7 @@ class PlayerPage extends React.Component {
 
             const drawScore333MBFTables = (scores: ScoresByContest[]) => {
                 let items = []
-                items.push(<tr key={"drawScore333MBFTables" + "score_key"}>
+                items.push(<tr key={"drawScore333MBFTables_score_key"}>
                     <td colSpan={5}>{GetCubeIcon(Cubes.Cube333MBF)} {CubesCn(Cubes.Cube333MBF)}</td>
                 </tr>)
                 for (let i = 0; i < scores.length; i++) {
@@ -358,11 +359,11 @@ class PlayerPage extends React.Component {
                         const IsBestGr = this.state.recordMap.get(ss[j].ID + "_" + RecordType.RecordBySingle) !== undefined
                         items.push(
                             <tr key={"score_key" + ss[j].ID}>
-                                <td>{j === 0 ? contest.Name : ""}</td>
+                                <td><Link to={"/contest?id=" + contest.ID}>{j === 0 ? contest.Name : ""}</Link></td>
                                 <td>{ss[j].RouteValue.Name}</td>
                                 <td>{FormatRank(ss[j].Rank)}</td>
                                 <td>{FormatTime(ss[j].Best, Cubes.Cube333MBF)}</td>
-                                <td>{PR_And_GR_Record(ss[j].IsBestSingle, IsBestGr)} <a style={{fontWeight: 700}}> {ss[j].R1} / {ss[j].R2}</a> {FormatTime(ss[j].R3, Cubes.Cube333)}</td>
+                                <td>{PR_And_GR_Record(ss[j].IsBestSingle, IsBestGr)} <i style={{fontWeight: 700}}> {ss[j].R1} / {ss[j].R2}</i> {FormatTime(ss[j].R3, Cubes.Cube333)}</td>
                             </tr>
                         )
                     }

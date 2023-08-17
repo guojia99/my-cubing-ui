@@ -3,7 +3,6 @@ import ReactEcharts from "echarts-for-react";
 import {FormatTime} from "./cube_timeformat";
 import {Cubes, CubesCn} from "./cube";
 import {Contest, Score} from "../../api/api_model";
-import {PR_And_GR_Record} from "./cube_record";
 
 type Format = echarts.EChartOption.Tooltip.Format;
 type EChartsOption = echarts.EChartOption;

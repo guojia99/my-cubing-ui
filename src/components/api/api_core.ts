@@ -19,7 +19,7 @@ export class apiCore {
         this.uri = uri;
     }
 
-    async GetContest(contestID: number):Promise<GetContestResponse>{
+    async GetContest(contestID: number): Promise<GetContestResponse> {
         let uri = this.uri + "/contest/" + contestID
         const result = await axios.get(uri, {headers: {Accept: 'application/json'}})
         return result.data
@@ -32,25 +32,25 @@ export class apiCore {
         return result.data
     }
 
-    async GetPlayer(id: number): Promise<Player>{
+    async GetPlayer(id: number): Promise<Player> {
         let uri = this.uri + "/player/" + id
         const result = await axios.get(uri, {headers: {Accept: 'application/json'}})
         return result.data
     }
 
-    async GetPlayerBestScoreReport(id: number): Promise<PlayerBestScoreResponse>{
+    async GetPlayerBestScoreReport(id: number): Promise<PlayerBestScoreResponse> {
         let uri = this.uri + "/report/player/" + id + "/best"
         const result = await axios.get(uri, {headers: {Accept: 'application/json'}})
         return result.data
     }
 
-    async GetPlayerAllScore(id: number) : Promise<GetPlayerAllScoreResponse>{
+    async GetPlayerAllScore(id: number): Promise<GetPlayerAllScoreResponse> {
         let uri = this.uri + "/report/player/" + id + "/score"
         const result = await axios.get(uri, {headers: {Accept: 'application/json'}})
         return result.data
     }
 
-    async GetPlayerRecord(id: number) : Promise<GetPlayerRecord> {
+    async GetPlayerRecord(id: number): Promise<GetPlayerRecord> {
         let uri = this.uri + "/report/player/" + id + "/record"
         const result = await axios.get(uri, {headers: {Accept: 'application/json'}})
         return result.data
@@ -81,8 +81,8 @@ export class apiCore {
     }
 
 
-    async GetContests(page: number, size: number): Promise<GetContestsResponse> {
-        let uri = this.uri + "/contest?page=" + page + "&size=" + size
+    async GetContests(page: number, size: number, typ: string): Promise<GetContestsResponse> {
+        let uri = this.uri + "/contest?page=" + page + "&size=" + size + "&type=" + typ
         const result = await axios.get(uri, {headers: {Accept: 'application/json'}})
         return result.data
     }
@@ -99,7 +99,7 @@ export class apiCore {
         return result.data
     }
 
-    async GetContestRecord(contestID: number): Promise<ContestRecord[]>{
+    async GetContestRecord(contestID: number): Promise<ContestRecord[]> {
         let uri = this.uri + "/report/contest/" + contestID + "/record"
         const result = await axios.get(uri, {headers: {Accept: 'application/json'}})
         return result.data
@@ -158,6 +158,11 @@ export class authApiCore {
             console.log('GetToken error' + error)
             return this.token
         }
+    }
+
+    IsAuth(): boolean {
+        const timestamp: number = getCurrentTimestampInSeconds()
+        return this.token.Token !== "" && this.token.Ts > timestamp
     }
 
     DeleteToken() {
