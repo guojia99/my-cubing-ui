@@ -1,7 +1,7 @@
 import React from 'react';
 const Sor = () => {
     return (
-        <div></div>
+        <div>开发中</div>
     );
 };
 export default Sor;

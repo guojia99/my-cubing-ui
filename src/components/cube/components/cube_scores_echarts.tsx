@@ -1,7 +1,7 @@
 import * as echarts from "echarts";
 import ReactEcharts from "echarts-for-react";
+import {Cubes, CubesCn} from "../cube";
 import {FormatTime} from "./cube_timeformat";
-import {Cubes, CubesCn} from "./cube";
 import {Contest, Score} from "../../api/api_model";
 
 type Format = echarts.EChartOption.Tooltip.Format;
@@ -29,17 +29,34 @@ export const ScoreChat = (v: ScoreChatValue) => {
         const idx = f.dataIndex as number
         const score = v.scores[idx]
         const contest = v.ContestMap.get(score.ContestID)
-        if (contest === undefined){
+        if (contest === undefined) {
             return '-'
         }
         return contest.Name
     }
 
-    const FormatValue = (f: Format): string => {
+    const FormatValue = (f: Format, isBest: boolean): string => {
         const idx = f.dataIndex as number
         const value = f.value as number
         const score = v.scores[idx]
-        return f.marker + " " + f.seriesName + ":" + FormatTime(value, score.Project)
+
+        let baseOut = f.marker + " " + f.seriesName + ":" + FormatTime(value, score.Project)
+
+        if (idx=== 0) {
+            return baseOut
+        }
+
+        // 成绩涨幅
+        let lastValue = v.scores[idx - 1].Avg
+        if (isBest) {
+            lastValue = v.scores[idx - 1].Best
+        }
+
+        const diff = ((value - lastValue) / value) * -100
+        if (diff > 0) {
+            return baseOut + "<i style='color:red'>( +" + diff.toFixed(2) + "% )</i>"
+        }
+        return baseOut + "<i style='color:green'>(" + diff.toFixed(2) + "% )</i>"
     }
 
     const option: EChartsOption = {
@@ -50,7 +67,7 @@ export const ScoreChat = (v: ScoreChatValue) => {
             trigger: 'axis',
             formatter: function (params: Format | Format[], ticket: string, callback: (ticket: string, html: string) => void): string {
                 const param = params as Format[]
-                return FormatContest(param[0]) + '<br/>' + FormatValue(param[0]) + '<br/>' + FormatValue(param[1])
+                return FormatContest(param[0]) + '<br/>' + FormatValue(param[0], false) + '<br/>' + FormatValue(param[1], true)
             }
         },
         legend: {

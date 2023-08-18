@@ -6,6 +6,7 @@
 
 import React from 'react';
 const Home = () => {
+    window.location.href = "/contests"
     return (
         <div></div>
     );

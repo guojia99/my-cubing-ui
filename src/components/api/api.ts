@@ -1,6 +1,4 @@
 import {apiCore, authApiCore} from "./api_core";
-import {Cubes} from "../cube/components/cube";
-
 
 function getAPIUrl() {
     const hostname = window.location.hostname;
@@ -15,4 +13,4 @@ function getAPIUrl() {
 
 export const API = new apiCore(getAPIUrl());
 
-export const AuthAPI = new authApiCore(API);
+export const AuthAPI = new authApiCore(new apiCore(getAPIUrl()));

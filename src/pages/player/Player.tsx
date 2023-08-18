@@ -3,12 +3,11 @@ import './Player.css'
 
 import React, {JSX} from 'react';
 import {API} from "../../components/api/api";
-import {WCAProjectList} from "../../components/cube/cube";
+import {AllProjectList, Cubes, CubesCn, WCAProjectList} from "../../components/cube/cube";
 import {GetLocationQueryParams, SetTitleName} from "../../components/utils/utils";
 import {GetPlayerAllScoreResponse, GetPlayerRecord, Player, PlayerBestScoreResponse, Podiums, RankScore, RecordMessage, Contest, Round, Score, ScoresByContest} from "../../components/api/api_model";
 import {GetCubeIcon} from "../../components/cube/icon/cube_icon";
 import {FormatRank, FormatTime} from "../../components/cube/components/cube_timeformat";
-import {Cubes, CubesCn} from "../../components/cube/components/cube";
 import {TabNav, TabNavsPage} from "../../components/utils/tabs";
 import {Link} from "react-router-dom";
 import {WaitGroup} from "../../components/utils/async";
@@ -120,10 +119,10 @@ class PlayerPage extends React.Component {
             return <div></div>
         }
 
-        const wcaList = WCAProjectList()
+        const pjList = AllProjectList()
         let body = []
-        for (let i = 0; i < wcaList.length; i++) {
-            const pj = wcaList[i]
+        for (let i = 0; i < pjList.length; i++) {
+            const pj = pjList[i]
 
             const best = data.Best[pj] as RankScore
             const avg = data.Avg[pj] as RankScore
@@ -392,10 +391,10 @@ class PlayerPage extends React.Component {
 
 
             const pages: TabNavsPage[] = []
-            const wcaList = WCAProjectList()
+            const pjList = AllProjectList()
 
-            for (let i = 0; i < wcaList.length; i++) {
-                const pj = wcaList[i]
+            for (let i = 0; i < pjList.length; i++) {
+                const pj = pjList[i]
                 let scores = scoreByCubesMap.get(pj)
                 if (scores === undefined) {
                     continue

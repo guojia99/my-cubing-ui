@@ -1,7 +1,7 @@
 import {Round} from "../../api/api_model";
 import React from "react";
+import {Cubes} from "../cube";
 import {DrawByCubeImage} from "../draw/draw";
-import {Cubes} from "./cube";
 
 export const RoundTables = (rounds: Round[]) => {
     let items = []

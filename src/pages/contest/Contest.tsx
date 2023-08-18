@@ -2,14 +2,13 @@ import './contest.css'
 
 import React, {JSX} from 'react';
 import {API} from "../../components/api/api";
-import {WCAProjectList} from "../../components/cube/cube";
+import {AllProjectList, Cubes} from "../../components/cube/cube";
 import {WaitGroup} from "../../components/utils/async";
 import {GetLocationQueryParams, SetTitleName} from "../../components/utils/utils";
 import { ContestPodiums, ContestRecord, GetContestResponse, GetContestScoreResponse, GetContestSorResponse, Round, RoutesScores, SorScore} from "../../components/api/api_model";
 import {Link} from "react-router-dom";
 import {TabNav, TabNavsHorizontal, TabNavsPage} from "../../components/utils/tabs";
 import {GetCubeIcon} from "../../components/cube/icon/cube_icon";
-import {Cubes} from "../../components/cube/components/cube";
 import {CubeScoresTable} from "../../components/cube/components/cube_score_tabels";
 import {RoundTables} from "../../components/cube/components/cube_rounds";
 
@@ -185,9 +184,9 @@ class ContestPage extends React.Component {
         }
 
         const pages: TabNavsPage[] = []
-        const wcaList = WCAProjectList()
-        for (let i = 0; i < wcaList.length; i++) {
-            const pj = wcaList[i]
+        const pjList = AllProjectList()
+        for (let i = 0; i < pjList.length; i++) {
+            const pj = pjList[i]
             let score = s.Scores[pj] as RoutesScores[]
             if (score === undefined || score.length === 0) {
                 continue
@@ -303,9 +302,9 @@ class ContestPage extends React.Component {
 
 
         const pages: TabNavsPage[] = []
-        const wcaList = WCAProjectList()
-        for (let i = 0; i < wcaList.length; i++) {
-            const pj = wcaList[i]
+        const pjList = AllProjectList()
+        for (let i = 0; i < pjList.length; i++) {
+            const pj = pjList[i]
             const rounds = roundMap.get(pj)
             if (rounds === undefined) {
                 continue

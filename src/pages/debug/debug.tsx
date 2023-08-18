@@ -1,5 +1,5 @@
+import {Cubes} from "../../components/cube/cube";
 import {DrawByCubeImage} from "../../components/cube/draw/draw";
-import {Cubes} from "../../components/cube/components/cube";
 
 const Debug = () => {
     let items = []

@@ -1,45 +1,10 @@
 import './cube_score_tables.css'
 
 import {ContestRecord, Score} from "../../api/api_model";
-import {Cubes} from "./cube";
 import {Link} from "react-router-dom";
+import {Cubes} from "../cube";
 import {FormatTime} from "./cube_timeformat";
 import {PR_And_GR_Record} from "./cube_record";
-
-export const CubeScoresTable = (pj: Cubes, Scores: Score[], records: ContestRecord[]) => {
-    const cubeHandlers: { [_ in Cubes]: (pj: Cubes, Scores: Score[], records: Map<string, ContestRecord>) => JSX.Element } = {
-        // 5
-        [Cubes.Cube222]: DefaultResultCubeScoresTable,
-        [Cubes.Cube333]: DefaultResultCubeScoresTable,
-        [Cubes.Cube444]: DefaultResultCubeScoresTable,
-        [Cubes.Cube555]: DefaultResultCubeScoresTable,
-        [Cubes.CubeSk]: DefaultResultCubeScoresTable,
-        [Cubes.CubePy]: DefaultResultCubeScoresTable,
-        [Cubes.CubeSq1]: DefaultResultCubeScoresTable,
-        [Cubes.CubeMinx]: DefaultResultCubeScoresTable,
-        [Cubes.CubeClock]: DefaultResultCubeScoresTable,
-        [Cubes.Cube333OH]: DefaultResultCubeScoresTable,
-        [Cubes.Cube333Ft]: DefaultResultCubeScoresTable,
-        // 3
-        [Cubes.Cube666]: DefaultResultCubeScoresTable,
-        [Cubes.Cube777]: DefaultResultCubeScoresTable,
-        [Cubes.Cube333BF]: DefaultResultCubeScoresTable,
-        [Cubes.Cube444BF]: DefaultResultCubeScoresTable,
-        [Cubes.Cube555BF]: DefaultResultCubeScoresTable,
-        [Cubes.Cube333FM]: DefaultResultCubeScoresTable,
-
-        // 特殊
-        [Cubes.Cube333MBF]: MBFCube333ScoreTable,
-    };
-
-    const recordMp = RecordsToMap(records)
-
-    const handler = cubeHandlers[pj];
-    if (handler) {
-        return handler(pj, Scores, recordMp);
-    }
-    return <table className="table table-bordered table-striped"></table>;
-}
 
 
 function RecordsToMap(records: ContestRecord[]) {
@@ -60,8 +25,9 @@ export enum RecordType {
     RecordBySingle = 2
 }
 
-const DefaultResultCubeScoresTable = (pj: Cubes, Scores: Score[], records: Map<string, ContestRecord>) => {
-    let tdNum = 5
+
+
+const NumberDefaultResultCubeScoresTable = (tdNum: number, pj: Cubes, Scores: Score[], records: Map<string, ContestRecord>) => {
     const getItems = () => {
         const items = [];
         for (let i = 0; i < Scores.length; i++) {
@@ -70,22 +36,21 @@ const DefaultResultCubeScoresTable = (pj: Cubes, Scores: Score[], records: Map<s
             const isSingleBestRecord = records !== undefined && records.get(score.ID.toString() + RecordType.RecordBySingle.toString()) !== undefined
             const isAvgBestRecord = records !== undefined && records.get(score.ID.toString() + RecordType.RecordByAvg.toString()) !== undefined
 
+            let cube3Td = (<>
+                <td>{FormatTime(score.R2, pj)}</td>
+                <td>{FormatTime(score.R3, pj)}</td>
+            </>)
             let cube5Td = (<>
                 <td>{FormatTime(score.R4, pj)}</td>
                 <td>{FormatTime(score.R5, pj)}</td>
             </>)
-            switch (pj) {
-                case Cubes.Cube666:
-                case Cubes.Cube777:
-                case Cubes.Cube333BF:
-                case Cubes.Cube444BF:
-                case Cubes.Cube555BF:
-                case Cubes.Cube333FM:
-                    cube5Td = (<></>)
-                    tdNum = 3
-                    break
-            }
 
+            if (tdNum < 3) {
+                cube3Td = <></>
+            }
+            if (tdNum < 5) {
+                cube5Td = <></>
+            }
             items.push(
                 <tr className={i < 3 ? "table-success" : ""}>
                     <td className="idxTd">{i + 1}</td>
@@ -93,8 +58,7 @@ const DefaultResultCubeScoresTable = (pj: Cubes, Scores: Score[], records: Map<s
                     <td>{PR_And_GR_Record(score.IsBestSingle, isSingleBestRecord)}{FormatTime(score.Best, pj)}</td>
                     <td>{PR_And_GR_Record(score.IsBestAvg, isAvgBestRecord)}{FormatTime(score.Avg, Cubes.Cube333)}</td>
                     <td>{FormatTime(score.R1, pj)}</td>
-                    <td>{FormatTime(score.R2, pj)}</td>
-                    <td>{FormatTime(score.R3, pj)}</td>
+                    {cube3Td}
                     {cube5Td}
                 </tr>
             )
@@ -120,6 +84,19 @@ const DefaultResultCubeScoresTable = (pj: Cubes, Scores: Score[], records: Map<s
 }
 
 
+const OneResultCubeScoreTableFn = (pj: Cubes, Scores: Score[], records: Map<string, ContestRecord>) => {
+    return NumberDefaultResultCubeScoresTable(1, pj, Scores, records)
+}
+
+const ThreeResultCubeScoreTableFn = (pj: Cubes, Scores: Score[], records: Map<string, ContestRecord>) => {
+    return NumberDefaultResultCubeScoresTable(3, pj, Scores, records)
+}
+
+const FiveResultCubeScoreTableFn = (pj: Cubes, Scores: Score[], records: Map<string, ContestRecord>) => {
+    return NumberDefaultResultCubeScoresTable(5, pj, Scores, records)
+}
+
+
 const MBFCube333ScoreTable = (pj: Cubes, Scores: Score[], records: Map<string, ContestRecord>) => {
     const getItems = () => {
         const items = [];
@@ -130,7 +107,7 @@ const MBFCube333ScoreTable = (pj: Cubes, Scores: Score[], records: Map<string, C
                 <tr>
                     <td>{i + 1}</td>
                     <td><Link to={"/player?id=" + score.PlayerID}>{score.PlayerName}</Link></td>
-                    <td>{FormatTime(score.R1 - score.R2, pj)} ({score.R1} / {score.R2}){PR_And_GR_Record(score.IsBestSingle, isSingleBestRecord)}</td>
+                    <td>({score.R1} / {score.R2}){PR_And_GR_Record(score.IsBestSingle, isSingleBestRecord)}</td>
                     <td>{FormatTime(score.R1, pj)}</td>
                     <td>{FormatTime(score.R2, pj)}</td>
                     <td>{FormatTime(score.R3, Cubes.Cube333)}</td>
@@ -154,4 +131,64 @@ const MBFCube333ScoreTable = (pj: Cubes, Scores: Score[], records: Map<string, C
             <tbody>{getItems()}</tbody>
         </table>
     )
+}
+
+const cubeHandlers: { [_ in Cubes]: (pj: Cubes, Scores: Score[], records: Map<string, ContestRecord>) => JSX.Element } = {
+
+    [Cubes.Cube222]: FiveResultCubeScoreTableFn,
+    [Cubes.Cube333]: FiveResultCubeScoreTableFn,
+    [Cubes.Cube444]: FiveResultCubeScoreTableFn,
+    [Cubes.Cube555]: FiveResultCubeScoreTableFn,
+    [Cubes.Cube666]: ThreeResultCubeScoreTableFn,
+    [Cubes.Cube777]: ThreeResultCubeScoreTableFn,
+    [Cubes.CubeSk]: FiveResultCubeScoreTableFn,
+    [Cubes.CubePy]: FiveResultCubeScoreTableFn,
+    [Cubes.CubeSq1]: FiveResultCubeScoreTableFn,
+    [Cubes.CubeMinx]: FiveResultCubeScoreTableFn,
+    [Cubes.CubeClock]: FiveResultCubeScoreTableFn,
+    [Cubes.Cube333OH]: FiveResultCubeScoreTableFn,
+    [Cubes.Cube333FM]: ThreeResultCubeScoreTableFn,
+    [Cubes.Cube333BF]: ThreeResultCubeScoreTableFn,
+    [Cubes.Cube444BF]: ThreeResultCubeScoreTableFn,
+    [Cubes.Cube555BF]: ThreeResultCubeScoreTableFn,
+    [Cubes.Cube333MBF]: MBFCube333ScoreTable,
+    [Cubes.Cube333Ft]: FiveResultCubeScoreTableFn,
+    [Cubes.JuBaoHaoHao]: OneResultCubeScoreTableFn,
+    [Cubes.OtherCola]: OneResultCubeScoreTableFn,
+    [Cubes.XCube222BF]: ThreeResultCubeScoreTableFn,
+    [Cubes.XCube666BF]: ThreeResultCubeScoreTableFn,
+    [Cubes.XCube777BF]: ThreeResultCubeScoreTableFn,
+    [Cubes.XCube333Mini]: FiveResultCubeScoreTableFn,
+    [Cubes.XCube333MiniOH]: FiveResultCubeScoreTableFn,
+    [Cubes.XCube222OH]: FiveResultCubeScoreTableFn,
+    [Cubes.XCube444OH]: FiveResultCubeScoreTableFn,
+    [Cubes.XCube555OH]: FiveResultCubeScoreTableFn,
+    [Cubes.XCube666OH]: ThreeResultCubeScoreTableFn,
+    [Cubes.XCube777OH]: ThreeResultCubeScoreTableFn,
+    [Cubes.XCubeSkOH]: FiveResultCubeScoreTableFn,
+    [Cubes.XCubePyOH]: FiveResultCubeScoreTableFn,
+    [Cubes.XCubeSq1OH]: FiveResultCubeScoreTableFn,
+    [Cubes.XCubeMinxOH]: FiveResultCubeScoreTableFn,
+    [Cubes.XCube333Mirror]: FiveResultCubeScoreTableFn,
+    [Cubes.XCube333Mirroring]: FiveResultCubeScoreTableFn,
+    [Cubes.XCube333Multiple5]: OneResultCubeScoreTableFn,
+    [Cubes.XCube333Multiple10]: OneResultCubeScoreTableFn,
+    [Cubes.XCube333Multiple15]: OneResultCubeScoreTableFn,
+    [Cubes.XCube333Multiple20]: OneResultCubeScoreTableFn,
+    [Cubes.XCube27Relay]: OneResultCubeScoreTableFn,
+    [Cubes.XCube345RelayBF]: OneResultCubeScoreTableFn,
+    [Cubes.XCubeAlienRelay]: OneResultCubeScoreTableFn,
+    [Cubes.XCube27AlienRelayAll]: OneResultCubeScoreTableFn,
+    [Cubes.XCube333Ghost]: FiveResultCubeScoreTableFn,
+    [Cubes.XCube333ZongZi]: FiveResultCubeScoreTableFn,
+}
+// todo重写
+export const CubeScoresTable = (pj: Cubes, Scores: Score[], records: ContestRecord[]) => {
+    const recordMp = RecordsToMap(records)
+
+    const handler = cubeHandlers[pj];
+    if (handler) {
+        return handler(pj, Scores, recordMp);
+    }
+    return <table className="table table-bordered table-striped"></table>;
 }

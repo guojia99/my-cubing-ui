@@ -5,19 +5,34 @@ import {AuthAPI} from "../../components/api/api";
 
 
 class Auth extends React.Component {
-    inputUserId = "input_user"
-    inputPassword = "input_password"
 
     componentDidMount() {
         if (AuthAPI.IsAuth()) {
             window.location.href = "/xadmin"
+            return
         }
         this.setState({})
     }
-    auth() {
-        const user = document.getElementById(this.inputUserId) as HTMLElement
-        const password = document.getElementById(this.inputPassword) as HTMLElement
-        console.log(user,password)
+
+    async auth() {
+        const user = document.getElementById("input_user") as HTMLInputElement
+        const password = document.getElementById("input_password") as HTMLInputElement
+        await AuthAPI.GetToken(user.value, password.value).then(value => {
+            if (AuthAPI.IsAuth()) {
+                window.location.href = "/xadmin"
+                return
+            }
+            alert("帐号密码错误")
+            password.value = ""
+        })
+    }
+
+
+    // todo 这里需要做回车处理
+    private async checkKeyUpEvent(e: React.KeyboardEvent<HTMLInputElement>) {
+        // if (e.code === "Enter") {
+        //     await this.auth()
+        // }
     }
 
     render() {
@@ -26,13 +41,12 @@ class Auth extends React.Component {
             <form className="form-horizontal col-md-8 col-sm-12 col-lg-6">
                 <span className="heading">登录</span>
                 <div className="form-group">
-                    <input type="text" className="form-control" id={this.inputUserId}  placeholder="帐号"></input>
+                    <input type="text" className="form-control" id="input_user" placeholder="帐号"></input>
                     <i className="bi bi-person-fill"></i>
                 </div>
                 <div className="form-group help">
-                    <input type="password" className="form-control" id={this.inputPassword} placeholder="密码"></input>
+                    <input type="password" className="form-control" id="input_password" placeholder="密码" onKeyUp={this.checkKeyUpEvent}></input>
                     <i className="bi bi-person-fill-lock"></i>
-                    <a href="#" className="fa fa-question-circle"></a>
                 </div>
                 <div className="form-group">
                     <button type="button" className="btn btn-default" onClick={this.auth}>登录</button>

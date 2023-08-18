@@ -1,6 +1,5 @@
 import {Circle, DrawPolygon, hsq3, Rotate, Transform} from "./utils";
 import {useEffect, useRef} from "react";
-import {SkCubeDrawerUtils} from "./draw_skewb";
 
 
 type drawCache = {

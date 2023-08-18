@@ -1,5 +1,6 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
+
 import {
     ContestPodiums,
     ContestRecord,
@@ -119,6 +120,8 @@ function getCurrentTimestampInSeconds(): number {
 }
 
 export class authApiCore {
+    key = "Token"
+
     apiCore: apiCore;
     token: GetTokenResponse = {
         Ts: 0,
@@ -132,27 +135,15 @@ export class authApiCore {
     async GetToken(user: string, password: string): Promise<GetTokenResponse> {
         const timestamp: number = getCurrentTimestampInSeconds()
         try {
+            this.updateByCache()
             if (this.token !== null && this.token.Ts <= timestamp - 10 && this.token.Token !== "") {
                 return this.token
             }
-
-            const key = 'Token'
-
-            const cache = Cookies.get(key)
-            if (cache !== null && typeof cache === "string" && cache !== "") {
-                this.token = JSON.parse(cache)
-                return this.token
-            }
-
             let uri = this.apiCore.uri + "/auth/token"
-            this.token = await axios.get(uri, {
-                headers: {
-                    user_name: user,
-                    password: password,
-                }
-            })
+            const value = await axios.post(uri, {user_name: user, password: password}, {headers: {Accept: 'application/json'}})
 
-            Cookies.set(key, JSON.stringify(this.token), {expires: 2})
+            this.token = value.data as GetTokenResponse
+            Cookies.set(this.key, JSON.stringify(this.token), {expires: 2})
             return this.token
         } catch (error) {
             console.log('GetToken error' + error)
@@ -160,16 +151,24 @@ export class authApiCore {
         }
     }
 
+    private updateByCache(){
+        const cache = Cookies.get(this.key)
+        if (cache !== null && typeof cache === "string" && cache !== "") {
+            this.token = JSON.parse(cache)
+        }
+    }
+
     IsAuth(): boolean {
+        this.updateByCache()
         const timestamp: number = getCurrentTimestampInSeconds()
-        return this.token.Token !== "" && this.token.Ts > timestamp
+        const tk = this.token as GetTokenResponse
+        return tk.Token !== "" && tk.Ts > timestamp
     }
 
     DeleteToken() {
         this.token.Token = ""
         this.token.Ts = 0
-        const key = 'Token'
-        Cookies.remove(key)
+        Cookies.remove(this.key)
     }
 
     async AddContest() {
