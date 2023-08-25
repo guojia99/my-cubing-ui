@@ -7,8 +7,11 @@ import './index.css'
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import {BrowserRouter, Link, NavLink, Route, Routes} from "react-router-dom";
+
+
+// page
 import Auth from "./pages/admin/auth";
-import Home from "./pages/Home";
+import Home from "./pages/home/Home";
 import About from "./pages/about/About";
 import Best from "./pages/best/Best";
 import Sor from "./pages/best/Sor";
@@ -18,6 +21,7 @@ import Contests from "./pages/contests/Contests";
 import ContestPage from "./pages/contest/Contest";
 import Debug from "./pages/debug/debug";
 import PlayerPage from "./pages/player/Player";
+
 
 const root = ReactDOM.createRoot(
     document.getElementById('root') as HTMLElement
@@ -34,8 +38,10 @@ root.render(
                 <Link to="#" className="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false">统计</Link>
                 {/*<a className="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" href="#" aria-expanded="false">统计</a>*/}
                 <ul className="dropdown-menu">
+                    <li><NavLink className="dropdown-item" to="/statistics/record">记录</NavLink></li>
                     <li><NavLink className="dropdown-item" to="/statistics/sor">排位分数</NavLink></li>
                     <li><NavLink className="dropdown-item" to="/statistics/best">最佳成绩</NavLink></li>
+                    <li><NavLink className="dropdown-item" to="/statistics/interest">趣味玩法</NavLink></li>
                 </ul>
             </li>
         </ul>
@@ -56,6 +62,7 @@ root.render(
             {/*统计*/}
             <Route path="/statistics/best" Component={Best}/> {/*最佳成绩汇总*/}
             <Route path="/statistics/sor" Component={Sor}/> {/*最佳成绩汇总*/}
+            <Route path="/statistics/interest" Component={() => {return (<div></div>)}}></Route> {/*趣味玩法*/}
         </Routes>
     </BrowserRouter>
 );

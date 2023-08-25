@@ -3,7 +3,7 @@ import './Player.css'
 
 import React, {JSX} from 'react';
 import {API} from "../../components/api/api";
-import {AllProjectList, Cubes, CubesCn, WCAProjectList} from "../../components/cube/cube";
+import {AllProjectList, Cubes, CubesCn} from "../../components/cube/cube";
 import {GetLocationQueryParams, SetTitleName} from "../../components/utils/utils";
 import {GetPlayerAllScoreResponse, GetPlayerRecord, Player, PlayerBestScoreResponse, Podiums, RankScore, RecordMessage, Contest, Round, Score, ScoresByContest} from "../../components/api/api_model";
 import {GetCubeIcon} from "../../components/cube/icon/cube_icon";

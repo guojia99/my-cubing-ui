@@ -1,6 +1,6 @@
 import './cube_icon_base.css'
 import './cube_icon.css'
-import {Cubes, CubesCn} from "../cube";
+import {Cubes} from "../cube";
 
 
 export const GetCubeIcon = (c: Cubes) => {

@@ -127,6 +127,7 @@ export const WCAProjectList = () => {
         Cubes.Cube444BF,
         Cubes.Cube555BF,
         Cubes.Cube333MBF,
+        Cubes.Cube333Ft,
     ]
 }
 
@@ -136,6 +137,15 @@ export const XCubeProjectList = () => {
         Cubes.XCube666BF,
         Cubes.XCube777BF,
         Cubes.XCube333Mini,
+        Cubes.XCube333Mirror,
+        Cubes.XCube333Mirroring,
+        Cubes.XCube333Ghost,
+        Cubes.XCube333ZongZi,
+    ]
+}
+
+export const XCubeOHProjectList = () => {
+    return [
         Cubes.XCube222OH,
         Cubes.XCube333MiniOH,
         Cubes.XCube444OH,
@@ -146,8 +156,13 @@ export const XCubeProjectList = () => {
         Cubes.XCubePyOH,
         Cubes.XCubeSq1OH,
         Cubes.XCubeMinxOH,
-        Cubes.XCube333Mirror,
-        Cubes.XCube333Mirroring,
+    ]
+}
+
+
+// XCubeRelaysList 趣味连拧系列
+export const XCubeRelaysList = () => {
+    return [
         Cubes.XCube333Multiple5,
         Cubes.XCube333Multiple10,
         Cubes.XCube333Multiple15,
@@ -156,8 +171,6 @@ export const XCubeProjectList = () => {
         Cubes.XCube345RelayBF,
         Cubes.XCubeAlienRelay,
         Cubes.XCube27AlienRelayAll,
-        Cubes.XCube333Ghost,
-        Cubes.XCube333ZongZi,
     ]
 }
 

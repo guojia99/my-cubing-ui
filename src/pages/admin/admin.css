@@ -3,6 +3,29 @@
     margin-top: -50px;
 }
 
-.badge{
+.badge {
     margin-left: 3px;
+}
+
+.input-center-tr {
+}
+
+.input-center-tr td {
+    text-align: center;
+    vertical-align: middle;
+}
+
+.input-center-tr td input {
+    width: 100%;
+    display: inline-block;
+    vertical-align: center;
+}
+
+.score-buttons {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    text-align: right;
+}
+.score-buttons button{
+    margin-left: 10px;
 }

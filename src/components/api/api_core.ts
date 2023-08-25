@@ -4,6 +4,7 @@ import Cookies from 'js-cookie';
 import {
     ContestPodiums,
     ContestRecord,
+    Record,
     GetBestScoreResponse, GetContestResponse,
     GetContestScoreResponse,
     GetContestSorResponse,
@@ -81,6 +82,12 @@ export class apiCore {
     async GetBestPodium() {
     }
 
+    async GetRecords(page: number, size: number) : Promise<Record[]>{
+        let uri = this.uri + "/record?page=" + page + "&size=" + size
+        const result = await axios.get(uri, {headers: {Accept: 'application/json'}})
+        return result.data
+    }
+
 
     async GetContests(page: number, size: number, typ: string): Promise<GetContestsResponse> {
         let uri = this.uri + "/contest?page=" + page + "&size=" + size + "&type=" + typ
@@ -133,17 +140,13 @@ export class authApiCore {
     }
 
     async GetToken(user: string, password: string): Promise<GetTokenResponse> {
-        const timestamp: number = getCurrentTimestampInSeconds()
         try {
-            this.updateByCache()
-            if (this.token !== null && this.token.Ts <= timestamp - 10 && this.token.Token !== "") {
-                return this.token
-            }
             let uri = this.apiCore.uri + "/auth/token"
             const value = await axios.post(uri, {user_name: user, password: password}, {headers: {Accept: 'application/json'}})
-
             this.token = value.data as GetTokenResponse
-            Cookies.set(this.key, JSON.stringify(this.token), {expires: 2})
+            if (this.token.Token !== ""){
+                Cookies.set(this.key, JSON.stringify(this.token), {expires: 2})
+            }
             return this.token
         } catch (error) {
             console.log('GetToken error' + error)

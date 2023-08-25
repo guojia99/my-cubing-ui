@@ -33,6 +33,24 @@ const AboutChangeLog = () => {
     // todo 从后端获取
     const changeLog: AboutChangeLogElement[] = [
         {
+            Time: '20241001', Au: '广州', Title: 'V2版本正式上线', Matters: [
+                {Idx: 1, Value: "正式上线全新版本"},
+            ]
+        },
+        {
+            Time: '20230901', Au: '广州', Title: 'V2版本正式内测', Matters: [
+                {Idx: 1, Value: "内部功能测试和交叉测试"},
+            ]
+        },
+        {
+            Time: '20230801', Au: '广州', Title: '正式重构赛事系统V2', Matters: [
+                {Idx: 1, Value: "采用React + Ts开发前端"},
+                {Idx: 2, Value: "后端全部实现重构"},
+                {Idx: 3, Value: "完善功能：个人、记录、统计、赛事领奖台等"},
+                {Idx: 4, Value: "完善后台成绩记录"}
+            ]
+        },
+        {
             Time: '20230722', Au: '广州', Title: '魔缘时隔4年再次组织线下魔聚', Matters: [
                 {Idx: 1, Value: "举办首次魔缘线下赛"},
             ]

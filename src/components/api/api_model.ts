@@ -64,6 +64,7 @@ export type Record = {
     ID: number;
     RType: RecordType;
     ScoreId: number;
+    ScoreValue: Score;
     PlayerID: number;
     PlayerName: string;
     ContestID: number;
