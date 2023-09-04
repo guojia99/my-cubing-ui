@@ -110,7 +110,7 @@ class Home extends React.Component {
                     <li><Link
                         to={"/player?id=" + rd.PlayerID}>
                         {GetCubeIcon(rd.ScoreValue.Project)}
-                        <a style={{color: "#dba0ef"}}> {rd.PlayerName} </a> 以成绩
+                        <Link style={{color: "#dba0ef"}} to={"/player?id=" + rd.PlayerID}> {rd.PlayerName} </Link> 以成绩
                         {rd.RType === 1 ? FormatTime(rd.ScoreValue.Avg, rd.ScoreValue.Project) : FormatTime(rd.ScoreValue.Best, rd.ScoreValue.Project)}
                         刷新 {CubesCn(rd.ScoreValue.Project)}
                         {rd.RType === 1 ? "平均" : "单次"} 记录

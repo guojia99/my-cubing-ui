@@ -97,6 +97,58 @@ const cubeCnMap: Map<Cubes, string> = new Map([
 ]);
 
 
+
+export const CubeRouteNumber: Map<Cubes, number> = new Map([
+    [Cubes.JuBaoHaoHao, 1],
+    [Cubes.OtherCola, 1],
+    [Cubes.Cube222,5],
+    [Cubes.Cube333, 5],
+    [Cubes.Cube444, 5],
+    [Cubes.Cube555, 5],
+    [Cubes.Cube666, 3],
+    [Cubes.Cube777, 3],
+    [Cubes.CubeSk, 5],
+    [Cubes.CubePy, 5],
+    [Cubes.CubeSq1, 5],
+    [Cubes.CubeMinx, 5],
+    [Cubes.CubeClock, 5],
+    [Cubes.Cube333OH, 5],
+    [Cubes.Cube333FM, 3],
+    [Cubes.Cube333BF, 3],
+    [Cubes.Cube444BF, 3],
+    [Cubes.Cube555BF, 3],
+    [Cubes.Cube333MBF, 3],
+    [Cubes.Cube333Ft, 5],
+    [Cubes.XCube222BF,5],
+    [Cubes.XCube666BF, 1],
+    [Cubes.XCube777BF, 1],
+    [Cubes.XCube333Mini, 5],
+    [Cubes.XCube333MiniOH, 5],
+    [Cubes.XCube222OH, 5],
+    [Cubes.XCube444OH, 5],
+    [Cubes.XCube555OH, 3],
+    [Cubes.XCube666OH, 1],
+    [Cubes.XCube777OH, 1],
+    [Cubes.XCubeSkOH, 5],
+    [Cubes.XCubePyOH, 5],
+    [Cubes.XCubeSq1OH, 5],
+    [Cubes.XCubeMinxOH, 1],
+    [Cubes.XCube333Mirror, 5],
+    [Cubes.XCube333Mirroring, 5],
+    [Cubes.XCube333Multiple5, 5],
+    [Cubes.XCube333Multiple10, 1],
+    [Cubes.XCube333Multiple15, 1],
+    [Cubes.XCube333Multiple20, 1],
+    [Cubes.XCube27Relay, 1],
+    [Cubes.XCube345RelayBF, 1],
+    [Cubes.XCubeAlienRelay, 1],
+    [Cubes.XCube27AlienRelayAll, 1],
+    [Cubes.XCube333Ghost, 5],
+    [Cubes.XCube333ZongZi, 5],
+]);
+
+
+
 export const CubesCn = (c: Cubes) => {
     const out = cubeCnMap.get(c)
     return out ? out : "其他"

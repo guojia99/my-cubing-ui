@@ -5,7 +5,7 @@ function getAPIUrl() {
     if (hostname === "localhost" || hostname === "127.0.0.1" || hostname === '0.0.0.0') {
         return "http://127.0.0.1:20000/v2/api"
     }
-    if (/^192\.168/.test(hostname)) {
+    if (/^192\.168/.test(hostname) || /^10./.test(hostname)) {
         return "http://" + hostname + ":20000/v2/api"
     }
     return "/v2/api"
