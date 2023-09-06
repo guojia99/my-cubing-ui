@@ -112,6 +112,7 @@ export type Podiums = {
 // resp
 export type GetContestsResponseContest = {
     Contest: Contest;
+    Rounds: Round[];
 }
 
 export type GetContestsResponse = {

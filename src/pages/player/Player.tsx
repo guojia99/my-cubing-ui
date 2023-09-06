@@ -467,7 +467,7 @@ class PlayerPage extends React.Component {
 
             const podium = this.state.podium as Podiums
             let items: JSX.Element[] = []
-            if (podium.PodiumsResults !== null) {
+            if (podium.PodiumsResults !== null && podium.PodiumsResults !== undefined) {
                 let lastContestID = -1
                 podium.PodiumsResults = podium.PodiumsResults.reverse()
                 for (let i = 0; i < podium.PodiumsResults.length; i++) {

@@ -5,13 +5,12 @@ export function FormatTime(result: number, pj: Cubes) {
     if (pj === Cubes.Cube333MBF) {
         return result.toFixed(0)
     }
-    if (result === -1) {
+    if (result === -10001) {
         return "DNS"
     }
-    if (result === 0) {
+    if (result === -10000) {
         return "DNF"
     }
-
     if (pj === Cubes.Cube333FM) {
         return result.toFixed(0)
     }

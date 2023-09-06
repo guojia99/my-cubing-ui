@@ -2,7 +2,7 @@ export class WaitGroup {
     private current = 0
     private queued: (() => void)[] = []
 
-    private queue (fn: () => void) {
+    private queue(fn: () => void) {
         if (this.current === 0) {
             fn()
             return
@@ -10,13 +10,13 @@ export class WaitGroup {
         this.queued.push(fn)
     }
 
-    private resolveQueue () {
+    private resolveQueue() {
         while (this.queued.length > 0) {
             this.queued.shift()?.()
         }
     }
 
-    public add (delta: number = 1): void {
+    public add(delta: number = 1): void {
         this.current += delta
         if (this.current < 0) {
             throw new Error('negative cur numbers are not allowed')
@@ -26,17 +26,28 @@ export class WaitGroup {
         }
     }
 
-    public done (): void {
+    public done(): void {
         this.add(-1)
     }
 
-    public wait (): Promise<void> {
+    public wait(): Promise<void> {
         return new Promise((resolve) => {
             this.queue(() => resolve())
         })
     }
 }
 
-export const Sleep = (ms: number) =>{
+export const Sleep = (ms: number) => {
     return new Promise(resolve => setTimeout(resolve, ms))
+}
+
+export function Once(fn: () => void) {
+    let toggle = false
+    return  () => {
+        if (toggle) {
+            return;
+        }
+        toggle = true;
+        fn()
+    };
 }

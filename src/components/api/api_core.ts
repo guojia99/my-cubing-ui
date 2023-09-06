@@ -10,7 +10,7 @@ import {
     GetContestSorResponse,
     GetContestsResponse, GetPlayerAllScoreResponse, GetPlayerRecord,
     GetTokenResponse, Player, PlayerBestScoreResponse,
-    PlayersResponse, Podiums,
+    PlayersResponse, Podiums, Score,
 } from './api_model';
 
 
@@ -82,7 +82,7 @@ export class apiCore {
     async GetBestPodium() {
     }
 
-    async GetRecords(page: number, size: number) : Promise<Record[]>{
+    async GetRecords(page: number, size: number): Promise<Record[]> {
         let uri = this.uri + "/record?page=" + page + "&size=" + size
         const result = await axios.get(uri, {headers: {Accept: 'application/json'}})
         return result.data
@@ -144,7 +144,7 @@ export class authApiCore {
             let uri = this.apiCore.uri + "/auth/token"
             const value = await axios.post(uri, {user_name: user, password: password}, {headers: {Accept: 'application/json'}})
             this.token = value.data as GetTokenResponse
-            if (this.token.Token !== ""){
+            if (this.token.Token !== "") {
                 Cookies.set(this.key, JSON.stringify(this.token), {expires: 2})
             }
             return this.token
@@ -154,7 +154,7 @@ export class authApiCore {
         }
     }
 
-    private updateByCache(){
+    private updateByCache() {
         const cache = Cookies.get(this.key)
         if (cache !== null && typeof cache === "string" && cache !== "") {
             this.token = JSON.parse(cache)
@@ -174,6 +174,24 @@ export class authApiCore {
         Cookies.remove(this.key)
     }
 
+    config() {
+        return {
+            method: "GET",
+            headers: {
+                Accept: 'application/json',
+                Authorization: this.token.Token,
+            },
+        }
+    }
+
+
+    async GetPlayerScoreByContest(playerID: number, contestID: number): Promise<Score[]> {
+        let uri = this.apiCore.uri + "/score/player/" + playerID + "/contest/" + contestID
+        const result = await axios.get(uri, this.config())
+        return result.data
+    }
+
+
     async AddContest() {
     }
 
@@ -192,7 +210,10 @@ export class authApiCore {
     async AddScore() {
     }
 
-    async DeleteScore() {
+    async DeleteScore(scoreID: number) {
+        let uri = this.apiCore.uri + "/score/" + scoreID
+        const result = await axios.delete(uri, this.config())
+        return result.data
     }
 }
 
