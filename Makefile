@@ -3,6 +3,9 @@ all: start
 start:
 	npm start
 
+build_a:
+	npm run build
+
 
 build_x:
 	npm run build
