@@ -68,6 +68,7 @@ export type Record = {
     PlayerID: number;
     PlayerName: string;
     ContestID: number;
+    ContestValue: Contest;
 }
 
 
@@ -186,3 +187,13 @@ export type GetPlayerAllScoreResponse = {
 }
 
 export type GetPlayerRecord = RecordMessage[];
+
+export type GetRecordsResponse = {
+    Count: number;
+    Records: Record[];
+}
+
+export type BestSorReportResponse = {
+    BestSingle: SorScore[];
+    BestAvg: SorScore[];
+}

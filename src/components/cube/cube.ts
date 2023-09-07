@@ -157,6 +157,8 @@ export const CubesCn = (c: Cubes) => {
 export const AllProjectList = () => {
     let all = WCAProjectList()
     all.push(...XCubeProjectList())
+    all.push(...XCubeOHProjectList())
+    all.push(...XCubeRelaysList())
     return all
 }
 
@@ -210,7 +212,6 @@ export const XCubeOHProjectList = () => {
         Cubes.XCubeMinxOH,
     ]
 }
-
 
 // XCubeRelaysList 趣味连拧系列
 export const XCubeRelaysList = () => {

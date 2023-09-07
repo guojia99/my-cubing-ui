@@ -220,7 +220,6 @@ class ContestPage extends React.Component {
                     </tr>
                 )
             }
-
             return items;
         }
 

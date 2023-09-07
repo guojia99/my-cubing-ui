@@ -21,6 +21,7 @@ import Contests from "./pages/contests/Contests";
 import ContestPage from "./pages/contest/Contest";
 import Debug from "./pages/debug/debug";
 import PlayerPage from "./pages/player/Player";
+import Record from "./pages/best/record";
 
 
 const root = ReactDOM.createRoot(
@@ -51,7 +52,7 @@ root.render(
 
             {/*管理员*/}
             <Route path="/xadmin" Component={Admin}/>
-            <Route path="/xauth" Component={Auth} />
+            <Route path="/xauth" Component={Auth}/>
             <Route path="/debug" Component={Debug}/>
 
             <Route path="/contest" Component={ContestPage}/> {/*比赛*/}
@@ -62,7 +63,10 @@ root.render(
             {/*统计*/}
             <Route path="/statistics/best" Component={Best}/> {/*最佳成绩汇总*/}
             <Route path="/statistics/sor" Component={Sor}/> {/*最佳成绩汇总*/}
-            <Route path="/statistics/interest" Component={() => {return (<div></div>)}}></Route> {/*趣味玩法*/}
+            <Route path="/statistics/record" Component={Record}/> {/*记录*/}
+            <Route path="/statistics/interest" Component={() => {
+                return (<div>没开发</div>)
+            }}></Route> {/*趣味玩法*/}
         </Routes>
     </BrowserRouter>
 );
