@@ -4,7 +4,6 @@ import Cookies from 'js-cookie';
 import {
     ContestPodiums,
     ContestRecord,
-    Record,
     GetBestScoreResponse, GetContestResponse,
     GetContestScoreResponse,
     GetContestSorResponse,

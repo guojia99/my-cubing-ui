@@ -88,7 +88,7 @@ class Home extends React.Component {
             for (let i = 0; i < contest.Contests.length; i++) {
                 const ct = contest.Contests[i].Contest
                 items.push(
-                    <li><Link
+                    <li key={"contestCard_item" + i}><Link
                         to={"/contest?id=" + contest.Contests[i].Contest.ID}>
                         {ct.Name} ({ct.IsEnd ? "已结束" : "进行中"})
                     </Link></li>
@@ -107,7 +107,7 @@ class Home extends React.Component {
             for (let i = 0; i < records.length; i++) {
                 const rd = records[i]
                 items.push(
-                    <li><Link
+                    <li key={"recordCard_item" + i}><Link
                         to={"/player?id=" + rd.PlayerID}>
                         {GetCubeIcon(rd.ScoreValue.Project)}
                         <Link style={{color: "#dba0ef"}} to={"/player?id=" + rd.PlayerID}> {rd.PlayerName} </Link> 以成绩
@@ -134,7 +134,7 @@ class Home extends React.Component {
                 }
                 const p = players[i]
                 items.push(
-                    <li><Link to={"/player?id=" + p.ID}> {p.ID}. {p.Name} </Link></li>
+                    <li key={"playerCard_item" + i}><Link to={"/player?id=" + p.ID}> {p.ID}. {p.Name} </Link></li>
                 )
             }
         }

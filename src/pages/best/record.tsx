@@ -1,14 +1,15 @@
 import React, {JSX} from 'react';
 import {API} from "../../components/api/api";
 import {GetLocationQueryParams} from "../../components/utils/utils";
-import {GetContestsResponse, GetRecordsResponse, Record as rc} from "../../components/api/api_model";
+import {GetRecordsResponse, Record as rc} from "../../components/api/api_model";
 import {Link} from "react-router-dom";
 import {PageNav, PageNavValue} from "../../components/utils/page";
 import {GetCubeIcon} from "../../components/cube/icon/cube_icon";
 import {CubesCn} from "../../components/cube/cube";
 import {RecordType} from "../../components/cube/components/cube_score_tabels";
 import {FormatTime} from "../../components/cube/components/cube_timeformat";
-class Record extends React.Component{
+
+class Record extends React.Component {
     state = {
         data: null,
     }
@@ -38,7 +39,7 @@ class Record extends React.Component{
     private contestTrBody(c: rc) {
         let score = c.ScoreValue.Best
         let name = "单次"
-        if (c.RType === RecordType.RecordByAvg){
+        if (c.RType === RecordType.RecordByAvg) {
             score = c.ScoreValue.Avg
             name = "平均"
         }
@@ -53,11 +54,11 @@ class Record extends React.Component{
     }
 
     private renderTable() {
-        let items :JSX.Element[] = []
-        if (this.state.data !== null){
+        let items: JSX.Element[] = []
+        if (this.state.data !== null) {
             const data = this.state.data as GetRecordsResponse
-            if (data.Records !== undefined){
-                for (let i = 0; i < data.Records.length; i++){
+            if (data.Records !== undefined) {
+                for (let i = 0; i < data.Records.length; i++) {
                     items.push(this.contestTrBody(data.Records[i]))
                 }
             }
