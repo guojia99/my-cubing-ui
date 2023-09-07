@@ -2,10 +2,6 @@ import {Cubes} from "../cube";
 
 
 export function FormatTime(result: number, pj: Cubes) {
-
-    if (pj === Cubes.Cube333MBF) {
-        return result.toFixed(0)
-    }
     if (result === -10001) {
         return "DNS"
     }

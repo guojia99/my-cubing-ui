@@ -1,7 +1,7 @@
 import React, {JSX} from 'react';
 import {API} from "../../components/api/api";
 import {GetBestScoreResponse, Score} from "../../components/api/api_model";
-import {AllProjectList, CubesCn} from "../../components/cube/cube";
+import {AllProjectList, Cubes, CubesCn} from "../../components/cube/cube";
 import {GetCubeIcon} from "../../components/cube/icon/cube_icon";
 import {FormatTime} from "../../components/cube/components/cube_timeformat";
 import {Link} from "react-router-dom";
@@ -39,6 +39,19 @@ class Best extends React.Component {
 
             if (bestScore.BestSingle[pj] !== undefined) {
                 const s = bestScore.BestSingle[pj] as Score
+                if (s.Project === Cubes.Cube333MBF){
+                    items.push(
+                        <tr key={"best_by_id" + s.ID}>
+                            <td colSpan={1}>单次</td>
+                            <td colSpan={1}><Link to={"/player?id=" + s.PlayerID}>{s.PlayerName}</Link></td>
+                            <td colSpan={1}>{s.R1} / {s.R2} ({FormatTime(s.R3, Cubes.Cube333)})</td>
+                            <td colSpan={1}></td>
+                            <td colSpan={1}></td>
+                        </tr>
+                    )
+                    continue
+                }
+
                 items.push(
                     <tr key={"best_by_id" + s.ID}>
                         <td colSpan={1}>单次</td>
