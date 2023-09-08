@@ -9,7 +9,7 @@ import {
     GetContestSorResponse,
     GetContestsResponse, GetPlayerAllScoreResponse, GetPlayerRecord,
     GetTokenResponse, Player, PlayerBestScoreResponse,
-    PlayersResponse, Podiums, Score, GetRecordsResponse, BestSorReportResponse,
+    PlayersResponse, Podiums, Score, GetRecordsResponse, BestSorReportResponse, AddScoreRequest,
 } from './api_model';
 
 
@@ -151,7 +151,6 @@ export class authApiCore {
             }
             return this.token
         } catch (error) {
-            console.log('GetToken error' + error)
             return this.token
         }
     }
@@ -209,7 +208,10 @@ export class authApiCore {
     async DeletePlayer() {
     }
 
-    async AddScore() {
+    async AddScore(req: AddScoreRequest) :Promise<void> {
+        let uri = this.apiCore.uri + "/score"
+        const result = await axios.post(uri, req, this.config())
+        return result.data
     }
 
     async DeleteScore(scoreID: number) {

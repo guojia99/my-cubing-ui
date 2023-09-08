@@ -163,8 +163,11 @@ class ContestPage extends React.Component {
                 items.push(
                     <div className="accordion-item" key={"drawRoutesScores_" + id+ "_item"}>
                         <h2 className="accordion-header">
-                            <button className="accordion-button" type="button" data-bs-toggle="collapse"
-                                    data-bs-target={"#accordion-item-body" + id} aria-expanded="true"
+                            <button className="accordion-button"
+                                    type="button"
+                                    data-bs-toggle="collapse"
+                                    data-bs-target={"#accordion-item-body" + id}
+                                    aria-expanded="true"
                                     aria-controls={"accordion-item-body" + id}>
                                 {routes.Round[0].Name}
                             </button>
@@ -350,7 +353,7 @@ class ContestPage extends React.Component {
         return (
             <div>
                 <div><h1 className="text-center">{contest.Contest.Name}</h1></div>
-                <TabNavsHorizontal Id="contest_nav" SelectedKey="contest_tab" Pages={pages}  Center={false}/>
+                <TabNav Id="contest_nav" SelectedKey="contest_tab" Pages={pages}  Center={false}/>
             </div>
         )
 

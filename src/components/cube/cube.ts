@@ -97,11 +97,10 @@ const cubeCnMap: Map<Cubes, string> = new Map([
 ]);
 
 
-
 export const CubeRouteNumber: Map<Cubes, number> = new Map([
     [Cubes.JuBaoHaoHao, 1],
     [Cubes.OtherCola, 1],
-    [Cubes.Cube222,5],
+    [Cubes.Cube222, 5],
     [Cubes.Cube333, 5],
     [Cubes.Cube444, 5],
     [Cubes.Cube555, 5],
@@ -119,7 +118,7 @@ export const CubeRouteNumber: Map<Cubes, number> = new Map([
     [Cubes.Cube555BF, 3],
     [Cubes.Cube333MBF, 3],
     [Cubes.Cube333Ft, 5],
-    [Cubes.XCube222BF,5],
+    [Cubes.XCube222BF, 5],
     [Cubes.XCube666BF, 1],
     [Cubes.XCube777BF, 1],
     [Cubes.XCube333Mini, 5],
@@ -146,7 +145,6 @@ export const CubeRouteNumber: Map<Cubes, number> = new Map([
     [Cubes.XCube333Ghost, 5],
     [Cubes.XCube333ZongZi, 5],
 ]);
-
 
 
 export const CubesCn = (c: Cubes) => {

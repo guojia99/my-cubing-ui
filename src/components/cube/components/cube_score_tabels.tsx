@@ -2,7 +2,7 @@ import './cube_score_tables.css'
 
 import {ContestRecord, Score} from "../../api/api_model";
 import {Link} from "react-router-dom";
-import {Cubes} from "../cube";
+import {CubeRouteNumber, Cubes} from "../cube";
 import {FormatTime} from "./cube_timeformat";
 import {PR_And_GR_Record} from "./cube_record";
 
@@ -133,60 +133,24 @@ const MBFCube333ScoreTable = (pj: Cubes, Scores: Score[], records: Map<string, C
     )
 }
 
-const cubeHandlers: { [_ in Cubes]: (pj: Cubes, Scores: Score[], records: Map<string, ContestRecord>) => JSX.Element } = {
-
-    [Cubes.Cube222]: FiveResultCubeScoreTableFn,
-    [Cubes.Cube333]: FiveResultCubeScoreTableFn,
-    [Cubes.Cube444]: FiveResultCubeScoreTableFn,
-    [Cubes.Cube555]: FiveResultCubeScoreTableFn,
-    [Cubes.Cube666]: ThreeResultCubeScoreTableFn,
-    [Cubes.Cube777]: ThreeResultCubeScoreTableFn,
-    [Cubes.CubeSk]: FiveResultCubeScoreTableFn,
-    [Cubes.CubePy]: FiveResultCubeScoreTableFn,
-    [Cubes.CubeSq1]: FiveResultCubeScoreTableFn,
-    [Cubes.CubeMinx]: FiveResultCubeScoreTableFn,
-    [Cubes.CubeClock]: FiveResultCubeScoreTableFn,
-    [Cubes.Cube333OH]: FiveResultCubeScoreTableFn,
-    [Cubes.Cube333FM]: ThreeResultCubeScoreTableFn,
-    [Cubes.Cube333BF]: ThreeResultCubeScoreTableFn,
-    [Cubes.Cube444BF]: ThreeResultCubeScoreTableFn,
-    [Cubes.Cube555BF]: ThreeResultCubeScoreTableFn,
-    [Cubes.Cube333MBF]: MBFCube333ScoreTable,
-    [Cubes.Cube333Ft]: FiveResultCubeScoreTableFn,
-    [Cubes.JuBaoHaoHao]: OneResultCubeScoreTableFn,
-    [Cubes.OtherCola]: OneResultCubeScoreTableFn,
-    [Cubes.XCube222BF]: ThreeResultCubeScoreTableFn,
-    [Cubes.XCube666BF]: ThreeResultCubeScoreTableFn,
-    [Cubes.XCube777BF]: ThreeResultCubeScoreTableFn,
-    [Cubes.XCube333Mini]: FiveResultCubeScoreTableFn,
-    [Cubes.XCube333MiniOH]: FiveResultCubeScoreTableFn,
-    [Cubes.XCube222OH]: FiveResultCubeScoreTableFn,
-    [Cubes.XCube444OH]: FiveResultCubeScoreTableFn,
-    [Cubes.XCube555OH]: FiveResultCubeScoreTableFn,
-    [Cubes.XCube666OH]: ThreeResultCubeScoreTableFn,
-    [Cubes.XCube777OH]: ThreeResultCubeScoreTableFn,
-    [Cubes.XCubeSkOH]: FiveResultCubeScoreTableFn,
-    [Cubes.XCubePyOH]: FiveResultCubeScoreTableFn,
-    [Cubes.XCubeSq1OH]: FiveResultCubeScoreTableFn,
-    [Cubes.XCubeMinxOH]: FiveResultCubeScoreTableFn,
-    [Cubes.XCube333Mirror]: FiveResultCubeScoreTableFn,
-    [Cubes.XCube333Mirroring]: FiveResultCubeScoreTableFn,
-    [Cubes.XCube333Multiple5]: OneResultCubeScoreTableFn,
-    [Cubes.XCube333Multiple10]: OneResultCubeScoreTableFn,
-    [Cubes.XCube333Multiple15]: OneResultCubeScoreTableFn,
-    [Cubes.XCube333Multiple20]: OneResultCubeScoreTableFn,
-    [Cubes.XCube27Relay]: OneResultCubeScoreTableFn,
-    [Cubes.XCube345RelayBF]: OneResultCubeScoreTableFn,
-    [Cubes.XCubeAlienRelay]: OneResultCubeScoreTableFn,
-    [Cubes.XCube27AlienRelayAll]: OneResultCubeScoreTableFn,
-    [Cubes.XCube333Ghost]: FiveResultCubeScoreTableFn,
-    [Cubes.XCube333ZongZi]: FiveResultCubeScoreTableFn,
-}
 // todo重写
 export const CubeScoresTable = (pj: Cubes, Scores: Score[], records: ContestRecord[]) => {
     const recordMp = RecordsToMap(records)
 
-    const handler = cubeHandlers[pj];
+    let handler = FiveResultCubeScoreTableFn
+    switch (CubeRouteNumber.get(pj)){
+        case 1:
+            handler = OneResultCubeScoreTableFn
+            break
+        case 3:
+            handler = ThreeResultCubeScoreTableFn
+            break
+    }
+
+    if (pj === Cubes.Cube333MBF){
+        handler = MBFCube333ScoreTable
+    }
+
     if (handler) {
         return handler(pj, Scores, recordMp);
     }

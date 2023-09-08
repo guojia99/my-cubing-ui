@@ -47,7 +47,6 @@ class Record extends React.Component {
             score = c.ScoreValue.R1 + "/" + c.ScoreValue.R2 + "(" + FormatTime(c.ScoreValue.R3, c.ScoreValue.Project) + ")"
         }
 
-
         return (
             <tr>
                 <td><Link to={"/player?id=" + c.ScoreValue.PlayerID}>{c.PlayerName}</Link></td>

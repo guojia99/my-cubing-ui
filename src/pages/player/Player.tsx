@@ -74,7 +74,6 @@ class PlayerPage extends React.Component {
             name = player.Name + " (" + player.ActualName + ")"
         }
         SetTitleName(name)
-
         let titles = []
         if (player.TitlesVal !== undefined && player.TitlesVal !== null) {
             for (let i = 0; i < player.TitlesVal.length; i++) {
@@ -269,6 +268,7 @@ class PlayerPage extends React.Component {
             const drawScoresBaseTablesAndChart = (pj: Cubes, scores: ScoresByContest[]) => {
                 let tdNum = 5
                 let items = []
+                // todo 这里的多行由特殊的函数确定
                 switch (pj) {
                     case Cubes.Cube666:
                     case Cubes.Cube777:

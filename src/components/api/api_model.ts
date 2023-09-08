@@ -197,3 +197,20 @@ export type BestSorReportResponse = {
     BestSingle: SorScore[];
     BestAvg: SorScore[];
 }
+
+export type ScorePenalty = {
+    R1: number[],
+    R2: number[],
+    R3: number[],
+    R4: number[],
+    R5: number[],
+}
+
+export type AddScoreRequest = {
+    PlayerName: string,
+    ContestID: number,
+    Project: Cubes,
+    RouteNum: number,
+    Penalty: ScorePenalty,
+    Results: number[],
+}

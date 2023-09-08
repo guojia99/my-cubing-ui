@@ -7,8 +7,6 @@ export function parseTimeToSeconds(time: string) : number {
             return -10001
         }
 
-
-
         // 解析纯秒数格式
         if (/^\d+(\.\d+)?$/.test(time)) {
             return parseFloat(time);
