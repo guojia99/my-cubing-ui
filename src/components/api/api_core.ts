@@ -205,7 +205,10 @@ export class authApiCore {
     async AddPlayer() {
     }
 
-    async DeletePlayer() {
+    async DeletePlayer(playerID: number):Promise<void> {
+        let uri = this.apiCore.uri + "/player/" + playerID
+        const result = await axios.delete(uri, this.config())
+        return result.data
     }
 
     async AddScore(req: AddScoreRequest) :Promise<void> {

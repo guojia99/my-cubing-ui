@@ -8,6 +8,7 @@ import {FormatTime} from "../../components/cube/components/cube_timeformat";
 import {AuthAPI} from "../../components/api/api";
 import {parseTimeToSeconds} from "./admin_utils";
 import {Once} from "../../components/utils/async";
+import {CreateModal, ModalButton} from "../../components/utils/modal";
 
 
 export const _playerSelectKey = "_player"
@@ -33,8 +34,8 @@ export type AdminScoreDataCtx = {
     Players: PlayersResponse | null,
     PlayersMap: Map<string, Player>,
     Scores: Score[] | null,
-
     UpdateHandle: callback,
+    DeleteScoreId: number,
 }
 
 const PenaltyList = [
@@ -344,52 +345,51 @@ const _roundNumberSelect = () => {
     return (<div></div>)
 }
 
-// 输入成绩框
-const scoreInputs = (n: number, ctx: AdminScoreDataCtx) => {
-    // 校验数据
-    const inputUpdate = (event: React.ChangeEvent<HTMLInputElement>) => {
-        event.target.value = event.target.value.replace(/\s+/g, "")
+const inputUpdate = (event: React.ChangeEvent<HTMLInputElement>) => {
+    event.target.value = event.target.value.replace(/\s+/g, "")
 
-        // 确认是否是指定的格式
-        if (event.target.value === "DNF" || event.target.value === "DNS") {
-            return
-        }
-        if (event.target.value === "D" || event.target.value === "d") {
-            event.target.value = "DNF"
-            return;
-        }
-        if (event.target.value === "S" || event.target.value === "s") {
-            event.target.value = "DNS"
-            return;
-        }
-
-        // 确认是否是数字
-        const num = Number(event.target.value)
-        if (!isNaN(num)) {
-            if (num > 60) {
-                const data = _getSelectData()
-                event.target.value = FormatTime(num, data.project as Cubes)
-            }
-            return;
-        }
-
-        // 确认是否符合时间格式
-        // 时分秒 {number} : {number} : {number} . {number}
-        // 分秒   {number} : {number} . {number}
-        // 秒    {number} . {number}
-        const reg = /^(\d+(\.\d*)?|\d*[:|：]\d*\.{0,1}\d{0,3})$/
-        if (reg.test(event.target.value)) {
-            return;
-        }
-        const match = event.target.value.match(reg)
-        if (match) {
-            event.target.value = match[0]
-            return
-        }
-        alert(event.target.value + "不符合格式")
-        event.target.value = ""
+    // 确认是否是指定的格式
+    if (event.target.value === "DNF" || event.target.value === "DNS") {
+        return
+    }
+    if (event.target.value === "D" || event.target.value === "d") {
+        event.target.value = "DNF"
+        return;
+    }
+    if (event.target.value === "S" || event.target.value === "s") {
+        event.target.value = "DNS"
+        return;
     }
 
+    // 确认是否是数字
+    const num = Number(event.target.value)
+    if (!isNaN(num)) {
+        if (num > 60) {
+            const data = _getSelectData()
+            event.target.value = FormatTime(num, data.project as Cubes)
+        }
+        return;
+    }
+
+    // 确认是否符合时间格式
+    // 时分秒 {number} : {number} : {number} . {number}
+    // 分秒   {number} : {number} . {number}
+    // 秒    {number} . {number}
+    const reg = /^(\d+(\.\d*)?|\d*[:|：]\d*\.{0,1}\d{0,3})$/
+    if (reg.test(event.target.value)) {
+        return;
+    }
+    const match = event.target.value.match(reg)
+    if (match) {
+        event.target.value = match[0]
+        return
+    }
+    alert(event.target.value + "不符合格式")
+    event.target.value = ""
+}
+
+// 输入成绩框
+const scoreInputs = (n: number, ctx: AdminScoreDataCtx) => {
     return (
         <tr className="input-center-tr" key={scoreInputKey + "tr" + n}>
             <td>{n}</td>
@@ -441,7 +441,6 @@ const clearInputHandle = () => {
         }
     }
 }
-
 
 const getAllScores = (): number[] => {
     let out: number[] = []
@@ -522,6 +521,31 @@ const onSubmitHandle = async () => {
     })
 }
 
+const _quickInputHandle = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const reg = /[：:][:0-9., ()DNFSdnfs]+$/
+
+    const out = e.target.value.match(reg)
+    if (out === null || out.length === 0) {
+        return
+    }
+    let find = out[0]
+    find = find.slice(1)
+    find = find.replaceAll("(", "").replaceAll(")", "").replaceAll("（", "").replaceAll("）", "").replaceAll(" ", "")
+
+
+    // slide
+    const slide = find.split(",")
+
+    for (let i = 0; i < slide.length; i++) {
+        const id = scoreInputKey + (i + 1)
+        const input = document.getElementById(id) as HTMLInputElement
+        if (input === null) {
+            continue
+        }
+        input.value = slide[i]
+    }
+    _loadScoreValue()
+}
 
 // 渲染成绩的table body
 const _adminScoreBody = (ctx: AdminScoreDataCtx) => {
@@ -530,6 +554,10 @@ const _adminScoreBody = (ctx: AdminScoreDataCtx) => {
             <tfoot>
             <tr>
                 <td colSpan={10} className="score-buttons">
+                    <div className="input-group mb-3">
+                        <input type="text" className="form-control" placeholder="输入成绩" aria-describedby="quick-input-score" onChange={_quickInputHandle}/>
+                        <span className="input-group-text" id="quick-input-score">成绩输入</span>
+                    </div>
                     <button type="button" className="btn btn-warning" onClick={clearInputHandle}>清空</button>
                     <button type="button" className="btn btn-success" onClick={onSubmitHandle}>提交</button>
                 </td>
@@ -567,92 +595,6 @@ const _adminScoreBody = (ctx: AdminScoreDataCtx) => {
     )
 }
 
-// _renderScoreList 该选手成绩列表
-const _renderScoreList = (ctx: AdminScoreDataCtx) => {
-    if (ctx.Scores === null) {
-        return <div></div>
-    }
-
-    const deleteScoreHandle = (id: number) => {
-        return () => {
-            AuthAPI.DeleteScore(id).then(() => {
-                alert("删除成功")
-            }).catch(() => {
-                alert("删除失败")
-            }).finally(() => {
-                window.location.reload()
-            })
-        }
-    }
-
-    let items: JSX.Element[] = []
-    for (let i = 0; i < ctx.Scores.length; i++) {
-        const s = ctx.Scores[i]
-
-        if (s.Project === Cubes.Cube333MBF) {
-            items.push(
-                <tr key={"_renderScoreList_tr" + s.ID}>
-                    <td>
-                        <button type="button" className="btn btn-sm btn-danger" onClick={deleteScoreHandle(s.ID)}>删除</button>
-                    </td>
-                    <td>{GetCubeIcon(s.Project)} {CubesCn(s.Project)}</td>
-                    <td>{s.RouteValue.Name}</td>
-                    <td>-</td>
-                    <td>-</td>
-                    <td colSpan={5}>{s.R1} / {s.R2}</td>
-                </tr>
-            )
-            continue
-        }
-
-        const round = CubeRouteNumber.get(s.Project) as number
-        let tds = []
-        if (round >= 3) {
-            tds.push(<td>{FormatTime(s.R2, s.Project)}</td>)
-            tds.push(<td>{FormatTime(s.R3, s.Project)}</td>)
-        }
-        if (round >= 5) {
-            tds.push(<td>{FormatTime(s.R4, s.Project)}</td>)
-            tds.push(<td>{FormatTime(s.R5, s.Project)}</td>)
-        }
-
-        for (let i = tds.length; i < 5; i++) {
-            tds.push(<td></td>)
-        }
-
-        items.push(
-            <tr key={"_renderScoreList_tr" + s.ID}>
-                <td>
-                    <button type="button" className="btn btn-sm btn-danger" onClick={deleteScoreHandle(s.ID)}>删除</button>
-                </td>
-                <td>{GetCubeIcon(s.Project)} {CubesCn(s.Project)}</td>
-                <td>{s.RouteValue.Name}</td>
-                <td>{FormatTime(s.Best, s.Project)}</td>
-                <td>{FormatTime(s.Avg, s.Project)}</td>
-                <td>{FormatTime(s.R1, s.Project)}</td>
-                {tds}
-            </tr>
-        )
-    }
-
-    return (
-        <table className="table table-striped table-hover" style={{minWidth: "600px", marginTop: "20px", marginBottom: "30px"}}>
-            <thead>
-            <tr key={"renderPageByScore_thead"}>
-                <th>删除</th>
-                <th>项目</th>
-                <th>轮次</th>
-                <th>单次</th>
-                <th>平均</th>
-                <th colSpan={5}>详情</th>
-            </tr>
-            </thead>
-            <tbody>
-            {items}
-            </tbody>
-        </table>
-    )
-}
 
 // 捞取select选择
 const _loadScoresSelect = (ctx: AdminScoreDataCtx) => {
@@ -666,13 +608,13 @@ const _loadScoresSelect = (ctx: AdminScoreDataCtx) => {
 
         if (contest === null || player === null || contest === "" || player === "") {
             ctx.Scores = null
-            ctx.UpdateHandle({})
+            ctx.UpdateHandle({scores: null})
             return
         }
         const p = ctx.PlayersMap.get(player)
         if (p === undefined) {
             ctx.Scores = null
-            ctx.UpdateHandle({})
+            ctx.UpdateHandle({scores: null})
             return
         }
         if (lastContest === contest && lastPlayer === player && ctx.Scores !== null) {
@@ -681,12 +623,11 @@ const _loadScoresSelect = (ctx: AdminScoreDataCtx) => {
 
         await AuthAPI.GetPlayerScoreByContest(Number(p.ID), Number(contest)).then(value => {
             ctx.Scores = value
-            ctx.UpdateHandle({})
+            ctx.UpdateHandle({scores: value})
         }).catch().finally(() => {
             lastContest = contest
             lastPlayer = player
         })
-
     }
 }
 
@@ -718,6 +659,144 @@ const _loadScoreValue = () => {
     }
 }
 
+
+// ------------------------------------------------------ 成绩列表
+
+
+const _scoreListTr = (s: Score, useDelete: boolean, ctx: AdminScoreDataCtx) => {
+    let deleteButton = (
+        <td>
+            {ModalButton("删除", deleteModalTarget, () => {
+                ctx.DeleteScoreId = s.ID
+                ctx.UpdateHandle({deleteScore: s.ID})
+            }, "btn-danger")}
+        </td>
+    )
+    if (!useDelete){
+        deleteButton = (<></>)
+    }
+
+
+    if (s.Project === Cubes.Cube333MBF) {
+        return (
+            <tr key={"_renderScoreList_tr" + s.ID}>
+                {deleteButton}
+                <td>{GetCubeIcon(s.Project)} {CubesCn(s.Project)}</td>
+                <td>{s.RouteValue.Name}</td>
+                <td>-</td>
+                <td>-</td>
+                <td colSpan={5}>{s.R1} / {s.R2}</td>
+            </tr>
+        )
+    }
+
+    const round = CubeRouteNumber.get(s.Project) as number
+    let tds = []
+    if (round >= 3) {
+        tds.push(<td>{FormatTime(s.R2, s.Project)}</td>)
+        tds.push(<td>{FormatTime(s.R3, s.Project)}</td>)
+    }
+    if (round >= 5) {
+        tds.push(<td>{FormatTime(s.R4, s.Project)}</td>)
+        tds.push(<td>{FormatTime(s.R5, s.Project)}</td>)
+    }
+
+    for (let i = tds.length + 1; i < 5; i++) {
+        tds.push(<td></td>)
+    }
+
+    return (
+        <tr key={"_renderScoreList_tr" + s.ID}>
+            {deleteButton}
+            <td>{GetCubeIcon(s.Project)} {CubesCn(s.Project)}</td>
+            <td>{s.RouteValue.Name}</td>
+            <td>{FormatTime(s.Best, s.Project)}</td>
+            <td>{FormatTime(s.Avg, s.Project)}</td>
+            <td>{FormatTime(s.R1, s.Project)}</td>
+            {tds}
+        </tr>
+    )
+}
+
+// _renderScoreList 该选手成绩列表
+const deleteModalTarget = "delete_scores"
+const _renderScoreList = (ctx: AdminScoreDataCtx) => {
+    if (ctx.Scores === null) {
+        return <div></div>
+    }
+
+    let items: JSX.Element[] = []
+    for (let i = 0; i < ctx.Scores.length; i++) {
+        const s = ctx.Scores[i]
+        items.push(_scoreListTr(s, true, ctx))
+    }
+
+    return (
+        <table className="table table-hover" style={{minWidth: "600px", marginTop: "20px", marginBottom: "30px"}}>
+            <thead>
+            <tr key={"renderPageByScore_thead"}>
+                <th>删除</th>
+                <th>项目</th>
+                <th>轮次</th>
+                <th>单次</th>
+                <th>平均</th>
+                <th colSpan={5}>详情</th>
+            </tr>
+            </thead>
+            <tbody>
+            {items}
+            </tbody>
+        </table>
+    )
+}
+
+// 删除成绩
+const GetDeleteModal = (ctx: AdminScoreDataCtx) => {
+    const bodyHandle = () => {
+        if (ctx.Scores === null) {
+            return <div>是否删除该成绩</div>
+        }
+
+        let score = ctx.Scores[0]
+        for (let i = 0; i < ctx.Scores.length; i++) {
+            if (ctx.Scores[i].ID === ctx.DeleteScoreId) {
+                score = ctx.Scores[i]
+                break
+            }
+        }
+
+        return (
+            <div>
+                <table className="table table-hover table-sm" style={{width: "90%"}}>
+                    <thead>
+                    <tr key={"renderPageByScore_thead_delete"}>
+                        <th>项目</th>
+                        <th>轮次</th>
+                        <th>单次</th>
+                        <th>平均</th>
+                        <th colSpan={5}>详情</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {_scoreListTr(score, false, ctx)}
+                    </tbody>
+                </table>
+            </div>
+        )
+    }
+
+    const deleteScoreHandle = () => {
+        AuthAPI.DeleteScore(ctx.DeleteScoreId).then(() => {
+            alert("删除成功")
+        }).catch(() => {
+            alert("删除失败")
+        }).finally(() => {
+            window.location.reload()
+        })
+    }
+    return CreateModal("删除", bodyHandle, deleteModalTarget, deleteScoreHandle)
+}
+
 // AdminScoreRender 成绩选项
 export class AdminScoreRender {
     private once_loadScores = () => {
@@ -737,6 +816,7 @@ export class AdminScoreRender {
 
         return (
             <div style={{marginTop: "20px"}}>
+                {GetDeleteModal(ctx)}
                 <table className="table table-bordered text-center table-hover table-responsive"
                        style={{verticalAlign: "text-top"}}>
                     <thead>
@@ -746,7 +826,6 @@ export class AdminScoreRender {
                     </thead>
                     {_adminScoreBody(ctx)}
                 </table>
-
 
                 {_renderScoreList(ctx)}
                 {renderPenaltyDescription()}

@@ -7,7 +7,7 @@ import {WaitGroup} from "../../components/utils/async";
 import {GetLocationQueryParams, SetTitleName} from "../../components/utils/utils";
 import { ContestPodiums, ContestRecord, GetContestResponse, GetContestScoreResponse, GetContestSorResponse, Round, RoutesScores, SorScore} from "../../components/api/api_model";
 import {Link} from "react-router-dom";
-import {TabNav, TabNavsHorizontal, TabNavsPage} from "../../components/utils/tabs";
+import {TabNav, TabNavsPage} from "../../components/utils/tabs";
 import {GetCubeIcon} from "../../components/cube/icon/cube_icon";
 import {CubeScoresTable} from "../../components/cube/components/cube_score_tabels";
 import {RoundTables} from "../../components/cube/components/cube_rounds";

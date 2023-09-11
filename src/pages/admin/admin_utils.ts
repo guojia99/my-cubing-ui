@@ -19,12 +19,13 @@ export function parseTimeToSeconds(time: string) : number {
         }
 
         // 解析时+分+秒格式
-        if (/^\d{1,2}[:：]\d{2}[:：]\d{2}(\.\d+)?$/.test(time)) {
+        if (/^\d{1,2}[:：]\d{2}[:：]\d{3}(\.\d+)?$/.test(time)) {
             const [hours, minutes, seconds] = time.split(/[:：]/);
             return parseFloat(hours) * 3600 + parseFloat(minutes) * 60 + parseFloat(seconds);
         }
-        return 0;
+        return -10000;
     }(time)
 
     return parseFloat(data.toString())
 }
+
