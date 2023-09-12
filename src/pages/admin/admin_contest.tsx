@@ -5,12 +5,8 @@ import {ContestTypeCn, convertDateString} from "../contests/Contests";
 import {CreateModal, EmptyHandle, ModalButton} from "../../components/utils/modal";
 import {callback} from "./admin_score";
 import {AuthAPI} from "../../components/api/api";
-import {AllProjectList, Cubes, CubesCn, WCAProjectMap} from "../../components/cube/cube";
+import {AllProjectList, CubesCn, WCAProjectMap} from "../../components/cube/cube";
 import {GetCubeIcon} from "../../components/cube/icon/cube_icon";
-import {Simulate} from "react-dom/test-utils";
-import doubleClick = Simulate.doubleClick;
-import {ALL} from "dns";
-
 
 export type AdminContestDataCtx = {
     Contests: GetContestsResponse | null,

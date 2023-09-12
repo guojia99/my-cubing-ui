@@ -191,7 +191,7 @@ export const WCAProjectList = () => {
 }
 
 export const WCAProjectMap = (): Map<Cubes, string> => {
-    const out = new Map<Cubes, string>
+    const out = new Map<Cubes, string>()
     const all = WCAProjectList()
     for (let i = 0; i < all.length; i++) {
         out.set(all[i], all[i])

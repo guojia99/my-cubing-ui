@@ -3,9 +3,21 @@ import './Player.css'
 
 import React, {JSX} from 'react';
 import {API} from "../../components/api/api";
-import {AllProjectList, Cubes, CubesCn} from "../../components/cube/cube";
+import {AllProjectList, CubeRouteNumber, Cubes, CubesCn} from "../../components/cube/cube";
 import {GetLocationQueryParams, SetTitleName} from "../../components/utils/utils";
-import {GetPlayerAllScoreResponse, GetPlayerRecord, Player, PlayerBestScoreResponse, Podiums, RankScore, RecordMessage, Contest, Round, Score, ScoresByContest} from "../../components/api/api_model";
+import {
+    GetPlayerAllScoreResponse,
+    GetPlayerRecord,
+    Player,
+    PlayerBestScoreResponse,
+    Podiums,
+    RankScore,
+    RecordMessage,
+    Contest,
+    Round,
+    Score,
+    ScoresByContest
+} from "../../components/api/api_model";
 import {GetCubeIcon} from "../../components/cube/icon/cube_icon";
 import {FormatRank, FormatTime} from "../../components/cube/components/cube_timeformat";
 import {TabNav, TabNavsPage} from "../../components/utils/tabs";
@@ -266,18 +278,10 @@ class PlayerPage extends React.Component {
 
 
             const drawScoresBaseTablesAndChart = (pj: Cubes, scores: ScoresByContest[]) => {
-                let tdNum = 5
+                let tdNum = CubeRouteNumber.get(pj) as number
                 let items = []
                 // todo 这里的多行由特殊的函数确定
-                switch (pj) {
-                    case Cubes.Cube666:
-                    case Cubes.Cube777:
-                    case Cubes.Cube333BF:
-                    case Cubes.Cube444BF:
-                    case Cubes.Cube555BF:
-                    case Cubes.Cube333FM:
-                        tdNum = 3
-                }
+
                 items.push(<tr key={"score_key_first_111"}>
                     <td colSpan={tdNum + 5}>{GetCubeIcon(pj)} {CubesCn(pj)}</td>
                 </tr>)
@@ -325,7 +329,7 @@ class PlayerPage extends React.Component {
                 }
                 return (
                     <div style={{overflowX: "auto"}}>
-                        <ScoreChat Project={pj} ContestMap={ContestMap}  scores={ss} key={"scores_chat_by_pj_" + pj}/>
+                        <ScoreChat Project={pj} ContestMap={ContestMap} scores={ss} key={"scores_chat_by_pj_" + pj}/>
                         <table className="table table-striped table-hover" style={{minWidth: "600px", marginTop: "20px", marginBottom: "30px"}}>
                             <thead>
                             <tr key={"renderPageByScore_thead"}>
@@ -356,13 +360,21 @@ class PlayerPage extends React.Component {
                     const ss = scores[i].Scores
                     for (let j = 0; j < ss.length; j++) {
                         const IsBestGr = this.state.recordMap.get(ss[j].ID + "_" + RecordType.RecordBySingle) !== undefined
+
+
+                        let score = <>{ss[j].R1} / {ss[j].R2}</>
+                        if (ss[j].R1 < 2) {
+                            score = <>DNF</>
+                        }
+
                         items.push(
                             <tr key={"score_key" + ss[j].ID}>
                                 <td><Link to={"/contest?id=" + contest.ID}>{j === 0 ? contest.Name : ""}</Link></td>
                                 <td>{ss[j].RouteValue.Name}</td>
                                 <td>{FormatRank(ss[j].Rank)}</td>
                                 <td>{FormatTime(ss[j].Best, Cubes.Cube333MBF)}</td>
-                                <td>{PR_And_GR_Record(ss[j].IsBestSingle, IsBestGr)} <i style={{fontWeight: 700}}> {ss[j].R1} / {ss[j].R2}</i> {FormatTime(ss[j].R3, Cubes.Cube333)}</td>
+                                <td>{PR_And_GR_Record(ss[j].IsBestSingle, IsBestGr)} <i style={{fontWeight: 700}}> {score} </i> {FormatTime(ss[j].R3, Cubes.Cube333)}
+                                </td>
                             </tr>
                         )
                     }
