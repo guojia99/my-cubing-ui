@@ -48,7 +48,7 @@ class Record extends React.Component {
         }
 
         return (
-            <tr>
+            <tr key={"contestTrBody_key" + c.ID}>
                 <td><Link to={"/player?id=" + c.ScoreValue.PlayerID}>{c.PlayerName}</Link></td>
                 <td>{GetCubeIcon(c.ScoreValue.Project)} {CubesCn(c.ScoreValue.Project)}</td>
                 <td>{name} {score}</td>

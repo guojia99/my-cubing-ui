@@ -1,4 +1,5 @@
 import {Cubes} from "../cube/cube";
+import exp from "constants";
 
 
 export type Contest = {
@@ -213,4 +214,23 @@ export type AddScoreRequest = {
     RouteNum: number,
     Penalty: ScorePenalty,
     Results: number[],
+}
+
+export type CreateContestRequestRound = {
+    Project: Cubes;
+    Number: number;
+    Part: number;
+    Name: string;
+    IsStart: boolean;
+    Final: boolean;
+    Upsets: string[];
+}
+
+export type CreateContestRequest = {
+    Name: string,
+    Description: string,
+    Rounds: CreateContestRequestRound[],
+    Type: string,
+    StartTime: number,
+    EndTime: number,
 }

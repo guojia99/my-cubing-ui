@@ -9,7 +9,7 @@ import {
     GetContestSorResponse,
     GetContestsResponse, GetPlayerAllScoreResponse, GetPlayerRecord,
     GetTokenResponse, Player, PlayerBestScoreResponse,
-    PlayersResponse, Podiums, Score, GetRecordsResponse, BestSorReportResponse, AddScoreRequest,
+    PlayersResponse, Podiums, Score, GetRecordsResponse, BestSorReportResponse, AddScoreRequest, CreateContestRequest,
 } from './api_model';
 
 
@@ -193,25 +193,42 @@ export class authApiCore {
     }
 
 
-    async AddContest() {
+    async AddContest(req: CreateContestRequest) {
+        let uri = this.apiCore.uri + "/contest"
+        const result = await axios.post(uri, req, this.config())
+        return result.data
     }
 
     async DeleteContest() {
     }
 
-    async EndContest() {
-    }
-
-    async AddPlayer() {
-    }
-
-    async DeletePlayer(playerID: number):Promise<void> {
-        let uri = this.apiCore.uri + "/player/" + playerID
-        const result = await axios.delete(uri, this.config())
+    async EndContest(id: number) {
+        let uri = this.apiCore.uri + "/score/end_contest"
+        const result = await axios.put(uri, {ContestID: id}, this.config())
         return result.data
     }
 
-    async AddScore(req: AddScoreRequest) :Promise<void> {
+    async AddPlayer(req: Player): Promise<void> {
+        let uri = this.apiCore.uri + "/player"
+        const result = await axios.post(uri, req, this.config())
+        return result.data
+    }
+
+    async UpdatePlayer(playerID: number, req: Player): Promise<void> {
+        req.ID = playerID
+        let uri = this.apiCore.uri + "/player"
+        const result = await axios.put(uri, req, this.config())
+        return result.data
+    }
+
+    async DeletePlayer(playerID: number): Promise<void> {
+        let uri = this.apiCore.uri + "/player/" + playerID
+        const result = await axios.delete(uri, this.config())
+        console.log(result.data)
+        return result.data
+    }
+
+    async AddScore(req: AddScoreRequest): Promise<void> {
         let uri = this.apiCore.uri + "/score"
         const result = await axios.post(uri, req, this.config())
         return result.data

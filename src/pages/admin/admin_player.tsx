@@ -1,9 +1,7 @@
-import {PlayersResponse} from "../../components/api/api_model";
+import {Player, PlayersResponse} from "../../components/api/api_model";
 import React, {JSX} from "react";
 import {callback} from "./admin_score";
-import {CreateModal, ModalButton} from "../../components/utils/modal";
-import Players from "../players/Players";
-import player from "../player/Player";
+import {CreateModal, EmptyHandle, ModalButton} from "../../components/utils/modal";
 import {AuthAPI} from "../../components/api/api";
 
 export type AdminPlayerDataCtx = {
@@ -28,16 +26,18 @@ const renderPlayerTable = (ctx: AdminPlayerDataCtx) => {
         for (let i = 0; i < ctx.Players.Players.length; i++) {
             const p = ctx.Players.Players[i]
             items.push(
-                <tr>
+                <tr key={"renderPlayerTable_item_player_" + p.ID}>
                     <td>{i + 1}</td>
                     <td>{p.WcaID}</td>
                     <td>{p.Name}</td>
                     <td>{p.ActualName}</td>
                     <td>{ModalButton("删除", DeleteTarget, () => {
                         ctx.UpdateHandle({PlayerRenderDeleteID: p.ID})
+                        ctx.DeleteID = p.ID
                     }, "btn-danger")}</td>
                     <td>{ModalButton("更新", UpdateTarget, () => {
                         ctx.UpdateHandle({PlayerRenderUpdateID: p.ID})
+                        ctx.UpdateID = p.ID
                     }, "btn-success")}</td>
                 </tr>
             )
@@ -93,27 +93,135 @@ const GetDeleteModal = (ctx: AdminPlayerDataCtx) => {
 
     return CreateModal("删除", bodyHandle, DeleteTarget, deletePlayerHandle)
 }
+
+
+type createAndUpdateHandleFn = (req: Player) => void
+const createAndUpdateHandle = (key: string, handle: createAndUpdateHandleFn) => {
+    const inputNameID = key + "Player_name"
+    const inputActualNameID = key + "Player_ActualName"
+    const inputWcaIDID = key + "Player_WcaID"
+    // const inputTitleID = key + "Player_Title"
+
+
+    const name = document.getElementById(inputNameID) as HTMLInputElement
+    const actualName = document.getElementById(inputActualNameID) as HTMLInputElement
+    const wcaId = document.getElementById(inputWcaIDID) as HTMLInputElement
+    // const title = document.getElementById(inputTitleID) as HTMLInputElement
+
+    if (name.value === "") {
+        alert("无法输入空名称")
+        return
+    }
+    // todo 校验
+    // todo 后端返回的错误结果输出
+    const req: Player = {
+        ID: 0,
+        Name: name.value,
+        WcaID: wcaId.value,
+        ActualName: actualName.value,
+        TitlesVal: [],
+        ContestNumber: 0,
+        RecoveryNumber: 0,
+        ValidRecoveryNumber: 0,
+    }
+    handle(req)
+}
+
+
 const GetUpdateModal = (ctx: AdminPlayerDataCtx) => {
+
+    const inputNameID = "updatePlayer_name"
+    const inputActualNameID = "updatePlayer_ActualName"
+    const inputWcaIDID = "updatePlayer_WcaID"
+    // const inputTitleID = "updatePlayer_Title"
+
     const bodyHandle = () => {
-        return <div>{ctx.DeleteID}</div>
+        if (ctx.Players === null) {
+            return <div></div>
+        }
+        let p = ctx.Players.Players[0]
+        for (let i = 0; i < ctx.Players.Players.length; i++) {
+            if (ctx.UpdateID === ctx.Players.Players[i].ID) {
+                p = ctx.Players.Players[i]
+                break
+            }
+        }
+
+        return (
+            <div key={"update_inputs" + ctx.UpdateID}>
+                <div className="mb-3" key={"update_inputs" + inputNameID + "_" + ctx.UpdateID}>
+                    <label htmlFor={inputNameID} className="form-label">姓名: ({p.Name})</label>
+                    <input type="text" className="form-control" id={inputNameID} defaultValue={p.Name} key={"update_inputs" + inputNameID + "_input" + ctx.UpdateID}/>
+                </div>
+                <div className="mb-3" key={"update_inputs" + inputActualNameID + "_" + ctx.UpdateID}>
+                    <label htmlFor={inputActualNameID} className="form-label">真实姓名: ({p.ActualName})</label>
+                    <input type="text" className="form-control" id={inputActualNameID} defaultValue={p.ActualName ? p.ActualName : ""}
+                           key={"update_inputs" + inputActualNameID + "_input" + ctx.UpdateID}/>
+                </div>
+                <div className="mb-3" key={"update_inputs" + inputWcaIDID + "_" + ctx.UpdateID}>
+                    <label htmlFor={inputWcaIDID} className="form-label">WcaID: ({p.WcaID})</label>
+                    <input type="text" className="form-control" id={inputWcaIDID} defaultValue={p.WcaID ? p.WcaID : ""}
+                           key={"update_inputs" + inputWcaIDID + "_input" + ctx.UpdateID}/>
+                </div>
+            </div>
+        )
     }
 
     const updatePlayerHandle = () => {
-        alert("更新")
+        const f = (req: Player) => {
+            AuthAPI.UpdatePlayer(ctx.UpdateID, req).then(() => {
+                alert("更新成功")
+            }).catch(() => {
+                alert("更新失败")
+            }).finally(() => {
+                window.location.reload()
+            })
+        }
+        createAndUpdateHandle("update", f)
     }
 
     return CreateModal("更新", bodyHandle, UpdateTarget, updatePlayerHandle)
 }
 
 const GetCreateModal = (ctx: AdminPlayerDataCtx) => {
+
+    const inputNameID = "createPlayer_name"
+    const inputActualNameID = "createPlayer_ActualName"
+    const inputWcaIDID = "createPlayer_WcaID"
+    // const inputTitleID = "createPlayer_Title"
+
     const bodyHandle = () => {
-        return <div>{ctx.DeleteID}</div>
+        return (
+            <div key={"create_inputs"}>
+                <div className="mb-3">
+                    <label htmlFor={inputNameID} className="form-label">姓名</label>
+                    <input type="text" className="form-control" id={inputNameID}/>
+                </div>
+                <div className="mb-3">
+                    <label htmlFor={inputActualNameID} className="form-label">真实姓名</label>
+                    <input type="text" className="form-control" id={inputActualNameID}/>
+                </div>
+                <div className="mb-3">
+                    <label htmlFor={inputWcaIDID} className="form-label">WcaID</label>
+                    <input type="text" className="form-control" id={inputWcaIDID}/>
+                </div>
+            </div>
+        )
     }
 
     const createPlayerHandle = () => {
-        alert("创建")
+        const f = (req: Player) => {
+            AuthAPI.AddPlayer(req).then(() => {
+                alert("添加成功")
+            }).catch(() => {
+                alert("添加失败")
+            }).finally(() => {
+                window.location.reload()
+            })
+        }
+        createAndUpdateHandle("create", f)
     }
-    return CreateModal("创建",bodyHandle, CreateTarget, createPlayerHandle)
+    return CreateModal("创建", bodyHandle, CreateTarget, createPlayerHandle)
 }
 
 export class AdminPlayerRender {
@@ -124,8 +232,9 @@ export class AdminPlayerRender {
                 {GetUpdateModal(ctx)}
                 {GetCreateModal(ctx)}
 
-                <p style={{marginTop: "10px", float: "right"}}>{ModalButton("创建", CreateTarget, () => {
-                }, "btn-primary")}</p>
+                <p style={{marginTop: "10px", float: "right"}}>
+                    {ModalButton("创建", CreateTarget, EmptyHandle, "btn-primary")}
+                </p>
 
                 {renderPlayerTable(ctx)}
             </div>

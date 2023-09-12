@@ -5,8 +5,8 @@ import {API, AuthAPI} from "../../components/api/api";
 import {GetContestsResponse, GetContestsResponseContest, Player, PlayersResponse, Score} from "../../components/api/api_model";
 import {WaitGroup} from "../../components/utils/async";
 import {TabNav, TabNavsPage} from "../../components/utils/tabs";
-import {AdminScoreDataCtx, AdminScoreRender, callback} from "./admin_score";
-import {AdminContestRender} from "./admin_contest";
+import {AdminScoreDataCtx, AdminScoreRender} from "./admin_score";
+import {AdminContestDataCtx, AdminContestRender} from "./admin_contest";
 import {AdminPlayerDataCtx, AdminPlayerRender} from "./admin_player";
 
 
@@ -26,6 +26,10 @@ class Admin extends React.Component {
         // player
         PlayerRenderUpdateID: null,
         PlayerRenderDeleteID: null,
+
+
+        // contest
+        ContestRenderEndContestID: null,
     }
 
     componentDidMount() {
@@ -118,7 +122,17 @@ class Admin extends React.Component {
 
     AdminContestRenderCli = new AdminContestRender()
     ContestRender = () => {
-        return this.AdminContestRenderCli.render()
+        const endId = this.state.ContestRenderEndContestID ? this.state.ContestRenderEndContestID as number : -1
+
+        const ctx: AdminContestDataCtx = {
+            Contests: this.state.contests,
+            EndContestID: endId,
+            UpdateHandle: (obj: {}) => {
+                this.setState(obj)
+            },
+        }
+
+        return this.AdminContestRenderCli.render(ctx)
     }
 
     AdminPlayerRenderCli = new AdminPlayerRender()

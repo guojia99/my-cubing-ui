@@ -7,6 +7,18 @@ import {PageNav, PageNavValue} from "../../components/utils/page";
 import Select from 'react-select'
 
 
+export function convertDateString(input: string): string {
+    const inputDate = new Date(input);
+    const year = inputDate.getFullYear();
+
+    if (year < 2000) {
+        return '-';
+    }
+    const month = inputDate.getMonth() + 1;
+    const date = inputDate.getDate();
+    return `${year}年${month}月${date}号`;
+}
+
 class Contests extends React.Component {
     state = {
         data: null,
@@ -39,18 +51,6 @@ class Contests extends React.Component {
         let status = "进行中"
         if (c.Contest.IsEnd) {
             status = "已结束"
-        }
-
-        function convertDateString(input: string): string {
-            const inputDate = new Date(input);
-            const year = inputDate.getFullYear();
-
-            if (year < 2000) {
-                return '-';
-            }
-            const month = inputDate.getMonth() + 1;
-            const date = inputDate.getDate();
-            return `${year}年${month}月${date}号`;
         }
 
 
@@ -162,7 +162,7 @@ class Contests extends React.Component {
 }
 
 
-const ContestTypeCn = (t: string) => {
+export const ContestTypeCn = (t: string) => {
     switch (t) {
         case "":
             return "所有"

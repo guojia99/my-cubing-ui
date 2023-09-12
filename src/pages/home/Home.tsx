@@ -13,6 +13,7 @@ import {GetContestsResponse, Player, Record} from "../../components/api/api_mode
 import {FormatTime} from "../../components/cube/components/cube_timeformat";
 import {CubesCn} from "../../components/cube/cube";
 import {GetCubeIcon} from "../../components/cube/icon/cube_icon";
+import {WaitGroup} from "../../components/utils/async";
 
 
 class Home extends React.Component {
@@ -24,14 +25,29 @@ class Home extends React.Component {
     }
 
     componentDidMount() {
+        const wg = new WaitGroup()
+        wg.add(3)
+
         API.GetContests(1, 7, "").then(value => {
             this.setState({contest: value})
+        }).finally(() => {
+            wg.done()
         })
         API.GetRecords(1, 7).then(value => {
             this.setState({record: value})
+        }).finally(() => {
+            wg.done()
         })
         API.GetPlayers().then(value => {
             this.setState({players: value.Players.reverse()})
+        }).finally(() => {
+            wg.done()
+        })
+
+        wg.wait().then(() => {
+            setInterval(() => {
+                this.setState({})
+            }, 1000)
         })
     }
 
@@ -67,7 +83,7 @@ class Home extends React.Component {
 
     newCard(items: JSX.Element[], name: string, toLink: string) {
         return (
-            <div className="col-md-4 col-sm-6 col-lg-3">
+            <div className="col-md-6 col-sm-6 col-lg-6 col-xl-4">
                 <li className="layout-card">
                     <Link to={toLink} className="cards-header">
                         <p><i className="bi bi-postcard"></i> {name} </p>
@@ -88,10 +104,11 @@ class Home extends React.Component {
             for (let i = 0; i < contest.Contests.length; i++) {
                 const ct = contest.Contests[i].Contest
                 items.push(
-                    <li key={"contestCard_item" + i}><Link
-                        to={"/contest?id=" + contest.Contests[i].Contest.ID}>
-                        {ct.Name} ({ct.IsEnd ? "已结束" : "进行中"})
-                    </Link></li>
+                    <li key={"contestCard_item" + i}>
+                        <Link to={"/contest?id=" + contest.Contests[i].Contest.ID}>
+                            {ct.Name} ({ct.IsEnd ? "已结束" : "进行中"})
+                        </Link>
+                    </li>
                 )
             }
         }
@@ -107,14 +124,14 @@ class Home extends React.Component {
             for (let i = 0; i < records.length; i++) {
                 const rd = records[i]
                 items.push(
-                    <li key={"recordCard_item" + i}><Link
-                        to={"/player?id=" + rd.PlayerID}>
-                        {GetCubeIcon(rd.ScoreValue.Project)}
-                        <Link style={{color: "#dba0ef"}} to={"/player?id=" + rd.PlayerID}> {rd.PlayerName} </Link> 以成绩
-                        {rd.RType === 1 ? FormatTime(rd.ScoreValue.Avg, rd.ScoreValue.Project) : FormatTime(rd.ScoreValue.Best, rd.ScoreValue.Project)}
-                        刷新 {CubesCn(rd.ScoreValue.Project)}
-                        {rd.RType === 1 ? "平均" : "单次"} 记录
-                    </Link>
+                    <li key={"recordCard_item" + i}>
+                        <Link to={"/player?id=" + rd.PlayerID}>
+                            {GetCubeIcon(rd.ScoreValue.Project)}
+                            {rd.PlayerName} 以成绩
+                            {rd.RType === 1 ? FormatTime(rd.ScoreValue.Avg, rd.ScoreValue.Project) : FormatTime(rd.ScoreValue.Best, rd.ScoreValue.Project)}
+                            刷新 {CubesCn(rd.ScoreValue.Project)}
+                            {rd.RType === 1 ? "平均" : "单次"}
+                        </Link>
                     </li>
                 )
             }

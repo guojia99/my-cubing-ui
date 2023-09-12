@@ -3,6 +3,9 @@ import {JSX} from "react";
 export type ModalBodyHandle = () => JSX.Element
 export type ButtonHandle = () => void
 
+
+export const EmptyHandle = () => {
+}
 export const ModalButton = (name: string, dataBsTarget: string, buttonHandle: ButtonHandle, buttonStyle: string) => {
     return (<button type="button" className={"btn " + buttonStyle} data-bs-toggle="modal" data-bs-target={"#" + dataBsTarget} onClick={buttonHandle}>{name}</button>)
 }

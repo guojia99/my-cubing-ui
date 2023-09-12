@@ -146,6 +146,7 @@ const _renderPenaltyList = (input: number, ctx: AdminScoreDataCtx) => {
     for (let i = 0; i < PenaltyList.length; i++) {
         item.push(
             <span id={_renderPenaltyListKey + "_" + input + "_" + i}
+                  key={"_renderPenaltyList_Item" + i}
                   className={"badge penalty_item " + hideStyleKey}
                   onClick={penaltyOnClickHandle}
                   style={{background: PenaltyList[i].color, cursor: "pointer"}}>{i + 1}</span>)
@@ -307,7 +308,7 @@ const _projectSelect = (ctx: AdminScoreDataCtx) => {
     }
 
     return (
-        <select id={FormID_projectSelect} className="form-select" key="ContestSelect" onChange={updateHandle} onClick={updateHandle}>
+        <select id={FormID_projectSelect} className="form-select" key="ContestSelect" onChange={updateHandle} onClick={updateHandle} defaultValue={Cubes.Cube333}>
             <optgroup label="WCA">{wcaItems}</optgroup>
             <optgroup label="趣味">{xCubeItems}</optgroup>
             <optgroup label="趣味单手">{xCubeOhItems}</optgroup>
@@ -668,7 +669,7 @@ const _scoreListTr = (s: Score, useDelete: boolean, ctx: AdminScoreDataCtx) => {
         <td>
             {ModalButton("删除", deleteModalTarget, () => {
                 ctx.DeleteScoreId = s.ID
-                ctx.UpdateHandle({deleteScore: s.ID})
+                ctx.UpdateHandle({deleteScoreID: s.ID})
             }, "btn-danger")}
         </td>
     )
@@ -753,7 +754,7 @@ const _renderScoreList = (ctx: AdminScoreDataCtx) => {
 // 删除成绩
 const GetDeleteModal = (ctx: AdminScoreDataCtx) => {
     const bodyHandle = () => {
-        if (ctx.Scores === null) {
+        if (ctx.Scores === null || ctx.Scores.length === 0) {
             return <div>是否删除该成绩</div>
         }
 

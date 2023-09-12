@@ -160,6 +160,13 @@ export const AllProjectList = () => {
     return all
 }
 
+export const AllXCubeList = () => {
+    let all = XCubeProjectList()
+    all.push(...XCubeOHProjectList())
+    all.push(...XCubeRelaysList())
+    return all
+}
+
 export const WCAProjectList = () => {
     return [
         Cubes.Cube333,
@@ -181,6 +188,15 @@ export const WCAProjectList = () => {
         Cubes.Cube333MBF,
         Cubes.Cube333Ft,
     ]
+}
+
+export const WCAProjectMap = (): Map<Cubes, string> => {
+    const out = new Map<Cubes, string>
+    const all = WCAProjectList()
+    for (let i = 0; i < all.length; i++) {
+        out.set(all[i], all[i])
+    }
+    return out
 }
 
 export const XCubeProjectList = () => {
