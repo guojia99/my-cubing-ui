@@ -59,6 +59,9 @@ export const GetCubeIcon = (c: Cubes) => {
         case        Cubes.XCubeMinxOH:
             name = "cubing-icon-" + Cubes.CubeMinx
             break
+        case Cubes.XCubeClockOH:
+            name = "cubing-icon-" + Cubes.CubeClock
+            break
 
         // XCube Relay
         case Cubes.XCube27Relay:

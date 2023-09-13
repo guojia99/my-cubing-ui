@@ -125,7 +125,7 @@ const _getSelectData = () => {
     return {
         player: player ? player.value : null,
         contest: contest ? contest.value : null,
-        project: project ? project.value : Cubes.Cube333,
+        project: project ? project.value : "",
         round: round ? round.value : null,
         roundNumber: roundNumber ? roundNumber.value : null,
     }
@@ -271,28 +271,47 @@ const _projectSelect = (ctx: AdminScoreDataCtx) => {
     }
 
     let wcaItems: JSX.Element[] = []
-    const wca = WCAProjectList()
+    let xCubeItems: JSX.Element[] = []
+    let xCubeOhItems: JSX.Element[] = []
+    let xCubeRelayItems: JSX.Element[] = []
 
-    for (let i = 0; i < wca.length; i++) {
-        wcaItems.push(<option value={wca[i]} selected={wca[i] === cube} key={"ContestSelect" + wca[i]}>{CubesCn(wca[i])}</option>)
+    const data = _getSelectData()
+    const pjCache = new Map<Cubes, string>()
+    if (ctx.Contests !== null && data.contest !== null) {
+        const contest = ctx.ContestsMap.get(Number(data.contest))
+        if (contest !== undefined) {
+            for (let i = 0; i < contest.Rounds.length; i++) {
+                pjCache.set(contest.Rounds[i].Project, contest.Rounds[i].Project)
+            }
+        }
     }
 
-    let xCubeItems: JSX.Element[] = []
+    const wca = WCAProjectList()
+    for (let i = 0; i < wca.length; i++) {
+        if (pjCache.get(wca[i]) !== undefined) {
+            wcaItems.push(<option value={wca[i]} selected={wca[i] === cube} key={"ContestSelect" + wca[i]}>{CubesCn(wca[i])}</option>)
+        }
+    }
+
     const xCube = XCubeProjectList()
     for (let i = 0; i < xCube.length; i++) {
-        xCubeItems.push(<option value={xCube[i]} selected={xCube[i] === cube} key={"ContestSelect" + xCube[i]}>{CubesCn(xCube[i])}</option>)
+        if (pjCache.get(xCube[i]) !== undefined) {
+            xCubeItems.push(<option value={xCube[i]} selected={xCube[i] === cube} key={"ContestSelect" + xCube[i]}>{CubesCn(xCube[i])}</option>)
+        }
     }
 
-    let xCubeOhItems: JSX.Element[] = []
     const xCubeOh = XCubeOHProjectList()
-    for (let i = 0; i < xCube.length; i++) {
-        xCubeOhItems.push(<option value={xCubeOh[i]} selected={xCubeOh[i] === cube} key={"ContestSelect" + xCubeOh[i]}>{CubesCn(xCubeOh[i])}</option>)
+    for (let i = 0; i < xCubeOh.length; i++) {
+        if (pjCache.get(xCubeOh[i]) !== undefined) {
+            xCubeOhItems.push(<option value={xCubeOh[i]} selected={xCubeOh[i] === cube} key={"ContestSelect" + xCubeOh[i]}>{CubesCn(xCubeOh[i])}</option>)
+        }
     }
 
-    let xCubeRelayItems: JSX.Element[] = []
     const xCubeRelay = XCubeRelaysList()
     for (let i = 0; i < xCubeRelay.length; i++) {
-        xCubeRelayItems.push(<option value={xCubeRelay[i]} selected={xCubeRelay[i] === cube} key={"ContestSelect" + xCubeRelay[i]}>{CubesCn(xCubeRelay[i])}</option>)
+        if (pjCache.get(xCubeRelay[i]) !== undefined) {
+            xCubeRelayItems.push(<option value={xCubeRelay[i]} selected={xCubeRelay[i] === cube} key={"ContestSelect" + xCubeRelay[i]}>{CubesCn(xCubeRelay[i])}</option>)
+        }
     }
 
     const updateHandle = () => {
@@ -308,7 +327,7 @@ const _projectSelect = (ctx: AdminScoreDataCtx) => {
     }
 
     return (
-        <select id={FormID_projectSelect} className="form-select" key="ContestSelect" onChange={updateHandle} onClick={updateHandle} defaultValue={Cubes.Cube333}>
+        <select id={FormID_projectSelect} className="form-select" key="ContestSelect" onChange={updateHandle} onClick={updateHandle}>
             <optgroup label="WCA">{wcaItems}</optgroup>
             <optgroup label="趣味">{xCubeItems}</optgroup>
             <optgroup label="趣味单手">{xCubeOhItems}</optgroup>
@@ -327,7 +346,7 @@ const _roundSelect = (ctx: AdminScoreDataCtx) => {
 
     const contest = ctx.ContestsMap.get(Number(data.contest))
     if (contest === undefined || contest.Contest === undefined || contest.Rounds === undefined) {
-        return <div></div>
+        return <div>2</div>
     }
 
     let items: JSX.Element[] = []
@@ -523,29 +542,49 @@ const onSubmitHandle = async () => {
 }
 
 const _quickInputHandle = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const reg = /[：:][:0-9., ()DNFSdnfs]+$/
-
-    const out = e.target.value.match(reg)
-    if (out === null || out.length === 0) {
-        return
-    }
-    let find = out[0]
-    find = find.slice(1)
-    find = find.replaceAll("(", "").replaceAll(")", "").replaceAll("（", "").replaceAll("）", "").replaceAll(" ", "")
-
-
-    // slide
-    const slide = find.split(",")
-
-    for (let i = 0; i < slide.length; i++) {
-        const id = scoreInputKey + (i + 1)
-        const input = document.getElementById(id) as HTMLInputElement
-        if (input === null) {
-            continue
+    const updateInputs = (slide: string[]) => {
+        for (let i = 0; i < slide.length; i++) {
+            const id = scoreInputKey + (i + 1)
+            const input = document.getElementById(id) as HTMLInputElement
+            if (input === null) {
+                continue
+            }
+            input.value = slide[i]
         }
-        input.value = slide[i]
+        _loadScoreValue()
     }
-    _loadScoreValue()
+
+
+    e.target.value = e.target.value.replaceAll("\t", " ")
+
+    // 01:53.25	01:35.41	52.66	01:13.53	48.86
+    // 01:18.39	01:21.05	01:22.41	01:22.07	01:23.31
+    // 04:16.87	04:57.08	DNF
+    const reg = /^\d{1}[:0-9. DNFSdnfs]+$/
+    if (reg.test(e.target.value)) {
+        const slide = e.target.value.split(/\s+/);
+        updateInputs(slide)
+        return;
+    }
+
+
+    // 成绩列表：(58.371), 1:02.797, (1:06.937), 1:00.928, 1:05.900
+    const reg1 = /[：:][:0-9., ()DNFSdnfs]+$/
+    if (reg1.test(e.target.value)) {
+        const out = e.target.value.match(reg1)
+        if (out === null || out.length === 0) {
+            return
+        }
+        let find = out[0]
+        find = find.slice(1)
+        find = find.replaceAll("(", "").replaceAll(")", "").replaceAll("（", "").replaceAll("）", "").replaceAll(" ", "")
+        const slide = find.split(",")
+
+        updateInputs(slide)
+        return;
+    }
+
+
 }
 
 // 渲染成绩的table body
@@ -673,7 +712,7 @@ const _scoreListTr = (s: Score, useDelete: boolean, ctx: AdminScoreDataCtx) => {
             }, "btn-danger")}
         </td>
     )
-    if (!useDelete){
+    if (!useDelete) {
         deleteButton = (<></>)
     }
 
@@ -812,6 +851,9 @@ export class AdminScoreRender {
                 setInterval(_loadScoreValue, 100)
             })
             this.once_loadScoresSet = true
+            setTimeout(() => {
+                ctx.UpdateHandle({})
+            }, 300)
         }
         this.once_loadScores()
 

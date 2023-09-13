@@ -1,9 +1,9 @@
-export function parseTimeToSeconds(time: string) : number {
+export function parseTimeToSeconds(time: string): number {
     const data = function (time) {
         if (time === 'DNF') {
             return -10000;
         }
-        if (time === "DNS"){
+        if (time === "DNS") {
             return -10001
         }
 
