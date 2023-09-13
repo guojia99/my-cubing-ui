@@ -64,7 +64,7 @@ enum RecordType {
 export type Record = {
     ID: number;
     RType: RecordType;
-    ScoreId: number;
+    score_id: number;
     ScoreValue: Score;
     PlayerID: number;
     PlayerName: string;
@@ -191,6 +191,7 @@ export type GetPlayerRecord = RecordMessage[];
 
 export type GetRecordsResponse = {
     Count: number;
+    Size: number;
     Records: Record[];
 }
 

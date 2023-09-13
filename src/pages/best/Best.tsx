@@ -18,8 +18,6 @@ class Best extends React.Component {
     }
 
     render() {
-        console.log(this.state.data)
-
         let items: JSX.Element[] = []
         if (this.state.data === null) {
             return <div></div>

@@ -9,7 +9,7 @@ import "bootstrap-icons/font/bootstrap-icons.css";
 import React, {JSX} from 'react';
 import {Link} from "react-router-dom";
 import {API} from "../../components/api/api";
-import {GetContestsResponse, Player, Record} from "../../components/api/api_model";
+import {GetContestsResponse, GetRecordsResponse, Player} from "../../components/api/api_model";
 import {FormatTime} from "../../components/cube/components/cube_timeformat";
 import {CubesCn} from "../../components/cube/cube";
 import {GetCubeIcon} from "../../components/cube/icon/cube_icon";
@@ -120,20 +120,22 @@ class Home extends React.Component {
     recordCard = () => {
         let items: JSX.Element[] = []
         if (this.state.record !== null) {
-            const records = this.state.record as Record[]
-            for (let i = 0; i < records.length; i++) {
-                const rd = records[i]
-                items.push(
-                    <li key={"recordCard_item" + i}>
-                        <Link to={"/player?id=" + rd.PlayerID}>
-                            {GetCubeIcon(rd.ScoreValue.Project)}
-                            {rd.PlayerName} 以成绩
-                            {rd.RType === 1 ? FormatTime(rd.ScoreValue.Avg, rd.ScoreValue.Project) : FormatTime(rd.ScoreValue.Best, rd.ScoreValue.Project)}
-                            刷新 {CubesCn(rd.ScoreValue.Project)}
-                            {rd.RType === 1 ? "平均" : "单次"}
-                        </Link>
-                    </li>
-                )
+            const records = this.state.record as GetRecordsResponse
+            if (records.Records !== undefined) {
+                for (let i = 0; i < records.Records.length; i++) {
+                    const rd = records.Records[i]
+                    items.push(
+                        <li key={"recordCard_item" + i}>
+                            <Link to={"/player?id=" + rd.PlayerID}>
+                                {GetCubeIcon(rd.ScoreValue.Project)}
+                                {rd.PlayerName} 以成绩
+                                {rd.RType === 1 ? FormatTime(rd.ScoreValue.Avg, rd.ScoreValue.Project) : FormatTime(rd.ScoreValue.Best, rd.ScoreValue.Project)}
+                                刷新 {CubesCn(rd.ScoreValue.Project)}
+                                {rd.RType === 1 ? "平均" : "单次"}
+                            </Link>
+                        </li>
+                    )
+                }
             }
         }
 
@@ -159,6 +161,17 @@ class Home extends React.Component {
     }
 
 
+    advertiseCard = (p: number) => {
+        let items: JSX.Element[] = [
+            (<li key={"advertiseCard_1" + p}>预留广告位,可以放图片、外部链接</li>),
+            (<li key={"advertiseCard_2" + p}>欢迎有需要的大佬联系我</li>),
+            (<li key={"advertiseCard_3" + p}>QQ:3164838686</li>),
+            (<li key={"advertiseCard_4" + p}>支持定制</li>),
+        ]
+        return this.newCard(items, "广告", "/")
+    }
+
+
     cards = () => {
         return (
             <section className="cards">
@@ -167,6 +180,9 @@ class Home extends React.Component {
                         {this.contestCard()}
                         {this.recordCard()}
                         {this.playerCard()}
+                        {this.advertiseCard(1)}
+                        {this.advertiseCard(2)}
+                        {this.advertiseCard(3)}
                     </ul>
                 </div>
             </section>

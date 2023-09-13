@@ -134,7 +134,7 @@ export const CubeRouteNumber: Map<Cubes, number> = new Map([
     [Cubes.XCubePyOH, 5],
     [Cubes.XCubeSq1OH, 5],
     [Cubes.XCubeClockOH, 5],
-    [Cubes.XCubeMinxOH, 1],
+    [Cubes.XCubeMinxOH, 3],
     [Cubes.XCube333Mirror, 5],
     [Cubes.XCube333Mirroring, 5],
     [Cubes.XCube333Multiple5, 5],
