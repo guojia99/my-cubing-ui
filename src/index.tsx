@@ -13,15 +13,18 @@ import {BrowserRouter, Link, NavLink, Route, Routes} from "react-router-dom";
 import Auth from "./pages/admin/auth";
 import Home from "./pages/home/Home";
 import About from "./pages/about/About";
-import Best from "./pages/best/Best";
-import Sor from "./pages/best/Sor";
+
 import Players from "./pages/players/Players";
 import Admin from "./pages/admin/admin";
 import Contests from "./pages/contests/Contests";
 import ContestPage from "./pages/contest/Contest";
 import Debug from "./pages/debug/debug";
 import PlayerPage from "./pages/player/Player";
-import Record from "./pages/best/record";
+
+import Record from "./pages/statistics/record";
+import Best from "./pages/statistics/Best";
+import Sor from "./pages/statistics/Sor";
+import PodiumsPage from "./pages/statistics/podiums";
 
 
 const root = ReactDOM.createRoot(
@@ -39,8 +42,9 @@ root.render(
                 <Link to="#" className="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false">统计</Link>
                 {/*<a className="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" href="#" aria-expanded="false">统计</a>*/}
                 <ul className="dropdown-menu">
-                    <li><NavLink className="dropdown-item" to="/statistics/record">记录</NavLink></li>
+                    <li><NavLink className="dropdown-item" to="/statistics/record">纪录</NavLink></li>
                     <li><NavLink className="dropdown-item" to="/statistics/sor">排位分数</NavLink></li>
+                    <li><NavLink className="dropdown-item" to="/statistics/podiums">奖牌榜单</NavLink></li>
                     <li><NavLink className="dropdown-item" to="/statistics/best">最佳成绩</NavLink></li>
                     <li><NavLink className="dropdown-item" to="/statistics/interest">趣味玩法</NavLink></li>
                 </ul>
@@ -55,6 +59,8 @@ root.render(
             <Route path="/xauth" Component={Auth}/>
             <Route path="/debug" Component={Debug}/>
 
+
+            {/*比赛*/}
             <Route path="/contest" Component={ContestPage}/> {/*比赛*/}
             <Route path="/contests" Component={Contests}/>{/*比赛列表*/}
             <Route path="/player" Component={PlayerPage}/>{/*玩家*/}
@@ -63,7 +69,8 @@ root.render(
             {/*统计*/}
             <Route path="/statistics/best" Component={Best}/> {/*最佳成绩汇总*/}
             <Route path="/statistics/sor" Component={Sor}/> {/*最佳成绩汇总*/}
-            <Route path="/statistics/record" Component={Record}/> {/*记录*/}
+            <Route path="/statistics/record" Component={Record}/> {/*纪录*/}
+            <Route path="/statistics/podiums" Component={PodiumsPage}/> {/*奖牌榜单*/}
             <Route path="/statistics/interest" Component={() => {
                 return (<div>没开发</div>)
             }}></Route> {/*趣味玩法*/}

@@ -9,6 +9,7 @@ import {AuthAPI} from "../../components/api/api";
 import {parseTimeToSeconds} from "./admin_utils";
 import {Once} from "../../components/utils/async";
 import {CreateModal, ModalButton} from "../../components/utils/modal";
+import {CubeScoreTds} from "../../components/cube/components/cube_score_tabels";
 
 
 export const _playerSelectKey = "_player"
@@ -709,14 +710,12 @@ const _scoreListTr = (s: Score, useDelete: boolean, ctx: AdminScoreDataCtx) => {
             {ModalButton("删除", deleteModalTarget, () => {
                 ctx.DeleteScoreId = s.ID
                 ctx.UpdateHandle({deleteScoreID: s.ID})
-            }, "btn-danger")}
+            }, "btn-danger btn-sm")}
         </td>
     )
     if (!useDelete) {
         deleteButton = (<></>)
     }
-
-
     if (s.Project === Cubes.Cube333MBF) {
         return (
             <tr key={"_renderScoreList_tr" + s.ID}>
@@ -725,24 +724,9 @@ const _scoreListTr = (s: Score, useDelete: boolean, ctx: AdminScoreDataCtx) => {
                 <td>{s.RouteValue.Name}</td>
                 <td>-</td>
                 <td>-</td>
-                <td colSpan={5}>{s.R1} / {s.R2}</td>
+                {CubeScoreTds(s)}
             </tr>
         )
-    }
-
-    const round = CubeRouteNumber.get(s.Project) as number
-    let tds = []
-    if (round >= 3) {
-        tds.push(<td>{FormatTime(s.R2, s.Project)}</td>)
-        tds.push(<td>{FormatTime(s.R3, s.Project)}</td>)
-    }
-    if (round >= 5) {
-        tds.push(<td>{FormatTime(s.R4, s.Project)}</td>)
-        tds.push(<td>{FormatTime(s.R5, s.Project)}</td>)
-    }
-
-    for (let i = tds.length + 1; i < 5; i++) {
-        tds.push(<td></td>)
     }
 
     return (
@@ -752,8 +736,7 @@ const _scoreListTr = (s: Score, useDelete: boolean, ctx: AdminScoreDataCtx) => {
             <td>{s.RouteValue.Name}</td>
             <td>{FormatTime(s.Best, s.Project)}</td>
             <td>{FormatTime(s.Avg, s.Project)}</td>
-            <td>{FormatTime(s.R1, s.Project)}</td>
-            {tds}
+            {CubeScoreTds(s)}
         </tr>
     )
 }

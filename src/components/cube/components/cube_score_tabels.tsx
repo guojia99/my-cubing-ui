@@ -5,6 +5,7 @@ import {Link} from "react-router-dom";
 import {CubeRouteNumber, Cubes} from "../cube";
 import {FormatTime} from "./cube_timeformat";
 import {PR_And_GR_Record} from "./cube_record";
+import React from "react";
 
 
 function RecordsToMap(records: ContestRecord[]) {
@@ -24,7 +25,6 @@ export enum RecordType {
     RecordByAvg = 1,
     RecordBySingle = 2
 }
-
 
 
 const NumberDefaultResultCubeScoresTable = (tdNum: number, pj: Cubes, Scores: Score[], records: Map<string, ContestRecord>) => {
@@ -138,7 +138,7 @@ export const CubeScoresTable = (pj: Cubes, Scores: Score[], records: ContestReco
     const recordMp = RecordsToMap(records)
 
     let handler = FiveResultCubeScoreTableFn
-    switch (CubeRouteNumber.get(pj)){
+    switch (CubeRouteNumber.get(pj)) {
         case 1:
             handler = OneResultCubeScoreTableFn
             break
@@ -147,7 +147,7 @@ export const CubeScoresTable = (pj: Cubes, Scores: Score[], records: ContestReco
             break
     }
 
-    if (pj === Cubes.Cube333MBF){
+    if (pj === Cubes.Cube333MBF) {
         handler = MBFCube333ScoreTable
     }
 
@@ -155,4 +155,28 @@ export const CubeScoresTable = (pj: Cubes, Scores: Score[], records: ContestReco
         return handler(pj, Scores, recordMp);
     }
     return <table className="table table-bordered table-striped"></table>;
+}
+
+
+export const CubeScoreTds = (s: Score) => {
+    if (s.Project === Cubes.Cube333MBF) {
+        return (<td colSpan={5}>{FormatTime(s.R1, s.Project)} / {FormatTime(s.R2, s.Project)} ({FormatTime(s.R3, Cubes.Cube333)})</td>)
+    }
+    const round = CubeRouteNumber.get(s.Project) as number
+    let tds = [
+        <td>{FormatTime(s.R1, s.Project)}</td>,
+    ]
+
+    if (round >= 3) {
+        tds.push(<td>{FormatTime(s.R2, s.Project)}</td>)
+        tds.push(<td>{FormatTime(s.R3, s.Project)}</td>)
+    }
+    if (round >= 5) {
+        tds.push(<td>{FormatTime(s.R4, s.Project)}</td>)
+        tds.push(<td>{FormatTime(s.R5, s.Project)}</td>)
+    }
+    for (let i = tds.length + 1; i < 5; i++) {
+        tds.push(<td></td>)
+    }
+    return tds
 }

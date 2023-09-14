@@ -81,7 +81,9 @@ export type RoutesScores = {
 export type SorScore = {
     Player: Player;
     SingleCount: number;
+    SingleProjects: number;
     AvgCount: number;
+    AvgProjects: number;
 }
 
 export type ScoresByContest = {
@@ -234,4 +236,9 @@ export type CreateContestRequest = {
     Type: string,
     StartTime: number,
     EndTime: number,
+}
+
+export type GetBestByAllScoresResponse = {
+    BestSingle: any, // Map<Cubes, Score[]>
+    BestAvg: any, // Map<Cubes, Score[]>
 }

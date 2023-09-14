@@ -2,13 +2,19 @@ import {Cubes} from "../cube";
 
 
 export function FormatTime(result: number, pj: Cubes) {
+
+    if (isNaN(result)) {
+        return "DNF"
+    }
+
     if (result === -10001) {
         return "DNS"
     }
     if (result === -10000) {
         return "DNF"
     }
-    if (pj === Cubes.Cube333FM) {
+
+    if (pj === Cubes.Cube333FM || pj === Cubes.Cube333MBF) {
         return result.toFixed(0)
     }
 

@@ -53,27 +53,27 @@ class Home extends React.Component {
 
     layout = () => {
         return (
-            <div className="layout-bg">
-                <div className="layout-left">
+            <div className="layout-bg row">
+                <div className="layout-left col-sm-12 col-md-6">
                     <h4>赛事系统</h4>
                     <p>提供魔方赛事成绩统计</p>
-                    <ul>
-                        <li><Link to="/contests">比赛结果统计</Link></li>
-                        <li><Link to="/players">可视化成绩曲线</Link></li>
-                        <li><Link to="/players">个人成绩统计</Link></li>
-                        <li><Link to="/statistics/sor">Sor成绩统计</Link></li>
-                        <li><Link to="https://www.worldcubeassociation.org/">WCA全项目</Link></li>
-                        <li><Link to="/statistics/interest">趣味项目玩法</Link></li>
-                        <li>在线打乱(开发中)</li>
-                        <li>各类求解器(开发中)</li>
+                    <ul className="row">
+                        <li className="col-sm-6 col-md-4 col-xl-3"><Link to="/contests">比赛结果统计</Link></li>
+                        <li className="col-sm-6 col-md-4 col-xl-3"><Link to="/players">可视化成绩曲线</Link></li>
+                        <li className="col-sm-6 col-md-4 col-xl-3"><Link to="/players">个人成绩统计</Link></li>
+                        <li className="col-sm-6 col-md-4 col-xl-3"><Link to="/statistics/sor">Sor成绩统计</Link></li>
+                        <li className="col-sm-6 col-md-4 col-xl-3"><Link to="https://www.worldcubeassociation.org/">WCA全项目</Link></li>
+                        <li className="col-sm-6 col-md-4 col-xl-3"><Link to="/statistics/interest">趣味项目玩法</Link></li>
+                        <li className="col-sm-6 col-md-4 col-xl-3">在线打乱(开发中)</li>
+                        <li className="col-sm-6 col-md-4 col-xl-3">各类求解器(开发中)</li>
                     </ul>
                 </div>
 
-                <div className="layout-right">
+                <div className="layout-right col-sm-12 col-md-6">
                     <h4>常用链接</h4>
-                    <ul>
-                        <li><Link to="https://www.worldcubeassociation.org/">世界魔方协会</Link></li>
-                        <li><Link to="https://cstimer.net/">魔方计时器</Link></li>
+                    <ul className="row">
+                        <li className="col-sm-6 col-md-4 col-xl-3"><Link to="https://www.worldcubeassociation.org/">世界魔方协会</Link></li>
+                        <li className="col-sm-6 col-md-4 col-xl-3"><Link to="https://cstimer.net/">魔方计时器</Link></li>
                     </ul>
                 </div>
             </div>
@@ -83,7 +83,7 @@ class Home extends React.Component {
 
     newCard(items: JSX.Element[], name: string, toLink: string) {
         return (
-            <div className="col-md-6 col-sm-6 col-lg-6 col-xl-4">
+            <div className="col-sm-12 col-md-6 col-lg-4 col-xl-3">
                 <li className="layout-card">
                     <Link to={toLink} className="cards-header">
                         <p><i className="bi bi-postcard"></i> {name} </p>
@@ -139,7 +139,7 @@ class Home extends React.Component {
             }
         }
 
-        return this.newCard(items, "最近记录", "/statistics/record")
+        return this.newCard(items, "最近纪录", "/statistics/record")
     }
 
 

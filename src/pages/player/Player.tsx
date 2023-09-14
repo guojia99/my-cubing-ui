@@ -132,6 +132,7 @@ class PlayerPage extends React.Component {
 
         const pjList = AllProjectList()
         let body = []
+        console.log(data)
         for (let i = 0; i < pjList.length; i++) {
             const pj = pjList[i]
 
@@ -149,6 +150,8 @@ class PlayerPage extends React.Component {
                         <td>{GetCubeIcon(pj)} {CubesCn(pj)}</td>
                         <td style={{color: best.Rank === 1 ? "red" : ""}}>{best.Rank}</td>
                         <td style={{fontWeight: 700}}>{best.Score.R1 + "/" + best.Score.R2 + " " + FormatTime(best.Score.R3, Cubes.Cube333)}</td>
+                        <td></td>
+                        <td></td>
                     </tr>
                 )
                 continue
@@ -166,7 +169,7 @@ class PlayerPage extends React.Component {
 
         return (
             <div>
-                <h4 style={{textAlign: "center", fontWeight: 700}}>个人记录</h4>
+                <h4 style={{textAlign: "center", fontWeight: 700}}>个人纪录</h4>
                 <table className="table table-striped table-hover text-center" id="best_score_table">
                     <thead>
                     <tr>
@@ -571,7 +574,7 @@ class PlayerPage extends React.Component {
             },
             {
                 Id: "record",
-                Name: (<h4>记录</h4>),
+                Name: (<h4>纪录</h4>),
                 Page: renderPageByRecord(),
             },
             {
