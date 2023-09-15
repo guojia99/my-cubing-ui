@@ -718,7 +718,7 @@ const _scoreListTr = (s: Score, useDelete: boolean, ctx: AdminScoreDataCtx) => {
     }
     if (s.Project === Cubes.Cube333MBF) {
         return (
-            <tr key={"_renderScoreList_tr" + s.ID}>
+            <tr key={"_renderScoreList_tr_" + s.ID}>
                 {deleteButton}
                 <td>{GetCubeIcon(s.Project)} {CubesCn(s.Project)}</td>
                 <td>{s.RouteValue.Name}</td>

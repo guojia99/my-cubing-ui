@@ -29,8 +29,8 @@ class PodiumsPage extends React.Component {
         // todo 可以显示详细的内容
         for (let i = 0; i < pds.length; i++) {
             items.push(
-                <tr>
-                    <td>{i+1}</td>
+                <tr key={"podiums_" + i}>
+                    <td>{i + 1}</td>
                     <td><Link to={"/player?id=" + pds[i].Player.ID}>{pds[i].Player.Name}</Link></td>
                     <td>{pds[i].Gold}</td>
                     <td>{pds[i].Silver}</td>

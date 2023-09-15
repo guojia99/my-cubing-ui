@@ -5,7 +5,7 @@ import {Link} from "react-router-dom";
 import {CubeRouteNumber, Cubes} from "../cube";
 import {FormatTime} from "./cube_timeformat";
 import {PR_And_GR_Record} from "./cube_record";
-import React from "react";
+import React, {JSX} from "react";
 
 
 function RecordsToMap(records: ContestRecord[]) {
@@ -29,7 +29,11 @@ export enum RecordType {
 
 const NumberDefaultResultCubeScoresTable = (tdNum: number, pj: Cubes, Scores: Score[], records: Map<string, ContestRecord>) => {
     const getItems = () => {
-        const items = [];
+        let items: JSX.Element[] = [];
+        if (Scores === undefined || Scores === null || Scores.length === 0) {
+            return items
+        }
+
         for (let i = 0; i < Scores.length; i++) {
             const score = Scores[i]
 
@@ -99,7 +103,11 @@ const FiveResultCubeScoreTableFn = (pj: Cubes, Scores: Score[], records: Map<str
 
 const MBFCube333ScoreTable = (pj: Cubes, Scores: Score[], records: Map<string, ContestRecord>) => {
     const getItems = () => {
-        const items = [];
+        let items: JSX.Element[] = [];
+        if (Scores === undefined || Scores === null || Scores.length === 0) {
+            return items
+        }
+
         for (let i = 0; i < Scores.length; i++) {
             const score = Scores[i]
             const isSingleBestRecord = records !== undefined && records.get(score.ID.toString() + RecordType.RecordBySingle.toString()) !== undefined
@@ -175,7 +183,7 @@ export const CubeScoreTds = (s: Score) => {
         tds.push(<td>{FormatTime(s.R4, s.Project)}</td>)
         tds.push(<td>{FormatTime(s.R5, s.Project)}</td>)
     }
-    for (let i = tds.length + 1; i < 5; i++) {
+    for (let i = tds.length + 1; i <= 5; i++) {
         tds.push(<td></td>)
     }
     return tds

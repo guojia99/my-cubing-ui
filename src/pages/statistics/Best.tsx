@@ -30,22 +30,19 @@ class Best extends React.Component {
         }
 
         const items: JSX.Element[] = []
-
-
+        const k = IsBest ? "b" : "a"
         for (let i = 0; i < scores.length; i++) {
+            const key = "allRenderTablesKey_" + k + "_" + pj + "_" + i + "_" + scores[i].ID
             const s = scores[i]
-            items.push(
-                <tr key={"allRenderTablesKey_" + pj + i + IsBest}>
-                    <td>{i + 1}</td>
-                    <td><Link to={"/player?id=" + s.PlayerID}>{s.PlayerName}</Link></td>
-                    <td className={IsBest ? "table-info" : ""}>{FormatTime(s.Best, s.Project)}</td>
-                    <td className={!IsBest ? "table-info" : ""}>{FormatTime(s.Avg, s.Project)}</td>
-                    {CubeScoreTds(s)}
-                </tr>
-            )
+            items.push(<tr key={key}>
+                <td>{i + 1}</td>
+                <td><Link to={"/player?id=" + s.PlayerID}>{s.PlayerName}</Link></td>
+                <td className={IsBest ? "table-info" : ""}>{FormatTime(s.Best, s.Project)}</td>
+                <td className={!IsBest ? "table-info" : ""}>{FormatTime(s.Avg, s.Project)}</td>
+                {CubeScoreTds(s)}
+            </tr>)
         }
-
-        return (<div>
+        return (<div key={pj + "_" + k}>
             <table className="table table-striped table-hover">
                 <thead>
                 <tr>

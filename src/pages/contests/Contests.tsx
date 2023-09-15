@@ -55,7 +55,7 @@ class Contests extends React.Component {
 
 
         return (
-            <tr>
+            <tr key={"contestTrBody_" + c.Contest.ID}>
                 <td>{convertDateString(c.Contest.StartTime)}</td>
                 <td>{convertDateString(c.Contest.EndTime)}</td>
                 <td>{ContestTypeCn(c.Contest.Type)}</td>

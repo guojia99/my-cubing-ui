@@ -71,7 +71,10 @@ const Debug = () => {
     }
 
     return (
-        <div style={{fontSize: "30px"}}>{items}</div>
+        <div>
+            <div style={{fontSize: "30px"}}>{items}</div>
+        </div>
+
     );
 };
 export default Debug;

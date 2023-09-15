@@ -53,6 +53,7 @@ class ContestPage extends React.Component {
         // wait all
         wg.wait().then(_ => {
             this.setState({ok: true})
+            console.log(this.state)
         })
     }
 

@@ -1,6 +1,6 @@
 import './cube_icon_base.css'
 import './cube_icon.css'
-import {Cubes} from "../cube";
+import {Cubes, CubesCn} from "../cube";
 
 
 export const GetCubeIcon = (c: Cubes) => {
@@ -81,13 +81,13 @@ export const GetCubeIcon = (c: Cubes) => {
             break
     }
 
-
     return (
         <i
             className={"cubing-icon " + name}
+
             data-toggle="tooltip"
             data-placement="top"
-            data-title={c}
+            title={CubesCn(c)}
         >
         </i>
     )
@@ -97,13 +97,13 @@ export const GetCubeIcon = (c: Cubes) => {
 export const GetCubeIconDebug = (name: string) => {
     return (
         <div style={{border: "solid 1px red"}}>
-            <i
+            <button
                 className={"cubing-icon " + name}
                 data-toggle="tooltip"
                 data-placement="top"
-                data-title={"debug"}
+                title="name"
             >
-            </i>
+            </button>
             {name}
         </div>
     )

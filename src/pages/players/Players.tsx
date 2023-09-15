@@ -40,7 +40,7 @@ class Players extends React.Component{
             }
 
             body.push(
-                <tr>
+                <tr key={"player_" + data.Players[i].ID}>
                     <td>{i + 1}</td>
                     <td><Link to={"https://www.worldcubeassociation.org/persons/" + data.Players[i].WcaID}>{data.Players[i].WcaID}</Link></td>
                     <td><Link to={"/player?id=" + data.Players[i].ID}>{data.Players[i].Name}</Link></td>

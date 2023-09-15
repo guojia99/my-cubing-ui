@@ -113,6 +113,16 @@ export type Podiums = {
     PodiumsResults: PodiumsResult[];
 }
 
+export type XLog = {
+    ID: number;
+    CreatedAt: string;
+    UpdatedAt: string;
+    Title: string;
+    CreatedTime: string;
+    Area: string;
+    Messages: string;
+}
+
 // resp
 export type GetContestsResponseContest = {
     Contest: Contest;

@@ -1,4 +1,5 @@
 import axios from 'axios';
+
 import Cookies from 'js-cookie';
 
 import {
@@ -9,7 +10,7 @@ import {
     GetContestSorResponse,
     GetContestsResponse, GetPlayerAllScoreResponse, GetPlayerRecord,
     GetTokenResponse, Player, PlayerBestScoreResponse,
-    PlayersResponse, Podiums, Score, GetRecordsResponse, BestSorReportResponse, AddScoreRequest, CreateContestRequest, GetBestByAllScoresResponse,
+    PlayersResponse, Podiums, Score, GetRecordsResponse, BestSorReportResponse, AddScoreRequest, CreateContestRequest, GetBestByAllScoresResponse, XLog,
 } from './api_model';
 
 
@@ -123,6 +124,12 @@ export class apiCore {
         const result = await axios.get(uri, {headers: {Accept: 'application/json'}})
         return result.data
     }
+
+    async GetXLog(): Promise<XLog[]> {
+        let uri = this.uri + "/x-log"
+        const result = await axios.get(uri, {headers: {Accept: 'application/json'}})
+        return result.data
+    }
 }
 
 
@@ -189,17 +196,78 @@ export class authApiCore {
     }
 
 
+    async checkResp(method: string, uri: string, data?: any): Promise<any> {
+        const reload = () => {
+            alert("授权过期,需要重新登录")
+            this.DeleteToken()
+            window.location.href = "/xauth"
+            return
+        }
+
+        let status = 0
+        let output = null
+        try {
+
+            switch (method) {
+                case "get":
+                    await axios.get(uri, this.config()).then((value) => {
+                        output = value.data
+                    }).catch((error) => {
+                        status = error.response.status
+                    })
+                    break
+                case "post":
+                    await axios.post(uri, data, this.config()).then((value) => {
+                        output = value.data
+                    }).catch((error) => {
+                        status = error.response.status
+                    })
+                    break
+                case "put":
+                    await axios.put(uri, data, this.config()).then((value) => {
+                        output = value.data
+                    }).catch((error) => {
+                        status = error.response.status
+                    })
+                    break
+                case "delete":
+                    await axios.delete(uri, this.config()).then((value) => {
+                        output = value.data
+                    }).catch((error) => {
+                        status = error.response.status
+                    })
+                    break
+            }
+            if (output === null ) {
+                if (status === 401){
+                    reload()
+                }
+                alert("存在未知错误1")
+                return {}
+            }
+            return output
+        } catch (e) {
+            console.log(e)
+            if (status === 0) {
+                alert("存在未知错误2")
+                return
+            }
+            if (status === 401) {
+                reload()
+            }
+        }
+    }
+
+
     async GetPlayerScoreByContest(playerID: number, contestID: number): Promise<Score[]> {
         let uri = this.apiCore.uri + "/score/player/" + playerID + "/contest/" + contestID
-        const result = await axios.get(uri, this.config())
-        return result.data
+        return await this.checkResp("get", uri)
     }
 
 
     async AddContest(req: CreateContestRequest) {
         let uri = this.apiCore.uri + "/contest"
-        const result = await axios.post(uri, req, this.config())
-        return result.data
+        return await this.checkResp("post", uri, req)
     }
 
     async DeleteContest() {
@@ -207,40 +275,44 @@ export class authApiCore {
 
     async EndContest(id: number) {
         let uri = this.apiCore.uri + "/score/end_contest"
-        const result = await axios.put(uri, {ContestID: id}, this.config())
-        return result.data
+        return await this.checkResp("put", uri, {ContestID: id})
     }
 
     async AddPlayer(req: Player): Promise<void> {
         let uri = this.apiCore.uri + "/player"
-        const result = await axios.post(uri, req, this.config())
-        return result.data
+        return await this.checkResp("post", uri, req)
     }
 
     async UpdatePlayer(playerID: number, req: Player): Promise<void> {
         req.ID = playerID
         let uri = this.apiCore.uri + "/player"
-        const result = await axios.put(uri, req, this.config())
-        return result.data
+        return await this.checkResp("put", uri, req)
     }
 
     async DeletePlayer(playerID: number): Promise<void> {
         let uri = this.apiCore.uri + "/player/" + playerID
-        const result = await axios.delete(uri, this.config())
-        console.log(result.data)
-        return result.data
+        return await this.checkResp("delete", uri)
     }
 
     async AddScore(req: AddScoreRequest): Promise<void> {
         let uri = this.apiCore.uri + "/score"
-        const result = await axios.post(uri, req, this.config())
-        return result.data
+        return await this.checkResp("post", uri, req)
     }
 
     async DeleteScore(scoreID: number) {
         let uri = this.apiCore.uri + "/score/" + scoreID
-        const result = await axios.delete(uri, this.config())
-        return result.data
+        return await this.checkResp("delete", uri)
+    }
+
+
+    async AddXLog(log: XLog) {
+        let uri = this.apiCore.uri + "/x-log"
+        return await this.checkResp("put", uri, log)
+    }
+
+    async DeleteXLog(id: number) {
+        let uri = this.apiCore.uri + "/x-log/" + id
+        return await this.checkResp("delete", uri)
     }
 }
 

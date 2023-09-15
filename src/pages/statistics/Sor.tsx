@@ -30,7 +30,7 @@ class Sor extends React.Component {
         let lastAvgRank = 1
 
         items.push(
-            <tr>
+            <tr key={"sor_00"}>
                 <td>{1}</td>
                 <td><Link to={"/player?id=" + data.BestSingle[0].Player.ID}>{data.BestSingle[0].Player.Name}</Link></td>
                 <td>{data.BestSingle[0].SingleCount}({data.BestSingle[0].SingleProjects})</td>
@@ -63,7 +63,7 @@ class Sor extends React.Component {
 
 
             items.push(
-                <tr>
+                <tr  key={"sor_" + i}>
                     <td>{bestRank}</td>
                     <td><Link to={"/player?id=" + best.Player.ID}>{best.Player.Name}</Link></td>
                     <td>{best.SingleCount} ({best.SingleProjects})</td>

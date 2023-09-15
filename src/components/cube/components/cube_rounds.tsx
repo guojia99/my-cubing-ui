@@ -27,26 +27,31 @@ const RoundTable = (round: Round) => {
         )
     }
 
-    switch (round.Project) {
-        case Cubes.Cube333BF:
-        case Cubes.Cube444BF:
-        case Cubes.Cube555BF:
-        case Cubes.Cube666:
-        case Cubes.Cube777:
-            for (let i = 0; i < 5; i++) {
-                setTr(i >= 3 ? "E" + (i - 3) : i + 1 + "", round.UpsetsVal[i], i >= 3)
-            }
-            break
-        case Cubes.Cube333MBF:
-            for (let i = 0; i < round.UpsetsVal.length; i++) {
-                setTr(i + 1 + "", round.UpsetsVal[i], false)
-            }
-            break
-        default:
-            for (let i = 0; i < 7; i++) {
-                setTr(i >= 5 ? "E" + (i - 5) : i + 1 + "", round.UpsetsVal[i], i >= 5)
-            }
+    if (round.UpsetsVal !== undefined){
+        switch (round.Project) {
+            case Cubes.Cube333BF:
+            case Cubes.Cube444BF:
+            case Cubes.Cube555BF:
+            case Cubes.Cube666:
+            case Cubes.Cube777:
+                for (let i = 0; i < 5; i++) {
+                    setTr(i >= 3 ? "E" + (i - 3) : i + 1 + "", round.UpsetsVal[i], i >= 3)
+                }
+                break
+            case Cubes.Cube333MBF:
+                for (let i = 0; i < round.UpsetsVal.length; i++) {
+                    setTr(i + 1 + "", round.UpsetsVal[i], false)
+                }
+                break
+            default:
+                for (let i = 0; i < 7; i++) {
+                    setTr(i >= 5 ? "E" + (i - 5) : i + 1 + "", round.UpsetsVal[i], i >= 5)
+                }
+        }
     }
+
+
+
 
     return (
         <div style={{overflowX: "auto"}} key={round.ID + "round_table"}>

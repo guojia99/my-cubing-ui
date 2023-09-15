@@ -26,6 +26,12 @@ import Best from "./pages/statistics/Best";
 import Sor from "./pages/statistics/Sor";
 import PodiumsPage from "./pages/statistics/podiums";
 
+$(() => {
+    setInterval(() => {
+        $('i').tooltip().show()
+    }, 1000)
+})
+
 
 const root = ReactDOM.createRoot(
     document.getElementById('root') as HTMLElement
