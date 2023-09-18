@@ -387,7 +387,7 @@ const inputUpdate = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (!isNaN(num)) {
         if (num > 60) {
             const data = _getSelectData()
-            event.target.value = FormatTime(num, data.project as Cubes)
+            event.target.value = FormatTime(num, data.project as Cubes, false)
         }
         return;
     }
@@ -696,7 +696,7 @@ const _loadScoreValue = () => {
 
         // 更新实际value
         const value = document.getElementById(inputValueId) as HTMLDivElement
-        value.innerText = FormatTime(score, data.project as Cubes) + " " + psStr
+        value.innerText = FormatTime(score, data.project as Cubes, false) + " " + psStr
     }
 }
 
@@ -734,8 +734,8 @@ const _scoreListTr = (s: Score, useDelete: boolean, ctx: AdminScoreDataCtx) => {
             {deleteButton}
             <td>{GetCubeIcon(s.Project)} {CubesCn(s.Project)}</td>
             <td>{s.RouteValue.Name}</td>
-            <td>{FormatTime(s.Best, s.Project)}</td>
-            <td>{FormatTime(s.Avg, s.Project)}</td>
+            <td>{FormatTime(s.Best, s.Project, false)}</td>
+            <td>{FormatTime(s.Avg, s.Project, true)}</td>
             {CubeScoreTds(s)}
         </tr>
     )

@@ -50,7 +50,7 @@ export const ScoreChat = (v: ScoreChatValue) => {
         const value = f.value as number
 
         const score = v.scores[idx]
-        let baseOut = f.marker + " " + f.seriesName + ":" + FormatTime(value, score.Project)
+        let baseOut = f.marker + " " + f.seriesName + ":" + FormatTime(value, score.Project, false)
 
         if (idx === 0) {
             return baseOut
@@ -106,7 +106,7 @@ export const ScoreChat = (v: ScoreChatValue) => {
             type: "value",
             axisLabel: {
                 formatter: function (value: number, index: number) {
-                    return FormatTime(value, v.Project)
+                    return FormatTime(value, v.Project, false)
                 }
             }
         },

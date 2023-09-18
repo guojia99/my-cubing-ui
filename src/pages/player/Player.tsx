@@ -3,9 +3,10 @@ import './Player.css'
 
 import React, {JSX} from 'react';
 import {API} from "../../components/api/api";
-import {AllProjectList, CubeRouteNumber, Cubes, CubesCn} from "../../components/cube/cube";
+import {AllProjectList, Cubes, CubesCn} from "../../components/cube/cube";
 import {GetLocationQueryParams, SetTitleName} from "../../components/utils/utils";
 import {
+    Contest,
     GetPlayerAllScoreResponse,
     GetPlayerRecord,
     Player,
@@ -13,7 +14,6 @@ import {
     Podiums,
     RankScore,
     RecordMessage,
-    Contest,
     Round,
     Score,
     ScoresByContest
@@ -24,7 +24,7 @@ import {TabNav, TabNavsPage} from "../../components/utils/tabs";
 import {Link} from "react-router-dom";
 import {WaitGroup} from "../../components/utils/async";
 import {PR_And_GR_Record} from "../../components/cube/components/cube_record";
-import {RecordType} from "../../components/cube/components/cube_score_tabels";
+import {CubeScoreTds, RecordType} from "../../components/cube/components/cube_score_tabels";
 import {ScoreChat} from "../../components/cube/components/cube_scores_echarts";
 
 
@@ -149,7 +149,7 @@ class PlayerPage extends React.Component {
                     <tr key={key}>
                         <td>{GetCubeIcon(pj)} {CubesCn(pj)}</td>
                         <td style={{color: best.Rank === 1 ? "red" : ""}}>{best.Rank}</td>
-                        <td style={{fontWeight: 700}}>{best.Score.R1 + "/" + best.Score.R2 + " " + FormatTime(best.Score.R3, Cubes.Cube333)}</td>
+                        <td style={{fontWeight: 700}}>{best.Score.R1 + "/" + best.Score.R2 + " " + FormatTime(best.Score.R3, best.Score.Project, true)}</td>
                         <td></td>
                         <td></td>
                     </tr>
@@ -160,8 +160,8 @@ class PlayerPage extends React.Component {
                 <tr key={key}>
                     <td>{GetCubeIcon(pj)} {CubesCn(pj)}</td>
                     <td style={{color: best.Rank === 1 ? "red" : ""}}>{best.Rank}</td>
-                    <td style={{fontWeight: 700}}>{FormatTime(best.Score.Best, pj)}</td>
-                    <td style={{fontWeight: 700}}>{avg === undefined ? "" : FormatTime(avg.Score.Avg, Cubes.Cube333)}</td>
+                    <td style={{fontWeight: 700}}>{FormatTime(best.Score.Best, pj, false)}</td>
+                    <td style={{fontWeight: 700}}>{avg === undefined ? "" : FormatTime(avg.Score.Avg, avg.Score.Project, true)}</td>
                     <td style={{color: avg !== undefined && avg.Rank === 1 ? "red" : ""}}>{avg === undefined ? "" : avg.Rank}</td>
                 </tr>
             )
@@ -281,9 +281,8 @@ class PlayerPage extends React.Component {
 
 
             const drawScoresBaseTablesAndChart = (pj: Cubes, scores: ScoresByContest[]) => {
-                let tdNum = CubeRouteNumber.get(pj) as number
+                let tdNum = 5
                 let items = []
-                // todo 这里的多行由特殊的函数确定
 
                 items.push(<tr key={"score_key_first_111"}>
                     <td colSpan={tdNum + 5}>{GetCubeIcon(pj)} {CubesCn(pj)}</td>
@@ -294,13 +293,6 @@ class PlayerPage extends React.Component {
                     const ss = scores[i].Scores
 
                     for (let j = 0; j < ss.length; j++) {
-                        let cube5Td = (<></>)
-                        if (tdNum === 5) {
-                            cube5Td = (<>
-                                <td>{FormatTime(ss[j].R4, pj)}</td>
-                                <td>{FormatTime(ss[j].R5, Cubes.Cube333)}</td>
-                            </>)
-                        }
 
                         const IsBestGr = this.state.recordMap.get(ss[j].ID + "_" + RecordType.RecordBySingle) !== undefined
                         const IsAvgGr = this.state.recordMap.get(ss[j].ID + "_" + +RecordType.RecordByAvg) !== undefined
@@ -312,12 +304,9 @@ class PlayerPage extends React.Component {
                                 {/*<td>{ss[j].Rank}</td>*/}
                                 <td>{ss[j].RouteValue.Name}</td>
                                 <td>{FormatRank(ss[j].Rank)}</td>
-                                <td style={{fontWeight: 700}}>{PR_And_GR_Record(ss[j].IsBestSingle, IsBestGr)}{FormatTime(ss[j].Best, pj)}</td>
-                                <td style={{fontWeight: 700}}>{PR_And_GR_Record(ss[j].IsBestAvg, IsAvgGr)}{FormatTime(ss[j].Avg, Cubes.Cube333)}</td>
-                                <td>{FormatTime(ss[j].R1, pj)}</td>
-                                <td>{FormatTime(ss[j].R2, pj)}</td>
-                                <td>{FormatTime(ss[j].R3, pj)}</td>
-                                {cube5Td}
+                                <td style={{fontWeight: 700}}>{PR_And_GR_Record(ss[j].IsBestSingle, IsBestGr)}{FormatTime(ss[j].Best, pj, false)}</td>
+                                <td style={{fontWeight: 700}}>{PR_And_GR_Record(ss[j].IsBestAvg, IsAvgGr)}{FormatTime(ss[j].Avg, pj, true)}</td>
+                                {CubeScoreTds(ss[j])}
                             </tr>
                         )
                     }
@@ -375,8 +364,8 @@ class PlayerPage extends React.Component {
                                 <td><Link to={"/contest?id=" + contest.ID}>{j === 0 ? contest.Name : ""}</Link></td>
                                 <td>{ss[j].RouteValue.Name}</td>
                                 <td>{FormatRank(ss[j].Rank)}</td>
-                                <td>{FormatTime(ss[j].Best, Cubes.Cube333MBF)}</td>
-                                <td>{PR_And_GR_Record(ss[j].IsBestSingle, IsBestGr)} <i style={{fontWeight: 700}}> {score} </i> {FormatTime(ss[j].R3, Cubes.Cube333)}
+                                <td>{FormatTime(ss[j].Best, Cubes.Cube333MBF, false)}</td>
+                                <td>{PR_And_GR_Record(ss[j].IsBestSingle, IsBestGr)} <i style={{fontWeight: 700}}> {score} </i> {FormatTime(ss[j].R3, ss[j].Project, true)}
                                 </td>
                             </tr>
                         )
@@ -439,16 +428,25 @@ class PlayerPage extends React.Component {
         const renderPageByRecord = () => {
             let items: JSX.Element[] = []
 
+            let lastRecord :RecordMessage
             this.state.recordMap.forEach((value, key, map) => {
                 let score = (<>
-                    <td style={{fontWeight: 700}}>{FormatTime(value.Score.Best, value.Score.Project)}</td>
+                    <td style={{fontWeight: 700}}>{FormatTime(value.Score.Best, value.Score.Project, false)}</td>
                     <td></td>
                 </>)
                 if (value.Record.RType === RecordType.RecordByAvg) {
                     score = (<>
                         <td></td>
-                        <td style={{fontWeight: 700}}>{FormatTime(value.Score.Avg, value.Score.Project)}</td>
+                        <td style={{fontWeight: 700}}>{FormatTime(value.Score.Avg, value.Score.Project, true)}</td>
                     </>)
+                }
+
+                if (lastRecord !== null && lastRecord !== undefined && lastRecord.Score.ID === value.Score.ID) {
+                    score = (<>
+                        <td style={{fontWeight: 700}}>{FormatTime(value.Score.Best, value.Score.Project, false)}</td>
+                        <td style={{fontWeight: 700}}>{FormatTime(value.Score.Avg, value.Score.Project, true)}</td>
+                    </>)
+                    items.pop()
                 }
                 items.push(
                     <tr key={"renderPageByRecord_" + value.Record.RType + "_" + value.Record.ID}>
@@ -457,6 +455,7 @@ class PlayerPage extends React.Component {
                         {score}
                     </tr>
                 )
+                lastRecord = value
             })
             return (
                 <div style={{overflowX: "auto"}}>
@@ -497,52 +496,13 @@ class PlayerPage extends React.Component {
                         </tr>)
                     }
 
-                    let pd = (
-                        <>
-                            <td>{FormatTime(p.Score.R1, p.Score.Project)}</td>
-                            <td>{FormatTime(p.Score.R2, p.Score.Project)}</td>
-                            <td>{FormatTime(p.Score.R3, p.Score.Project)}</td>
-                            <td>{FormatTime(p.Score.R4, p.Score.Project)}</td>
-                            <td>{FormatTime(p.Score.R5, p.Score.Project)}</td>
-                        </>
-                    )
-
-                    switch (p.Score.Project) {
-                        case Cubes.Cube666:
-                        case Cubes.Cube777:
-                        case Cubes.Cube333BF:
-                        case Cubes.Cube444BF:
-                        case Cubes.Cube555BF:
-                        case Cubes.Cube333FM:
-                            pd = (
-                                <>
-                                    <td>{FormatTime(p.Score.R1, p.Score.Project)}</td>
-                                    <td>{FormatTime(p.Score.R2, p.Score.Project)}</td>
-                                    <td>{FormatTime(p.Score.R3, p.Score.Project)}</td>
-                                    <td></td>
-                                    <td></td>
-                                </>
-                            )
-                            break
-                        case Cubes.Cube333MBF:
-                            pd = (
-                                <>
-                                    <td>{p.Score.R1} / {p.Score.R2} </td>
-                                    <td>{FormatTime(p.Score.R3, Cubes.Cube333)}</td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                </>
-                            )
-                    }
-
                     items.push(
                         <tr key={"renderPageByPodium_value" + p.Score.ID}>
                             <td>{GetCubeIcon(p.Score.Project)} {CubesCn(p.Score.Project)}</td>
                             <td>{p.Score.Rank}</td>
-                            <td style={{fontWeight: 700}}>{FormatTime(p.Score.Best, p.Score.Project)}</td>
-                            <td style={{fontWeight: 700}}>{FormatTime(p.Score.Avg, p.Score.Project)}</td>
-                            {pd}
+                            <td style={{fontWeight: 700}}>{FormatTime(p.Score.Best, p.Score.Project, false)}</td>
+                            <td style={{fontWeight: 700}}>{FormatTime(p.Score.Avg, p.Score.Project, true)}</td>
+                            {CubeScoreTds(p.Score)}
                         </tr>
                     )
                 }

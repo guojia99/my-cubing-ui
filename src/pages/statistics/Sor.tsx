@@ -66,8 +66,8 @@ class Sor extends React.Component {
                 <tr  key={"sor_" + i}>
                     <td>{bestRank}</td>
                     <td><Link to={"/player?id=" + best.Player.ID}>{best.Player.Name}</Link></td>
-                    <td>{best.SingleCount} ({best.SingleProjects})</td>
-                    <td>{avg.AvgCount} ({avg.AvgProjects})</td>
+                    <td>{best.SingleCount} ({best.SingleProjects ? best.SingleProjects : 0})</td>
+                    <td>{avg.AvgCount} ({avg.AvgProjects ? avg.AvgProjects : 0})</td>
                     <td><Link to={"/player?id=" + avg.Player.ID}>{avg.Player.Name}</Link></td>
                     <td>{avgRank}</td>
                 </tr>

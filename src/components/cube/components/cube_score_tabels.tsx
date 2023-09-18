@@ -41,12 +41,12 @@ const NumberDefaultResultCubeScoresTable = (tdNum: number, pj: Cubes, Scores: Sc
             const isAvgBestRecord = records !== undefined && records.get(score.ID.toString() + RecordType.RecordByAvg.toString()) !== undefined
 
             let cube3Td = (<>
-                <td>{FormatTime(score.R2, pj)}</td>
-                <td>{FormatTime(score.R3, pj)}</td>
+                <td>{FormatTime(score.R2, pj, false)}</td>
+                <td>{FormatTime(score.R3, pj, false)}</td>
             </>)
             let cube5Td = (<>
-                <td>{FormatTime(score.R4, pj)}</td>
-                <td>{FormatTime(score.R5, pj)}</td>
+                <td>{FormatTime(score.R4, pj, false)}</td>
+                <td>{FormatTime(score.R5, pj, false)}</td>
             </>)
 
             if (tdNum < 3) {
@@ -59,9 +59,9 @@ const NumberDefaultResultCubeScoresTable = (tdNum: number, pj: Cubes, Scores: Sc
                 <tr className={i < 3 ? "table-success" : ""}>
                     <td className="idxTd">{i + 1}</td>
                     <td><Link to={"/player?id=" + score.PlayerID}>{score.PlayerName}</Link></td>
-                    <td>{PR_And_GR_Record(score.IsBestSingle, isSingleBestRecord)}{FormatTime(score.Best, pj)}</td>
-                    <td>{PR_And_GR_Record(score.IsBestAvg, isAvgBestRecord)}{FormatTime(score.Avg, Cubes.Cube333)}</td>
-                    <td>{FormatTime(score.R1, pj)}</td>
+                    <td>{PR_And_GR_Record(score.IsBestSingle, isSingleBestRecord)}{FormatTime(score.Best, pj, false)}</td>
+                    <td>{PR_And_GR_Record(score.IsBestAvg, isAvgBestRecord)}{FormatTime(score.Avg, pj,  true)}</td>
+                    <td>{FormatTime(score.R1, pj, false)}</td>
                     {cube3Td}
                     {cube5Td}
                 </tr>
@@ -116,9 +116,9 @@ const MBFCube333ScoreTable = (pj: Cubes, Scores: Score[], records: Map<string, C
                     <td>{i + 1}</td>
                     <td><Link to={"/player?id=" + score.PlayerID}>{score.PlayerName}</Link></td>
                     <td>({score.R1} / {score.R2}){PR_And_GR_Record(score.IsBestSingle, isSingleBestRecord)}</td>
-                    <td>{FormatTime(score.R1, pj)}</td>
-                    <td>{FormatTime(score.R2, pj)}</td>
-                    <td>{FormatTime(score.R3, Cubes.Cube333)}</td>
+                    <td>{FormatTime(score.R1, pj, false)}</td>
+                    <td>{FormatTime(score.R2, pj, false)}</td>
+                    <td>{FormatTime(score.R3, pj, true)}</td>
                 </tr>
             )
         }
@@ -168,20 +168,20 @@ export const CubeScoresTable = (pj: Cubes, Scores: Score[], records: ContestReco
 
 export const CubeScoreTds = (s: Score) => {
     if (s.Project === Cubes.Cube333MBF) {
-        return (<td colSpan={5}>{FormatTime(s.R1, s.Project)} / {FormatTime(s.R2, s.Project)} ({FormatTime(s.R3, Cubes.Cube333)})</td>)
+        return (<td colSpan={5}>{FormatTime(s.R1, s.Project, false)} / {FormatTime(s.R2, s.Project, false)} ({FormatTime(s.R3, Cubes.Cube333, true)})</td>)
     }
     const round = CubeRouteNumber.get(s.Project) as number
     let tds = [
-        <td>{FormatTime(s.R1, s.Project)}</td>,
+        <td>{FormatTime(s.R1, s.Project, false)}</td>,
     ]
 
     if (round >= 3) {
-        tds.push(<td>{FormatTime(s.R2, s.Project)}</td>)
-        tds.push(<td>{FormatTime(s.R3, s.Project)}</td>)
+        tds.push(<td>{FormatTime(s.R2, s.Project, false)}</td>)
+        tds.push(<td>{FormatTime(s.R3, s.Project, false)}</td>)
     }
     if (round >= 5) {
-        tds.push(<td>{FormatTime(s.R4, s.Project)}</td>)
-        tds.push(<td>{FormatTime(s.R5, s.Project)}</td>)
+        tds.push(<td>{FormatTime(s.R4, s.Project, false)}</td>)
+        tds.push(<td>{FormatTime(s.R5, s.Project, false)}</td>)
     }
     for (let i = tds.length + 1; i <= 5; i++) {
         tds.push(<td></td>)

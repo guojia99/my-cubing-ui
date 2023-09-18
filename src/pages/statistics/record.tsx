@@ -38,13 +38,13 @@ class Record extends React.Component {
 
     private contestTrBody(c: rc) {
         let name = "单次"
-        let score = FormatTime(c.ScoreValue.Best, c.ScoreValue.Project)
+        let score = FormatTime(c.ScoreValue.Best, c.ScoreValue.Project, false)
         if (c.RType === RecordType.RecordByAvg) {
-            score = FormatTime(c.ScoreValue.Avg, c.ScoreValue.Project)
+            score = FormatTime(c.ScoreValue.Avg, c.ScoreValue.Project, true)
             name = "平均"
         }
         if (c.ScoreValue.Project === Cubes.Cube333MBF) {
-            score = c.ScoreValue.R1 + "/" + c.ScoreValue.R2 + "(" + FormatTime(c.ScoreValue.R3, c.ScoreValue.Project) + ")"
+            score = c.ScoreValue.R1 + "/" + c.ScoreValue.R2 + "(" + FormatTime(c.ScoreValue.R3, c.ScoreValue.Project, true) + ")"
         }
 
         return (

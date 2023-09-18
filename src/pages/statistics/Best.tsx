@@ -37,8 +37,8 @@ class Best extends React.Component {
             items.push(<tr key={key}>
                 <td>{i + 1}</td>
                 <td><Link to={"/player?id=" + s.PlayerID}>{s.PlayerName}</Link></td>
-                <td className={IsBest ? "table-info" : ""}>{FormatTime(s.Best, s.Project)}</td>
-                <td className={!IsBest ? "table-info" : ""}>{FormatTime(s.Avg, s.Project)}</td>
+                <td className={IsBest ? "table-info" : ""}>{FormatTime(s.Best, s.Project, false)}</td>
+                <td className={!IsBest ? "table-info" : ""}>{FormatTime(s.Avg, s.Project, true)}</td>
                 {CubeScoreTds(s)}
             </tr>)
         }
@@ -127,6 +127,15 @@ class Best extends React.Component {
             if (bestScore.BestSingle[pj] === undefined && bestScore.BestAvg[pj] === undefined) {
                 continue
             }
+
+            items.push(<tr key={"empty_" + i}>
+                <th colSpan={1}>{" ".replace(/ /g, "\u00a0")}</th>
+                <th colSpan={1}></th>
+                <th colSpan={1}></th>
+                <th colSpan={1}></th>
+                <th colSpan={1}></th>
+            </tr>)
+
             items.push(<tr key={"base_table_head_" + pj}>
                 <th colSpan={5}>{GetCubeIcon(pj)} {CubesCn(pj)}</th>
             </tr>)
@@ -138,7 +147,7 @@ class Best extends React.Component {
                         <tr key={"best_by_id" + s.ID}>
                             <td colSpan={1}>单次</td>
                             <td colSpan={1}><Link to={"/player?id=" + s.PlayerID}>{s.PlayerName}</Link></td>
-                            <td colSpan={1}>{s.R1} / {s.R2} ({FormatTime(s.R3, Cubes.Cube333)})</td>
+                            <td colSpan={1}>{s.R1} / {s.R2} ({FormatTime(s.R3, Cubes.Cube333, true)})</td>
                             <td colSpan={1}></td>
                             <td colSpan={1}></td>
                         </tr>
@@ -150,7 +159,7 @@ class Best extends React.Component {
                     <tr key={"best_by_id" + s.ID}>
                         <td colSpan={1}>单次</td>
                         <td colSpan={1}><Link to={"/player?id=" + s.PlayerID}>{s.PlayerName}</Link></td>
-                        <td colSpan={1}>{FormatTime(s.Best, s.Project)}</td>
+                        <td colSpan={1}>{FormatTime(s.Best, s.Project, false)}</td>
                         <td colSpan={1}></td>
                         <td colSpan={1}></td>
                     </tr>
@@ -163,20 +172,12 @@ class Best extends React.Component {
                     <tr key={"avg_by_id" + s.ID}>
                         <td>平均</td>
                         <td><Link to={"/player?id=" + s.PlayerID}>{s.PlayerName}</Link></td>
-                        <td>{FormatTime(s.Avg, s.Project)}</td>
+                        <td>{FormatTime(s.Avg, s.Project, true)}</td>
                         <td colSpan={1}></td>
                         <td colSpan={1}></td>
                     </tr>
                 )
             }
-
-            items.push(<tr key={"empty_" + i}>
-                <th colSpan={1}>{" ".replace(/ /g, "\u00a0")}</th>
-                <th colSpan={1}></th>
-                <th colSpan={1}></th>
-                <th colSpan={1}></th>
-                <th colSpan={1}></th>
-            </tr>)
         }
 
 

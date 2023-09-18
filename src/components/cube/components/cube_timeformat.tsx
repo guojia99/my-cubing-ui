@@ -1,7 +1,6 @@
 import {Cubes} from "../cube";
 
-
-export function FormatTime(result: number, pj: Cubes) {
+export function FormatTime(result: number, pj: Cubes, isAvg: boolean) {
 
     if (isNaN(result)) {
         return "DNF"
@@ -14,7 +13,7 @@ export function FormatTime(result: number, pj: Cubes) {
         return "DNF"
     }
 
-    if (pj === Cubes.Cube333FM || pj === Cubes.Cube333MBF) {
+    if ((pj === Cubes.Cube333FM || pj === Cubes.Cube333MBF) && !isAvg) {
         return result.toFixed(0)
     }
 
