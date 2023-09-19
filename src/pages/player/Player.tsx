@@ -10,13 +10,13 @@ import {
     GetPlayerAllScoreResponse,
     GetPlayerRecord,
     Player,
-    PlayerBestScoreResponse,
+    PlayerBestScoreResponse, PlayerSorResponse,
     Podiums,
     RankScore,
     RecordMessage,
     Round,
     Score,
-    ScoresByContest
+    ScoresByContest, SorScore
 } from "../../components/api/api_model";
 import {GetCubeIcon} from "../../components/cube/icon/cube_icon";
 import {FormatRank, FormatTime} from "../../components/cube/components/cube_timeformat";
@@ -26,6 +26,7 @@ import {WaitGroup} from "../../components/utils/async";
 import {PR_And_GR_Record} from "../../components/cube/components/cube_record";
 import {CubeScoreTds, RecordType} from "../../components/cube/components/cube_score_tabels";
 import {ScoreChat} from "../../components/cube/components/cube_scores_echarts";
+import {SorKeys} from "../../components/cube/components/cube_sor";
 
 
 class PlayerPage extends React.Component {
@@ -35,33 +36,43 @@ class PlayerPage extends React.Component {
         best: null,
         podium: null,
         allScore: null,
-        recordMap: new Map<string, RecordMessage>()
+        recordMap: new Map<string, RecordMessage>(),
+        sor: null,
     }
 
     componentDidMount() {
         const p = GetLocationQueryParams()
         const id = Number(p["id"])
         const wg = new WaitGroup()
-        wg.add(5)
+        wg.add(6)
         wg.wait().then(value => {
             this.setState({ok: true})
         })
-        API.GetPlayer(id).then(value => {
-            this.setState({player: value})
+
+        API.GetPlayer(id).then(value => this.setState({player: value})).finally(() => {
             wg.done()
         })
         API.GetPlayerBestScoreReport(id).then(value => {
             this.setState({best: value})
+        }).finally(() => {
             wg.done()
         })
         API.GetPlayerAllScore(id).then(value => {
             this.setState({allScore: value})
+        }).finally(() => {
             wg.done()
         })
         API.GetPlayerPodium(id).then(value => {
             this.setState({podium: value})
+        }).finally(() => {
             wg.done()
         })
+        API.GetPlayerSor(id).then(value => {
+            this.setState({sor: value})
+        }).finally(() => {
+            wg.done()
+        })
+
         API.GetPlayerRecord(id).then(value => {
             let record = value as GetPlayerRecord
             if (record === null || record === undefined) {
@@ -74,6 +85,7 @@ class PlayerPage extends React.Component {
             }
             wg.done()
         })
+
     }
 
     renderHeader() {
@@ -132,7 +144,6 @@ class PlayerPage extends React.Component {
 
         const pjList = AllProjectList()
         let body = []
-        console.log(data)
         for (let i = 0; i < pjList.length; i++) {
             const pj = pjList[i]
 
@@ -149,7 +160,10 @@ class PlayerPage extends React.Component {
                     <tr key={key}>
                         <td>{GetCubeIcon(pj)} {CubesCn(pj)}</td>
                         <td style={{color: best.Rank === 1 ? "red" : ""}}>{best.Rank}</td>
-                        <td style={{fontWeight: 700}}>{best.Score.R1 + "/" + best.Score.R2 + " " + FormatTime(best.Score.R3, best.Score.Project, true)}</td>
+                        <td style={{
+                            fontWeight: 700,
+                            color: best.Rank === 1 ? "red" : ""
+                        }}>{best.Score.R1 + "/" + best.Score.R2 + " " + FormatTime(best.Score.R3, best.Score.Project, true)}</td>
                         <td></td>
                         <td></td>
                     </tr>
@@ -160,9 +174,9 @@ class PlayerPage extends React.Component {
                 <tr key={key}>
                     <td>{GetCubeIcon(pj)} {CubesCn(pj)}</td>
                     <td style={{color: best.Rank === 1 ? "red" : ""}}>{best.Rank}</td>
-                    <td style={{fontWeight: 700}}>{FormatTime(best.Score.Best, pj, false)}</td>
-                    <td style={{fontWeight: 700}}>{avg === undefined ? "" : FormatTime(avg.Score.Avg, avg.Score.Project, true)}</td>
-                    <td style={{color: avg !== undefined && avg.Rank === 1 ? "red" : ""}}>{avg === undefined ? "" : avg.Rank}</td>
+                    <td style={{fontWeight: 700, color: best.Rank === 1 ? "red" : ""}}>{FormatTime(best.Score.Best, pj, false)}</td>
+                    <td style={{fontWeight: 700, color: avg.Rank === 1 ? "red" : ""}}>{FormatTime(avg.Score.Avg, avg.Score.Project, true)}</td>
+                    <td style={{color: avg.Rank === 1 ? "red" : ""}}>{avg.Rank}</td>
                 </tr>
             )
         }
@@ -187,7 +201,6 @@ class PlayerPage extends React.Component {
     }
 
     renderPodiumsTable() {
-
         if (this.state.podium === null) {
             return <div></div>
         }
@@ -195,12 +208,18 @@ class PlayerPage extends React.Component {
         const podium = this.state.podium as Podiums
 
         let body: JSX.Element[] = []
+
+
         if (podium !== undefined) {
+            const g = podium.Gold ? podium.Gold : 0
+            const s = podium.Silver ? podium.Silver : 0
+            const b = podium.Bronze ? podium.Bronze : 0
             body.push(
                 <tr key={"podium_" + podium.Player.ID}>
-                    <td>{podium.Gold ? podium.Gold : 0}</td>
-                    <td>{podium.Silver ? podium.Silver : 0}</td>
-                    <td>{podium.Bronze ? podium.Bronze : 0}</td>
+                    <td>{g}</td>
+                    <td>{s}</td>
+                    <td>{b}</td>
+                    <td>{g + s + b}</td>
                 </tr>
             )
         }
@@ -215,6 +234,56 @@ class PlayerPage extends React.Component {
                         <th colSpan={1}>金牌</th>
                         <th colSpan={1}>银牌</th>
                         <th colSpan={1}>铜牌</th>
+                        <th colSpan={1}>总数</th>
+                    </tr>
+                    </thead>
+                    <tbody>{body}</tbody>
+                </table>
+            </div>
+        )
+    }
+
+    renderSorTable() {
+        if (this.state.sor === null) {
+            return <div></div>
+        }
+
+        const sor = this.state.sor as PlayerSorResponse
+
+        if (sor.Single === undefined && sor.Avg === undefined) {
+            return <div></div>
+        }
+        let body: JSX.Element[] = []
+        SorKeys.forEach((value, key) => {
+            const signal = sor.Single[key] as SorScore
+            const avg = sor.Avg[key] as SorScore
+
+            if (signal === undefined && avg === undefined) {
+                return
+            }
+
+            body.push(
+                <tr key={"renderSorTable_tr" + key}>
+                    <th>{value}</th>
+                    <td style={{color: signal.SingleRank === 1 ? "red" : ""}}>{signal.SingleRank}</td>
+                    <td style={{color: signal.SingleRank === 1 ? "red" : ""}}>{signal.SingleCount} ({signal.SingleProjects})</td>
+                    <td style={{color: avg.AvgRank === 1 ? "red" : ""}}> {avg.AvgCount} ({avg.AvgProjects})</td>
+                    <td style={{color: avg.AvgRank === 1 ? "red" : ""}}>{avg.AvgRank}</td>
+                </tr>
+            )
+        })
+
+        return (
+            <div>
+                <h4 style={{textAlign: "center", fontWeight: 700}}>排位分</h4>
+                <table className="table table-striped table-hover text-center" id="best_score_table">
+                    <thead>
+                    <tr key={"renderPodiumsTable_head_tr"}>
+                        <th colSpan={1}>项目</th>
+                        <th colSpan={1}>排位</th>
+                        <th colSpan={1}>单次</th>
+                        <th colSpan={1}>平均</th>
+                        <th colSpan={1}>排位</th>
                     </tr>
                     </thead>
                     <tbody>{body}</tbody>
@@ -428,7 +497,7 @@ class PlayerPage extends React.Component {
         const renderPageByRecord = () => {
             let items: JSX.Element[] = []
 
-            let lastRecord :RecordMessage
+            let lastRecord: RecordMessage
             this.state.recordMap.forEach((value, key, map) => {
                 let score = (<>
                     <td style={{fontWeight: 700}}>{FormatTime(value.Score.Best, value.Score.Project, false)}</td>
@@ -542,6 +611,11 @@ class PlayerPage extends React.Component {
                 Name: (<h4>领奖台</h4>),
                 Page: renderPageByPodium(),
             },
+            {
+                Id: "old_enemy",
+                Name: (<h4>宿敌</h4>),
+                Page: (<div></div>)
+            }
         ]
 
         return (
@@ -558,6 +632,7 @@ class PlayerPage extends React.Component {
                 {this.renderHeader()}
                 {this.renderBestTable()}
                 {this.renderPodiumsTable()}
+                {this.renderSorTable()}
                 {this.renderAllScore()}
             </div>
         )

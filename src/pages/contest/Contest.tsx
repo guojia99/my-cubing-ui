@@ -5,12 +5,22 @@ import {API} from "../../components/api/api";
 import {AllProjectList, Cubes} from "../../components/cube/cube";
 import {WaitGroup} from "../../components/utils/async";
 import {GetLocationQueryParams, SetTitleName} from "../../components/utils/utils";
-import { ContestPodiums, ContestRecord, GetContestResponse, GetContestScoreResponse, GetContestSorResponse, Round, RoutesScores, SorScore} from "../../components/api/api_model";
+import {
+    ContestPodiums,
+    ContestRecord,
+    GetContestResponse,
+    GetContestScoreResponse,
+    GetContestSorResponse,
+    Round,
+    RoutesScores,
+    SorScore
+} from "../../components/api/api_model";
 import {Link} from "react-router-dom";
 import {TabNav, TabNavsPage} from "../../components/utils/tabs";
 import {GetCubeIcon} from "../../components/cube/icon/cube_icon";
 import {CubeScoresTable} from "../../components/cube/components/cube_score_tabels";
 import {RoundTables} from "../../components/cube/components/cube_rounds";
+import {SorKeys, SorTable} from "../../components/cube/components/cube_sor";
 
 class ContestPage extends React.Component {
     state = {
@@ -59,84 +69,27 @@ class ContestPage extends React.Component {
 
     private readerSorTable() {
         const sor = this.state.sor as GetContestSorResponse
-
-        // hidden
-        if (sor.Avg === undefined || sor.Single === undefined) {
-            return (<div></div>)
+        if (sor === undefined) {
+            return <div></div>
         }
 
-        function sorTableBody(sor: GetContestSorResponse) {
-            if (sor.Avg === null || sor.Avg === undefined || sor.Single === null || sor.Single === undefined) {
-                return (<tbody></tbody>)
+        let tabs: TabNavsPage[] = []
+        SorKeys.forEach((value, key) => {
+            const single = sor.Single[key] as SorScore[]
+            const avg = sor.Avg[key] as SorScore[]
+
+            if (single === undefined && avg === undefined) {
+                return
             }
+            tabs.push({
+                Id: key,
+                Name: (<h6>{value}</h6>),
+                Page: SorTable(single, avg),
+            })
+        })
 
-            function sorTrs(idx: number, single: SorScore | null, avg: SorScore | null) {
-                idx = idx += 1
-                const SingleTds = () => {
-                    if (single === null) {
-                        return (<>
-                            <td>-</td>
-                            <td>-</td>
-                            <td>-</td>
-                        </>)
-                    }
-                    return (<>
-                        <td>{idx}</td>
-                        <td><Link to={"/player?id=" + single.Player.ID}>{single.Player.Name}</Link></td>
-                        <td>{single.SingleCount}</td>
-                    </>)
-                }
 
-                const AvgTds = () => {
-                    if (avg === null) {
-                        return (<>
-                            <td>-</td>
-                            <td>-</td>
-                            <td>-</td>
-                        </>)
-                    }
-                    return (<>
-                        <td>{avg.AvgCount}</td>
-                        <td><Link to={"/player?id=" + avg.Player.ID}>{avg.Player.Name}</Link></td>
-                        <td>{idx}</td>
-                    </>)
-                }
-
-                return (
-                    <tr className={idx <= 3 ? "table-success" : ""}>
-                        <SingleTds/>
-                        <AvgTds/>
-                    </tr>
-                )
-            }
-
-            const maxLength = sor.Single.length > sor.Avg.length ? sor.Single.length : sor.Avg.length
-            return (
-                <tbody>
-                {Array.from(Array(maxLength), (e, i) => {
-                    const single = i < sor.Single.length ? sor.Single[i] : null
-                    let avg = i < sor.Avg.length ? sor.Avg[i] : null
-                    return sorTrs(i, single, avg)
-                })}
-                </tbody>
-            )
-        }
-
-        return (
-            <div>
-                <table className="table text-center table-striped table-hover">
-                    <thead>
-                    <tr>
-                        <th scope="col">排名</th>
-                        <th scope="col" colSpan={2}>单次</th>
-                        <th scope="col" colSpan={2}>平均</th>
-                        <th scope="col">排名</th>
-                    </tr>
-                    </thead>
-                    {sorTableBody(sor)}
-                </table>
-            </div>
-        )
+        return (<TabNav Id={"contest_sor_tabs"} SelectedKey={"contest_sor_tabs"} Pages={tabs} Center={true}/>)
     }
 
     private readerScore() {
@@ -162,7 +115,7 @@ class ContestPage extends React.Component {
 
                 const id = routes.Round[0].ID
                 items.push(
-                    <div className="accordion-item" key={"drawRoutesScores_" + id+ "_item"}>
+                    <div className="accordion-item" key={"drawRoutesScores_" + id + "_item"}>
                         <h2 className="accordion-header">
                             <button className="accordion-button"
                                     type="button"
@@ -202,7 +155,7 @@ class ContestPage extends React.Component {
             })
         }
 
-        return (<TabNav Id="constest_socre" SelectedKey="score_cubes" Pages={pages}  Center={false}/>)
+        return (<TabNav Id="constest_socre" SelectedKey="score_cubes" Pages={pages} Center={false}/>)
     }
 
     private readerPodiums() {
@@ -319,12 +272,12 @@ class ContestPage extends React.Component {
                 Page: drawRounds(pj, rounds),
             })
         }
-        return (<><TabNav Id="constest_round" SelectedKey="round_cubes" Pages={pages} Center={false} /></>)
+        return (<><TabNav Id="constest_round" SelectedKey="round_cubes" Pages={pages} Center={false}/></>)
     }
 
     render() {
         const contest = this.state.contest as GetContestResponse
-        if (contest.Contest === undefined){
+        if (contest.Contest === undefined) {
             return <div></div>
         }
         SetTitleName(contest.Contest.Name)
@@ -354,7 +307,7 @@ class ContestPage extends React.Component {
         return (
             <div>
                 <div><h1 className="text-center">{contest.Contest.Name}</h1></div>
-                <TabNav Id="contest_nav" SelectedKey="contest_tab" Pages={pages}  Center={false}/>
+                <TabNav Id="contest_nav" SelectedKey="contest_tab" Pages={pages} Center={false}/>
             </div>
         )
 

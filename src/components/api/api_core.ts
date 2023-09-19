@@ -10,7 +10,7 @@ import {
     GetContestSorResponse,
     GetContestsResponse, GetPlayerAllScoreResponse, GetPlayerRecord,
     GetTokenResponse, Player, PlayerBestScoreResponse,
-    PlayersResponse, Podiums, Score, GetRecordsResponse, BestSorReportResponse, AddScoreRequest, CreateContestRequest, GetBestByAllScoresResponse, XLog,
+    PlayersResponse, Podiums, Score, GetRecordsResponse, BestSorReportResponse, AddScoreRequest, CreateContestRequest, GetBestByAllScoresResponse, XLog, PlayerSorResponse,
 } from './api_model';
 
 
@@ -78,6 +78,12 @@ export class apiCore {
 
     async GetBestSor(): Promise<BestSorReportResponse> {
         let uri = this.uri + "/report/best/sor"
+        const result = await axios.get(uri, {headers: {Accept: 'application/json'}})
+        return result.data
+    }
+
+    async GetPlayerSor(playerID: number): Promise<PlayerSorResponse>{
+        let uri = this.uri +  "/report/player/" + playerID + "/sor"
         const result = await axios.get(uri, {headers: {Accept: 'application/json'}})
         return result.data
     }

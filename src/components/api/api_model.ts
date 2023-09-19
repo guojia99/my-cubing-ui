@@ -1,5 +1,4 @@
 import {Cubes} from "../cube/cube";
-import exp from "constants";
 
 
 export type Contest = {
@@ -80,8 +79,10 @@ export type RoutesScores = {
 
 export type SorScore = {
     Player: Player;
+    SingleRank: number;
     SingleCount: number;
     SingleProjects: number;
+    AvgRank: number;
     AvgCount: number;
     AvgProjects: number;
 }
@@ -155,9 +156,10 @@ export type GetBestScoreResponse = {
     BestAvg: any; // Map<Cubes, Score>
 }
 
+
 export type GetContestSorResponse = {
-    Single: SorScore[];
-    Avg: SorScore[];
+    Single: any; // map[key][]SorScore
+    Avg: any; // map[key][]SorScore
 }
 
 export type GetContestScoreResponse = {
@@ -193,6 +195,11 @@ export type PlayerBestScoreResponse = {
     Avg: any; // Map<Cubes, RankScore>
 }
 
+export type PlayerSorResponse = {
+    Single: any; // map[key]SorScore
+    Avg: any; // map[key]SorScore
+}
+
 export type GetPlayerAllScoreResponse = {
     BestSingle: Score[];
     BestAvg: Score[];
@@ -208,8 +215,8 @@ export type GetRecordsResponse = {
 }
 
 export type BestSorReportResponse = {
-    BestSingle: SorScore[];
-    BestAvg: SorScore[];
+    BestSingle: any; // map[key][]SorScore
+    BestAvg: any; // map[key][]SorScore
 }
 
 export type ScorePenalty = {

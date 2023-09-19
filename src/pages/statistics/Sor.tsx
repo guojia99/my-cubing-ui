@@ -1,7 +1,8 @@
-import React, {JSX} from 'react';
+import React from 'react';
 import {API} from "../../components/api/api";
-import {BestSorReportResponse} from "../../components/api/api_model";
-import {Link} from "react-router-dom";
+import {BestSorReportResponse, SorScore} from "../../components/api/api_model";
+import {TabNav, TabNavsPage} from "../../components/utils/tabs";
+import {SorKeys, SorTable} from "../../components/cube/components/cube_sor";
 
 class Sor extends React.Component {
     state = {
@@ -19,79 +20,23 @@ class Sor extends React.Component {
             return <div></div>
         }
         const data = this.state.data as BestSorReportResponse
-
-        let items: JSX.Element[] = []
-
-
-        let lastBest = data.BestSingle[0].SingleCount
-        let lastBestRank = 1
-
-        let lastAvg = data.BestAvg[0].AvgCount
-        let lastAvgRank = 1
-
-        items.push(
-            <tr key={"sor_00"}>
-                <td>{1}</td>
-                <td><Link to={"/player?id=" + data.BestSingle[0].Player.ID}>{data.BestSingle[0].Player.Name}</Link></td>
-                <td>{data.BestSingle[0].SingleCount}({data.BestSingle[0].SingleProjects})</td>
-                <td>{data.BestAvg[0].AvgCount} ({data.BestAvg[0].AvgProjects})</td>
-                <td><Link to={"/player?id=" + data.BestAvg[0].Player.ID}>{data.BestAvg[0].Player.Name}</Link></td>
-                <td>{1}</td>
-            </tr>
-        )
-
-
-        for (let i = 1; i < data.BestSingle.length; i++) {
-            const best = data.BestSingle[i]
-            const avg = data.BestAvg[i]
-
-
-            let bestRank = lastBestRank
-            if (best.SingleCount !== lastBest) {
-                lastBestRank = i + 1
-                bestRank = i + 1
-            }
-            lastBest = best.SingleCount
-
-
-            let avgRank = lastAvgRank
-            if (avg.AvgCount !== lastAvg) {
-                lastAvgRank = i + 1
-                avgRank = i + 1
-            }
-            lastAvg = avg.AvgCount
-
-
-            items.push(
-                <tr  key={"sor_" + i}>
-                    <td>{bestRank}</td>
-                    <td><Link to={"/player?id=" + best.Player.ID}>{best.Player.Name}</Link></td>
-                    <td>{best.SingleCount} ({best.SingleProjects ? best.SingleProjects : 0})</td>
-                    <td>{avg.AvgCount} ({avg.AvgProjects ? avg.AvgProjects : 0})</td>
-                    <td><Link to={"/player?id=" + avg.Player.ID}>{avg.Player.Name}</Link></td>
-                    <td>{avgRank}</td>
-                </tr>
-            )
+        if (data.BestSingle === undefined && data.BestAvg === undefined) {
+            return <div></div>
         }
-
-        return (
-            <div>
-                <table className="table text-center table-striped table-hover">
-                    <thead>
-                    <tr>
-                        <th scope="col">序</th>
-                        <th scope="col">选手</th>
-                        <th scope="col" colSpan={2}>分数(参与项目总数)</th>
-                        <th scope="col">选手</th>
-                        <th scope="col">序</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {items}
-                    </tbody>
-                </table>
-            </div>
-        )
+        let tabs: TabNavsPage[] = []
+        SorKeys.forEach((value, key) => {
+            const single = data.BestSingle[key] as SorScore[]
+            const avg = data.BestAvg[key] as SorScore[]
+            if (single === undefined || avg === undefined){
+                return
+            }
+            tabs.push({
+                Id: key,
+                Name: (<h6>{value}</h6>),
+                Page: SorTable(single, avg),
+            })
+        })
+        return ( <TabNav Id={"sor_tabs"} SelectedKey={"sor_tabs"} Pages={tabs} Center={true}/>)
     }
 }
 
