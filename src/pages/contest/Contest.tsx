@@ -3,7 +3,6 @@ import './contest.css'
 import React, {JSX} from 'react';
 import {API} from "../../components/api/api";
 import {AllProjectList, Cubes} from "../../components/cube/cube";
-import {WaitGroup} from "../../components/utils/async";
 import {GetLocationQueryParams, SetTitleName} from "../../components/utils/utils";
 import {
     ContestPodiums,
@@ -24,7 +23,6 @@ import {SorKeys, SorTable} from "../../components/cube/components/cube_sor";
 
 class ContestPage extends React.Component {
     state = {
-        ok: false,
         score: {},
         sor: {},
         contest: {},
@@ -36,40 +34,26 @@ class ContestPage extends React.Component {
         const p = GetLocationQueryParams()
         const id = Number(p['id'])
 
-        let wg = new WaitGroup();
-        wg.add(5)
-
         API.GetContestRecord(id).then(value => {
             this.setState({record: value})
-            wg.done()
         })
         API.GetContest(id).then(value => {
             this.setState({contest: value})
-            wg.done()
         })
         API.GetContestScore(id).then(value => {
             this.setState({score: value})
-            wg.done()
         })
         API.GetContestSor(id).then(value => {
             this.setState({sor: value})
-            wg.done()
         })
         API.GetContestPodium(id).then(value => {
             this.setState({podium: value})
-            wg.done()
-        })
-
-        // wait all
-        wg.wait().then(_ => {
-            this.setState({ok: true})
-            console.log(this.state)
         })
     }
 
     private readerSorTable() {
         const sor = this.state.sor as GetContestSorResponse
-        if (sor === undefined) {
+        if (sor === undefined || (sor.Single === undefined && sor.Avg === undefined)) {
             return <div></div>
         }
 

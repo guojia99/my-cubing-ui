@@ -15,10 +15,5 @@
     <orderEntry type="library" name="bootstrap" level="application" />
     <orderEntry type="library" name="bootstrap-datepicker" level="application" />
     <orderEntry type="library" name="jquery" level="application" />
-    <orderEntry type="library" name="bootstrap.bundle" level="application" />
-    <orderEntry type="library" name="jquery" level="application" />
-    <orderEntry type="library" name="bootstrap-tagsinput" level="application" />
-    <orderEntry type="library" name="bootstrap-datepicker" level="application" />
-    <orderEntry type="library" name="bootstrap" level="application" />
   </component>
 </module>

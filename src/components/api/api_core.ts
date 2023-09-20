@@ -130,9 +130,8 @@ export class apiCore {
         const result = await axios.get(uri, {headers: {Accept: 'application/json'}})
         return result.data
     }
-
     async GetXLog(): Promise<XLog[]> {
-        let uri = this.uri + "/x-log"
+        let uri = this.uri + "/x-log/"
         const result = await axios.get(uri, {headers: {Accept: 'application/json'}})
         return result.data
     }

@@ -25,6 +25,7 @@ import Record from "./pages/statistics/record";
 import Best from "./pages/statistics/Best";
 import Sor from "./pages/statistics/Sor";
 import PodiumsPage from "./pages/statistics/podiums";
+import ScrollToTopButton from "./components/utils/top_button";
 
 $(() => {
     setInterval(() => {
@@ -37,49 +38,54 @@ const root = ReactDOM.createRoot(
     document.getElementById('root') as HTMLElement
 );
 root.render(
-    <BrowserRouter>
-        <ul className="nav nav-underline" style={{marginBottom: '20px'}}>
-            <li className="nav-item"><NavLink className="nav-link" to="/">主页</NavLink></li>
-            <li className="nav-item"><NavLink className="nav-link" to="/about">关于</NavLink></li>
-            <li className="nav-item"><NavLink className="nav-link" to="/contests">比赛</NavLink></li>
-            <li className="nav-item"><NavLink className="nav-link" to="/players">玩家</NavLink></li>
+    <div>
+        <BrowserRouter>
+            <ul className="nav nav-underline" style={{marginBottom: '20px'}}>
+                <li className="nav-item"><NavLink className="nav-link" to="/">主页</NavLink></li>
+                <li className="nav-item"><NavLink className="nav-link" to="/about">关于</NavLink></li>
+                <li className="nav-item"><NavLink className="nav-link" to="/contests">比赛</NavLink></li>
+                <li className="nav-item"><NavLink className="nav-link" to="/players">玩家</NavLink></li>
 
-            <li className="nav-item dropdown">
-                <Link to="#" className="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false">统计</Link>
-                {/*<a className="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" href="#" aria-expanded="false">统计</a>*/}
-                <ul className="dropdown-menu">
-                    <li><NavLink className="dropdown-item" to="/statistics/record">纪录</NavLink></li>
-                    <li><NavLink className="dropdown-item" to="/statistics/sor">排位分数</NavLink></li>
-                    <li><NavLink className="dropdown-item" to="/statistics/podiums">奖牌榜单</NavLink></li>
-                    <li><NavLink className="dropdown-item" to="/statistics/best">最佳成绩</NavLink></li>
-                    <li><NavLink className="dropdown-item" to="/statistics/interest">趣味玩法</NavLink></li>
-                </ul>
-            </li>
-        </ul>
-        <Routes>
-            <Route path="/" Component={Home}/>
-            <Route path="/about" Component={About}/> {/*关于*/}
+                <li className="nav-item dropdown">
+                    <Link to="#" className="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false">统计</Link>
+                    {/*<a className="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" href="#" aria-expanded="false">统计</a>*/}
+                    <ul className="dropdown-menu">
+                        <li><NavLink className="dropdown-item" to="/statistics/record">纪录</NavLink></li>
+                        <li><NavLink className="dropdown-item" to="/statistics/sor">排位分数</NavLink></li>
+                        <li><NavLink className="dropdown-item" to="/statistics/podiums">奖牌榜单</NavLink></li>
+                        <li><NavLink className="dropdown-item" to="/statistics/best">最佳成绩</NavLink></li>
+                        <li><NavLink className="dropdown-item" to="/statistics/interest">趣味玩法</NavLink></li>
+                    </ul>
+                </li>
+            </ul>
+            <Routes>
+                <Route path="/" Component={Home}/>
+                <Route path="/about" Component={About}/> {/*关于*/}
 
-            {/*管理员*/}
-            <Route path="/xadmin" Component={Admin}/>
-            <Route path="/xauth" Component={Auth}/>
-            <Route path="/debug" Component={Debug}/>
+                {/*管理员*/}
+                <Route path="/xadmin" Component={Admin}/>
+                <Route path="/xauth" Component={Auth}/>
+                <Route path="/debug" Component={Debug}/>
 
 
-            {/*比赛*/}
-            <Route path="/contest" Component={ContestPage}/> {/*比赛*/}
-            <Route path="/contests" Component={Contests}/>{/*比赛列表*/}
-            <Route path="/player" Component={PlayerPage}/>{/*玩家*/}
-            <Route path="/players" Component={Players}/>{/*玩家列表*/}
+                {/*比赛*/}
+                <Route path="/contest" Component={ContestPage}/> {/*比赛*/}
+                <Route path="/contests" Component={Contests}/>{/*比赛列表*/}
+                <Route path="/player" Component={PlayerPage}/>{/*玩家*/}
+                <Route path="/players" Component={Players}/>{/*玩家列表*/}
 
-            {/*统计*/}
-            <Route path="/statistics/best" Component={Best}/> {/*最佳成绩汇总*/}
-            <Route path="/statistics/sor" Component={Sor}/> {/*最佳成绩汇总*/}
-            <Route path="/statistics/record" Component={Record}/> {/*纪录*/}
-            <Route path="/statistics/podiums" Component={PodiumsPage}/> {/*奖牌榜单*/}
-            <Route path="/statistics/interest" Component={() => {
-                return (<div>没开发</div>)
-            }}></Route> {/*趣味玩法*/}
-        </Routes>
-    </BrowserRouter>
+                {/*统计*/}
+                <Route path="/statistics/best" Component={Best}/> {/*最佳成绩汇总*/}
+                <Route path="/statistics/sor" Component={Sor}/> {/*最佳成绩汇总*/}
+                <Route path="/statistics/record" Component={Record}/> {/*纪录*/}
+                <Route path="/statistics/podiums" Component={PodiumsPage}/> {/*奖牌榜单*/}
+                <Route path="/statistics/interest" Component={() => {
+                    return (<div>没开发</div>)
+                }}></Route> {/*趣味玩法*/}
+            </Routes>
+        </BrowserRouter>
+
+        <ScrollToTopButton/>
+    </div>
+
 );

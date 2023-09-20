@@ -8,6 +8,7 @@ import {TabNav, TabNavsPage} from "../../components/utils/tabs";
 import {AdminScoreDataCtx, AdminScoreRender} from "./admin_score";
 import {AdminContestDataCtx, AdminContestRender} from "./admin_contest";
 import {AdminPlayerDataCtx, AdminPlayerRender} from "./admin_player";
+import {AdminXLogRender} from "./admin_xlog";
 
 
 class Admin extends React.Component {
@@ -63,6 +64,11 @@ class Admin extends React.Component {
                 Name: (<h4>选手管理</h4>),
                 Page: this.PlayerRender(),
             },
+            {
+                Id: "xlog",
+                Name: (<h4>日志管理</h4>),
+                Page: this.XLogRender(),
+            }
         ]
 
         return (
@@ -72,6 +78,8 @@ class Admin extends React.Component {
             </div>)
     }
 
+
+    // todo  这个请求下放给各自的子模块
     loadData() {
         let data = {
             contests: {},
@@ -101,7 +109,6 @@ class Admin extends React.Component {
 
     AdminScoreRenderCli = new AdminScoreRender()
     ScoreRender = () => {
-
         const contest = this.state.contests ? this.state.contests as GetContestsResponse : null
         const player = this.state.players ? this.state.players as PlayersResponse : null
         const deleteScore = this.state.deleteScoreID ? this.state.deleteScoreID as number : -2
@@ -136,7 +143,6 @@ class Admin extends React.Component {
     }
 
     AdminPlayerRenderCli = new AdminPlayerRender()
-
     PlayerRender = () => {
         const player = this.state.players ? this.state.players as PlayersResponse : null
         const DeleteID = this.state.PlayerRenderDeleteID ? this.state.PlayerRenderDeleteID as number : -1
@@ -152,6 +158,12 @@ class Admin extends React.Component {
 
         return this.AdminPlayerRenderCli.render(ctx)
     }
+
+    AdminXLogRenderCli = new AdminXLogRender()
+    XLogRender = () => {
+        return this.AdminXLogRenderCli.render()
+    }
+
 }
 
 export default Admin;

@@ -50,3 +50,4 @@ yarn-error.log*
 
 .idea
 build.zip
+dist

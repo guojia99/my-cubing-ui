@@ -160,10 +160,9 @@ class PlayerPage extends React.Component {
                     <tr key={key}>
                         <td>{GetCubeIcon(pj)} {CubesCn(pj)}</td>
                         <td style={{color: best.Rank === 1 ? "red" : ""}}>{best.Rank}</td>
-                        <td style={{
-                            fontWeight: 700,
-                            color: best.Rank === 1 ? "red" : ""
-                        }}>{best.Score.R1 + "/" + best.Score.R2 + " " + FormatTime(best.Score.R3, best.Score.Project, true)}</td>
+                        <td style={{fontWeight: 700, color: best.Rank === 1 ? "red" : ""}}>
+                            {best.Score.R1 + "/" + best.Score.R2 + " " + FormatTime(best.Score.R3, best.Score.Project, true)}
+                        </td>
                         <td></td>
                         <td></td>
                     </tr>
