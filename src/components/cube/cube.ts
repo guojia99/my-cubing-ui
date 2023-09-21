@@ -22,6 +22,7 @@ export enum Cubes {
     XCube222BF = "222bf",
     XCube666BF = "666bf",
     XCube777BF = "777bf",
+    XCubePyFm = "pyram_fm",
     XCube333Mini = "333mini",
     XCube222OH = "222oh",
     XCube333MiniOH = "333mini_oh",
@@ -31,7 +32,7 @@ export enum Cubes {
     XCube777OH = "777oh",
     XCubeSkOH = "skewb_oh",
     XCubePyOH = "pyram_oh",
-    XCubeSq1OH = "sql_oh",
+    XCubeSq1OH = "sq1_oh",
     XCubeMinxOH = "minx_oh",
     XCubeClockOH = "clock_oh",
     XCube333Mirror = "333mirror",
@@ -69,9 +70,11 @@ const cubeCnMap: Map<Cubes, string> = new Map([
     [Cubes.Cube555BF, "五盲"],
     [Cubes.Cube333MBF, "多盲"],
     [Cubes.Cube333Ft, "脚拧"],
+
     [Cubes.XCube222BF, "二盲"],
     [Cubes.XCube666BF, "六盲"],
     [Cubes.XCube777BF, "七盲"],
+    [Cubes.XCubePyFm, "塔少步"],
     [Cubes.XCube333Mini, "三阶迷你"],
     [Cubes.XCube333MiniOH, "三阶迷你单"],
     [Cubes.XCube222OH, "二单"],
@@ -123,6 +126,7 @@ export const CubeRouteNumber: Map<Cubes, number> = new Map([
     [Cubes.XCube222BF, 5],
     [Cubes.XCube666BF, 1],
     [Cubes.XCube777BF, 1],
+    [Cubes.XCubePyFm, 3],
     [Cubes.XCube333Mini, 5],
     [Cubes.XCube333MiniOH, 5],
     [Cubes.XCube222OH, 5],
@@ -212,6 +216,7 @@ export const XCubeProjectList = () => {
         Cubes.XCube333Mirroring,
         Cubes.XCube333Ghost,
         Cubes.XCube333ZongZi,
+        Cubes.XCubePyFm,
     ]
 }
 

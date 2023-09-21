@@ -7,7 +7,7 @@ import {DrawPyCubeImage} from "./draw_py";
 import {DrawSkCubeImage} from "./draw_skewb";
 import {DrawSQ1Cube} from "./draw_sq1";
 
-const use = false
+const use = true
 
 export const DrawByCubeImage = (id: string, cube: Cubes, imageWidth: number, seq: string): JSX.Element => {
     if (!use) {

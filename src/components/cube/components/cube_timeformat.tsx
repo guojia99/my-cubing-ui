@@ -17,6 +17,10 @@ export function FormatTime(result: number, pj: Cubes, isAvg: boolean) {
         return result.toFixed(0)
     }
 
+    if (pj === Cubes.Cube333FM && isAvg){
+        return result.toFixed(2)
+    }
+
     if (result < 60) {
         return result.toFixed(2);
     }

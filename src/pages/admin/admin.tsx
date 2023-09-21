@@ -9,6 +9,9 @@ import {AdminScoreDataCtx, AdminScoreRender} from "./admin_score";
 import {AdminContestDataCtx, AdminContestRender} from "./admin_contest";
 import {AdminPlayerDataCtx, AdminPlayerRender} from "./admin_player";
 import {AdminXLogRender} from "./admin_xlog";
+import {AdminApprovalScoreRender} from "./admin_approval_score";
+import {AdminApprovalScoreVideoRender} from "./admin_approval_score_video";
+import {AdminUserRender} from "./admin_user";
 
 
 class Admin extends React.Component {
@@ -68,6 +71,21 @@ class Admin extends React.Component {
                 Id: "xlog",
                 Name: (<h4>日志管理</h4>),
                 Page: this.XLogRender(),
+            },
+            {
+                Id: "user",
+                Name: (<h4>选手审批</h4>),
+                Page: this.AdminUserRender(),
+            },
+            {
+                Id: "approval_score",
+                Name: (<h4>成绩审批</h4>),
+                Page: this.AdminApprovalScoreRender(),
+            },
+            {
+                Id: "approval_score_video",
+                Name: (<h4>视频审批</h4>),
+                Page: this.AdminApprovalScoreVideoRender(),
             }
         ]
 
@@ -162,6 +180,22 @@ class Admin extends React.Component {
     AdminXLogRenderCli = new AdminXLogRender()
     XLogRender = () => {
         return this.AdminXLogRenderCli.render()
+    }
+
+    AdminApprovalScoreRenderCli = new AdminApprovalScoreRender()
+    AdminApprovalScoreRender = () => {
+        return this.AdminApprovalScoreRenderCli.render()
+    }
+
+    AdminApprovalScoreVideoRenderCli = new AdminApprovalScoreVideoRender()
+    AdminApprovalScoreVideoRender = () => {
+        return this.AdminApprovalScoreVideoRenderCli.render()
+   }
+
+
+    AdminAdminUserRenderCli = new AdminUserRender()
+    AdminUserRender = () => {
+        return this.AdminAdminUserRenderCli.render()
     }
 
 }
