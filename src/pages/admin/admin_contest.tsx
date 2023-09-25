@@ -5,7 +5,7 @@ import {ContestTypeCn, convertDateString} from "../contests/Contests";
 import {CreateModal, EmptyHandle, ModalButton} from "../../components/utils/modal";
 import {callback} from "./admin_score";
 import {AuthAPI} from "../../components/api/api";
-import {AllProjectList, CubesCn, WCAProjectMap} from "../../components/cube/cube";
+import {AllProjectList, CubesCn} from "../../components/cube/cube";
 import {GetCubeIcon} from "../../components/cube/icon/cube_icon";
 
 export type AdminContestDataCtx = {
@@ -103,7 +103,6 @@ const GetCreateContestModal = (ctx: AdminContestDataCtx) => {
 
         let items: JSX.Element[] = []
 
-        const allWca = WCAProjectMap()
         const allPj = AllProjectList()
         for (let i = 0; i < allPj.length; i++) {
             const pj = allPj[i]
@@ -120,7 +119,7 @@ const GetCreateContestModal = (ctx: AdminContestDataCtx) => {
                         </div>
                     </td>
                     <td>
-                        <input className="form-check-input" type="checkbox" id={roundKeyRoundEnable + pj} defaultChecked={allWca.get(pj) !== undefined}/>
+                        <input className="form-check-input" type="checkbox" id={roundKeyRoundEnable + pj} defaultChecked={true}/>
                     </td>
                     <td>
                         <input className="form-check-input" type="checkbox" id={roundKeyRoundAutoUpsets + pj}/>

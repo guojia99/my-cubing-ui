@@ -27,6 +27,11 @@ export const TabNav = (tb: TabNavsValue) => {
         }
     }
 
+    if (tb.Pages === undefined || tb.Pages.length === 0 ){
+        return <div></div>
+    }
+
+
     const p = GetLocationQueryParams()
     const selected = p[tb.SelectedKey] === undefined ? tb.Pages[0].Id : p[tb.SelectedKey]
 

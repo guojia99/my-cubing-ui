@@ -28,7 +28,6 @@ import {CubeScoreTds, RecordType} from "../../components/cube/components/cube_sc
 import {ScoreChat} from "../../components/cube/components/cube_scores_echarts";
 import {SorKeys} from "../../components/cube/components/cube_sor";
 
-
 class PlayerPage extends React.Component {
     state = {
         ok: false,
@@ -105,6 +104,7 @@ class PlayerPage extends React.Component {
             }
         }
 
+
         return (
             <div>
                 <h2 style={{textAlign: "center", fontWeight: 700}}>{name}</h2>
@@ -124,7 +124,7 @@ class PlayerPage extends React.Component {
                         <td><Link to={"https://www.worldcubeassociation.org/persons/" + player.WcaID}>{player.WcaID ? player.WcaID : "-"}</Link></td>
                         <td>{player.ActualName ? player.ActualName : player.Name}</td>
                         <td>{player.ContestNumber}</td>
-                        <td>{player.RecoveryNumber - player.ValidRecoveryNumber} / {player.RecoveryNumber}</td>
+                        <td>{player.RecoveryNumber - (player.ValidRecoveryNumber ? player.ValidRecoveryNumber: 0)} / {player.RecoveryNumber}</td>
                     </tr>
                     </tbody>
                 </table>
@@ -169,13 +169,24 @@ class PlayerPage extends React.Component {
                 )
                 continue
             }
+            let avgTd = <>
+                <td></td>
+                <td></td>
+            </>
+
+            if (avg !== undefined) {
+                avgTd = (<>
+                    <td style={{fontWeight: 700, color: avg.Rank === 1 ? "red" : ""}}>{FormatTime(avg.Score.Avg, avg.Score.Project, true)}</td>
+                    <td style={{color: avg.Rank === 1 ? "red" : ""}}>{avg.Rank}</td>
+                </>)
+            }
+
             body.push(
                 <tr key={key}>
                     <td>{GetCubeIcon(pj)} {CubesCn(pj)}</td>
                     <td style={{color: best.Rank === 1 ? "red" : ""}}>{best.Rank}</td>
                     <td style={{fontWeight: 700, color: best.Rank === 1 ? "red" : ""}}>{FormatTime(best.Score.Best, pj, false)}</td>
-                    <td style={{fontWeight: 700, color: avg.Rank === 1 ? "red" : ""}}>{FormatTime(avg.Score.Avg, avg.Score.Project, true)}</td>
-                    <td style={{color: avg.Rank === 1 ? "red" : ""}}>{avg.Rank}</td>
+                    {avgTd}
                 </tr>
             )
         }

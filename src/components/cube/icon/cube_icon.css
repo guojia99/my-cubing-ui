@@ -104,6 +104,9 @@
 .cubing-icon.cubing-icon-pyram_fm:before {
     content: "\ea33"
 }
+.cubing-icon.cubing-icon-skewb_fm:before{
+    content: "\ea36"
+}
 .cubing-icon.cubing-icon-333mini:before {
     content: "\ea34"
 }
