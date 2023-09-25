@@ -7,22 +7,23 @@ import {AllProjectList, Cubes, CubesCn} from "../../components/cube/cube";
 import {GetLocationQueryParams, SetTitleName} from "../../components/utils/utils";
 import {
     Contest,
-    GetPlayerAllScoreResponse,
+    GetPlayerAllScoreResponse, GetPlayerOldEnemyResponse,
     GetPlayerRecord,
     Player,
-    PlayerBestScoreResponse, PlayerSorResponse,
+    PlayerBestScoreResponse,
+    PlayerSorResponse,
     Podiums,
     RankScore,
     RecordMessage,
     Round,
     Score,
-    ScoresByContest, SorScore
+    ScoresByContest,
+    SorScore
 } from "../../components/api/api_model";
 import {GetCubeIcon} from "../../components/cube/icon/cube_icon";
 import {FormatRank, FormatTime} from "../../components/cube/components/cube_timeformat";
 import {TabNav, TabNavsPage} from "../../components/utils/tabs";
 import {Link} from "react-router-dom";
-import {WaitGroup} from "../../components/utils/async";
 import {PR_And_GR_Record} from "../../components/cube/components/cube_record";
 import {CubeScoreTds, RecordType} from "../../components/cube/components/cube_score_tabels";
 import {ScoreChat} from "../../components/cube/components/cube_scores_echarts";
@@ -30,59 +31,44 @@ import {SorKeys} from "../../components/cube/components/cube_sor";
 
 class PlayerPage extends React.Component {
     state = {
-        ok: false,
         player: null,
         best: null,
         podium: null,
         allScore: null,
         recordMap: new Map<string, RecordMessage>(),
         sor: null,
+        oldEnemy: null,
     }
 
     componentDidMount() {
         const p = GetLocationQueryParams()
         const id = Number(p["id"])
-        const wg = new WaitGroup()
-        wg.add(6)
-        wg.wait().then(value => {
-            this.setState({ok: true})
-        })
 
-        API.GetPlayer(id).then(value => this.setState({player: value})).finally(() => {
-            wg.done()
-        })
-        API.GetPlayerBestScoreReport(id).then(value => {
+        API.GetPlayer(id).then(value => this.setState({player: value}))
+        API.GetPlayerBestScore(id).then(value => {
             this.setState({best: value})
-        }).finally(() => {
-            wg.done()
         })
         API.GetPlayerAllScore(id).then(value => {
             this.setState({allScore: value})
-        }).finally(() => {
-            wg.done()
         })
         API.GetPlayerPodium(id).then(value => {
             this.setState({podium: value})
-        }).finally(() => {
-            wg.done()
         })
         API.GetPlayerSor(id).then(value => {
             this.setState({sor: value})
-        }).finally(() => {
-            wg.done()
         })
-
         API.GetPlayerRecord(id).then(value => {
             let record = value as GetPlayerRecord
             if (record === null || record === undefined) {
-                wg.done()
                 return
             }
             record = record.reverse()
             for (let i = 0; i < record.length; i++) {
                 this.state.recordMap.set(record[i].Score.ID + "_" + record[i].Record.RType, record[i])
             }
-            wg.done()
+        })
+        API.GetPlayerOldEnemy(id).then(value => {
+            this.setState({oldEnemy: value})
         })
 
     }
@@ -124,7 +110,7 @@ class PlayerPage extends React.Component {
                         <td><Link to={"https://www.worldcubeassociation.org/persons/" + player.WcaID}>{player.WcaID ? player.WcaID : "-"}</Link></td>
                         <td>{player.ActualName ? player.ActualName : player.Name}</td>
                         <td>{player.ContestNumber}</td>
-                        <td>{player.RecoveryNumber - (player.ValidRecoveryNumber ? player.ValidRecoveryNumber: 0)} / {player.RecoveryNumber}</td>
+                        <td>{player.RecoveryNumber - (player.ValidRecoveryNumber ? player.ValidRecoveryNumber : 0)} / {player.RecoveryNumber}</td>
                     </tr>
                     </tbody>
                 </table>
@@ -302,12 +288,7 @@ class PlayerPage extends React.Component {
         )
     }
 
-
     renderAllScore() {
-        if (!this.state.ok) {
-            return <div></div>
-        }
-
         const renderPageByScore = () => {
             if (this.state.allScore === null) {
                 return <div></div>
@@ -343,15 +324,17 @@ class PlayerPage extends React.Component {
                     if (roundsByIdCache.get(ss[j].RouteID) !== undefined) {
                         ss[j].RouteValue = roundsByIdCache.get(ss[j].RouteID) as Round
                     }
-
                     let setScores = scoreByCubesMap.get(ss[j].Project)
                     if (setScores === undefined) {
                         setScores = [{Contest: contest, Scores: [ss[j]], Rounds: rounds}]
                         scoreByCubesMap.set(ss[j].Project, setScores)
                         continue
                     }
+
                     if (setScores[setScores.length - 1].Contest.ID === contest.ID) {
                         setScores[setScores.length - 1].Scores.push(ss[j])
+                        scoreByCubesMap.set(ss[j].Project, setScores)
+                        continue
                     }
                     setScores.push({Contest: contest, Scores: [ss[j]], Rounds: rounds})
                     scoreByCubesMap.set(ss[j].Project, setScores)
@@ -363,7 +346,7 @@ class PlayerPage extends React.Component {
                 let tdNum = 5
                 let items = []
 
-                items.push(<tr key={"score_key_first_111"}>
+                items.push(<tr key={"score_key_first_111_" + pj}>
                     <td colSpan={tdNum + 5}>{GetCubeIcon(pj)} {CubesCn(pj)}</td>
                 </tr>)
 
@@ -372,12 +355,11 @@ class PlayerPage extends React.Component {
                     const ss = scores[i].Scores
 
                     for (let j = 0; j < ss.length; j++) {
-
                         const IsBestGr = this.state.recordMap.get(ss[j].ID + "_" + RecordType.RecordBySingle) !== undefined
                         const IsAvgGr = this.state.recordMap.get(ss[j].ID + "_" + +RecordType.RecordByAvg) !== undefined
 
                         items.push(
-                            <tr key={"score_key_" + ss[j].ID}>
+                            <tr key={"drawScoresBaseTablesAndChart_KEY_" + ss[j].ID}>
                                 <td>{j === 0 ? contest.Name : ""}</td>
                                 {/*<td>{ss[j].RouteValue.Number}</td>*/}
                                 {/*<td>{ss[j].Rank}</td>*/}
@@ -605,6 +587,80 @@ class PlayerPage extends React.Component {
             )
         }
 
+        const renderPageByOldEnemy = () => {
+            if (this.state.oldEnemy === null || this.state.player === null) {
+                return <h2 style={{margin: "30px 30px"}}>加载中</h2>
+            }
+
+            const player = this.state.player as Player
+            const oldEnemy = this.state.oldEnemy as GetPlayerOldEnemyResponse
+            if (oldEnemy === undefined || oldEnemy.length === 0) {
+                return <h2 style={{margin: "30px 30px", textAlign: "center"}}> <p style={{color: "red"}}>{player.Name}</p> 无任何宿敌!</h2>
+            }
+
+            let items: JSX.Element[] = []
+
+            const allPj = AllProjectList()
+
+            const scoreTable = (allSingle: any, allAvg: any) => {
+                let items: JSX.Element[] = []
+                for (let i = 0; i < allPj.length; i++) {
+                    const avg = allAvg[allPj[i]] as Score
+                    const best = allSingle[allPj[i]] as Score
+                    if (avg === undefined && best === undefined) {
+                        continue
+                    }
+
+                    items.push(<tr>
+                        <td>{GetCubeIcon(allPj[i])} {CubesCn(allPj[i])}</td>
+                        <td>{FormatTime(best.Best, allPj[i], false)}</td>
+                        <td>{avg !== undefined ? FormatTime(avg.Avg, allPj[i], false): "-"}</td>
+                    </tr>)
+                }
+                return (
+                    <div style={{overflowX: "auto"}}>
+                        <table className="table table-striped table-hover" style={{minWidth: "600px", marginTop: "20px", marginBottom: "30px"}}>
+                            <thead>
+                            <tr>
+                                <th>项目</th>
+                                <th>单次</th>
+                                <th>平均</th>
+                            </tr>
+                            </thead>
+                            <tbody>{items}</tbody>
+                        </table>
+                    </div>
+                )
+            }
+
+
+            for (let i = 0; i < oldEnemy.length; i++) {
+                items.push(
+                    <tr key={"renderPageByOldEnemy_item" + oldEnemy[i].Player.ID}>
+                        <td>{oldEnemy[i].Player.Name}</td>
+                        <td>{scoreTable(oldEnemy[i].Single, oldEnemy[i].Avg)}</td>
+                    </tr>
+                )
+            }
+
+            return (
+                <div style={{overflowX: "auto"}}>
+                    <table className="table table-striped table-hover" style={{minWidth: "600px", marginTop: "20px", marginBottom: "30px"}}>
+                        <thead>
+                        <tr key={"renderPageByOldEnemy_thead1"}>
+                            <th colSpan={2}><h4>宿敌列表</h4></th>
+                        </tr>
+                        <tr key={"renderPageByOldEnemy_thead2"}>
+                            <th>选手</th>
+                            <th>成绩对比</th>
+                        </tr>
+                        </thead>
+                        <tbody>{items}</tbody>
+                    </table>
+                </div>
+            )
+        }
+
         const tabs: TabNavsPage[] = [
             {
                 Id: "score",
@@ -624,7 +680,7 @@ class PlayerPage extends React.Component {
             {
                 Id: "old_enemy",
                 Name: (<h4>宿敌</h4>),
-                Page: (<div></div>)
+                Page: renderPageByOldEnemy()
             }
         ]
 

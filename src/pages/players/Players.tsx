@@ -12,7 +12,6 @@ class Players extends React.Component{
     componentDidMount() {
         API.GetPlayers().then(value => {
             this.setState({data: value})
-            console.log(value)
         })
     }
 

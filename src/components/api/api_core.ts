@@ -5,12 +5,27 @@ import Cookies from 'js-cookie';
 import {
     ContestPodiums,
     ContestRecord,
-    GetBestScoreResponse, GetContestResponse,
+    GetBestScoreResponse,
+    GetContestResponse,
     GetContestScoreResponse,
     GetContestSorResponse,
-    GetContestsResponse, GetPlayerAllScoreResponse, GetPlayerRecord,
-    GetTokenResponse, Player, PlayerBestScoreResponse,
-    PlayersResponse, Podiums, Score, GetRecordsResponse, BestSorReportResponse, AddScoreRequest, CreateContestRequest, GetBestByAllScoresResponse, XLog, PlayerSorResponse,
+    GetContestsResponse,
+    GetPlayerAllScoreResponse,
+    GetPlayerRecord,
+    GetTokenResponse,
+    Player,
+    PlayerBestScoreResponse,
+    PlayersResponse,
+    Podiums,
+    Score,
+    GetRecordsResponse,
+    BestSorReportResponse,
+    AddScoreRequest,
+    CreateContestRequest,
+    GetBestByAllScoresResponse,
+    XLog,
+    PlayerSorResponse,
+    GetPlayerOldEnemyResponse,
 } from './api_model';
 
 
@@ -40,7 +55,7 @@ export class apiCore {
         return result.data
     }
 
-    async GetPlayerBestScoreReport(id: number): Promise<PlayerBestScoreResponse> {
+    async GetPlayerBestScore(id: number): Promise<PlayerBestScoreResponse> {
         let uri = this.uri + "/report/player/" + id + "/best"
         const result = await axios.get(uri, {headers: {Accept: 'application/json'}})
         return result.data
@@ -76,6 +91,7 @@ export class apiCore {
         return result.data
     }
 
+
     async GetBestSor(): Promise<BestSorReportResponse> {
         let uri = this.uri + "/report/best/sor"
         const result = await axios.get(uri, {headers: {Accept: 'application/json'}})
@@ -87,6 +103,13 @@ export class apiCore {
         const result = await axios.get(uri, {headers: {Accept: 'application/json'}})
         return result.data
     }
+
+    async GetPlayerOldEnemy(playerID: number) : Promise<GetPlayerOldEnemyResponse>{
+        let uri = this.uri + "/report/player/" + playerID + "/old_enemy"
+        const result = await axios.get(uri, {headers: {Accept: 'application/json'}})
+        return result.data
+    }
+
 
     async GetBestPodium(): Promise<Podiums[]> {
         let uri = this.uri + "/report/best/podium"
