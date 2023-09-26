@@ -12,6 +12,7 @@ import {AdminXLogRender} from "./admin_xlog";
 import {AdminApprovalScoreRender} from "./admin_approval_score";
 import {AdminApprovalScoreVideoRender} from "./admin_approval_score_video";
 import {AdminUserRender} from "./admin_user";
+import {SetBackGround} from "../../components/utils/background";
 
 
 class Admin extends React.Component {
@@ -37,6 +38,7 @@ class Admin extends React.Component {
     }
 
     componentDidMount() {
+        SetBackGround("")
         if (!AuthAPI.IsAuth()) {
             window.location.href = "/xauth"
             return

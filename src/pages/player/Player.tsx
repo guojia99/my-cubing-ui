@@ -44,6 +44,8 @@ class PlayerPage extends React.Component {
     }
 
     componentDidMount() {
+        SetBackGround("")
+
         const p = GetLocationQueryParams()
         const id = Number(p["id"])
 

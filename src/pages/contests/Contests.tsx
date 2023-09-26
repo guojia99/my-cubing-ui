@@ -5,6 +5,7 @@ import {Link} from "react-router-dom";
 import {GetLocationQueryParam, GetLocationQueryParams, UpdateBrowserURL} from "../../components/utils/utils";
 import {PageNav, PageNavValue} from "../../components/utils/page";
 import Select from 'react-select'
+import {SetBackGround} from "../../components/utils/background";
 
 
 export function convertDateString(input: string): string {
@@ -39,6 +40,7 @@ class Contests extends React.Component {
     }
 
     componentDidMount() {
+        SetBackGround("")
         this.getData()
     }
 

@@ -7,6 +7,7 @@ import {FormatTime} from "../../components/cube/components/cube_timeformat";
 import {Link} from "react-router-dom";
 import {TabNav, TabNavsPage} from "../../components/utils/tabs";
 import {CubeScoreTds} from "../../components/cube/components/cube_score_tabels";
+import {SetBackGround} from "../../components/utils/background";
 
 class Best extends React.Component {
     state = {
@@ -15,6 +16,7 @@ class Best extends React.Component {
     }
 
     componentDidMount() {
+        SetBackGround("")
         API.GetBestScore().then(value => {
             this.setState({bestTop: value})
         })

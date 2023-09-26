@@ -2,6 +2,7 @@ import React from 'react';
 import {API} from "../../components/api/api";
 import {PlayersResponse} from "../../components/api/api_model";
 import {Link} from "react-router-dom";
+import {SetBackGround} from "../../components/utils/background";
 
 
 class Players extends React.Component{
@@ -10,6 +11,7 @@ class Players extends React.Component{
     }
 
     componentDidMount() {
+        SetBackGround("")
         API.GetPlayers().then(value => {
             this.setState({data: value})
         })

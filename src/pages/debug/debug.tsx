@@ -1,8 +1,10 @@
 import {AllProjectList, Cubes, CubesCn} from "../../components/cube/cube";
 import {DrawByCubeImage} from "../../components/cube/draw/draw";
 import {GetCubeIcon} from "../../components/cube/icon/cube_icon";
+import {SetBackGround} from "../../components/utils/background";
 
 const Debug = () => {
+    SetBackGround("")
     let items = []
  // items.push(DrawByCubeImage("py_xxx", Cubes.CubePy, 25, "L U R B' L B L U' l r u"))
     // items.push(DrawByCubeImage("sk_xxx", Cubes.CubeSk, 25, "B' U' R' U L B U L'"))

@@ -20,6 +20,7 @@ import {GetCubeIcon} from "../../components/cube/icon/cube_icon";
 import {CubeScoresTable} from "../../components/cube/components/cube_score_tabels";
 import {RoundTables} from "../../components/cube/components/cube_rounds";
 import {SorKeys, SorTable} from "../../components/cube/components/cube_sor";
+import {SetBackGround} from "../../components/utils/background";
 
 class ContestPage extends React.Component {
     state = {
@@ -31,6 +32,7 @@ class ContestPage extends React.Component {
     }
 
     componentDidMount() {
+        SetBackGround("")
         const p = GetLocationQueryParams()
         const id = Number(p['id'])
 

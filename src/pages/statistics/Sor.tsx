@@ -3,6 +3,7 @@ import {API} from "../../components/api/api";
 import {BestSorReportResponse, SorScore} from "../../components/api/api_model";
 import {TabNav, TabNavsPage} from "../../components/utils/tabs";
 import {SorKeys, SorTable} from "../../components/cube/components/cube_sor";
+import {SetBackGround} from "../../components/utils/background";
 
 class Sor extends React.Component {
     state = {
@@ -10,6 +11,7 @@ class Sor extends React.Component {
     }
 
     componentDidMount() {
+        SetBackGround("")
         API.GetBestSor().then(value => {
             this.setState({data: value})
         })

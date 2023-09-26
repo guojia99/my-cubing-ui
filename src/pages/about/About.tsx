@@ -8,6 +8,7 @@ import React, {JSX} from 'react';
 import '../../css/timeline.css'
 import {API} from "../../components/api/api";
 import {XLog} from "../../components/api/api_model";
+import {SetBackGround} from "../../components/utils/background";
 
 
 class About extends React.Component {
@@ -17,6 +18,7 @@ class About extends React.Component {
     }
 
     componentDidMount() {
+        SetBackGround("")
         API.GetXLog().then(value => {
             this.setState({data: value})
         })

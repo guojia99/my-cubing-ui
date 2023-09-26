@@ -8,6 +8,7 @@ import {GetCubeIcon} from "../../components/cube/icon/cube_icon";
 import {Cubes, CubesCn} from "../../components/cube/cube";
 import {RecordType} from "../../components/cube/components/cube_score_tabels";
 import {FormatTime} from "../../components/cube/components/cube_timeformat";
+import {SetBackGround} from "../../components/utils/background";
 
 class Record extends React.Component {
     state = {
@@ -29,6 +30,7 @@ class Record extends React.Component {
     }
 
     componentDidMount() {
+        SetBackGround("")
         this.getData()
     }
 

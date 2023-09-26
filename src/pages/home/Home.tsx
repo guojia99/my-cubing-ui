@@ -14,6 +14,7 @@ import {FormatTime} from "../../components/cube/components/cube_timeformat";
 import {CubesCn} from "../../components/cube/cube";
 import {GetCubeIcon} from "../../components/cube/icon/cube_icon";
 import {WaitGroup} from "../../components/utils/async";
+import {SetBackGround} from "../../components/utils/background";
 
 
 class Home extends React.Component {
@@ -25,6 +26,7 @@ class Home extends React.Component {
     }
 
     componentDidMount() {
+        SetBackGround("")
         const wg = new WaitGroup()
         wg.add(3)
 

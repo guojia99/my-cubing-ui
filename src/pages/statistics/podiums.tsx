@@ -2,6 +2,7 @@ import React, {JSX} from "react";
 import {API} from "../../components/api/api";
 import {Podiums} from "../../components/api/api_model";
 import {Link} from "react-router-dom";
+import {SetBackGround} from "../../components/utils/background";
 
 class PodiumsPage extends React.Component {
 
@@ -10,6 +11,7 @@ class PodiumsPage extends React.Component {
     }
 
     componentDidMount() {
+        SetBackGround("")
         API.GetBestPodium().then(value => {
             this.setState({data: value})
         })

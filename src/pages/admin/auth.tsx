@@ -2,6 +2,7 @@ import './auth.css'
 
 import React from 'react';
 import {AuthAPI} from "../../components/api/api";
+import {SetBackGround} from "../../components/utils/background";
 
 
 
@@ -20,6 +21,7 @@ async function auth() {
 
 class Auth extends React.Component {
     componentDidMount() {
+        SetBackGround("")
         if (AuthAPI.IsAuth()) {
             window.location.href = "/xadmin"
             return
