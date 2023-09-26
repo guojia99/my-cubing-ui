@@ -25,7 +25,7 @@ import {
     GetBestByAllScoresResponse,
     XLog,
     PlayerSorResponse,
-    GetPlayerOldEnemyResponse,
+    GetPlayerOldEnemyResponse, GetPlayerImageResponse,
 } from './api_model';
 
 
@@ -51,6 +51,12 @@ export class apiCore {
 
     async GetPlayer(id: number): Promise<Player> {
         let uri = this.uri + "/player/" + id
+        const result = await axios.get(uri, {headers: {Accept: 'application/json'}})
+        return result.data
+    }
+
+    async GetPlayerImage(playerId: number): Promise<GetPlayerImageResponse>{
+        let uri = this.uri + "/player/" + playerId + "/images"
         const result = await axios.get(uri, {headers: {Accept: 'application/json'}})
         return result.data
     }
@@ -118,7 +124,7 @@ export class apiCore {
     }
 
     async GetRecords(page: number, size: number): Promise<GetRecordsResponse> {
-        let uri = this.uri + "/record?page=" + page + "&size=" + size
+        let uri = this.uri + "/report/record?page=" + page + "&size=" + size
         const result = await axios.get(uri, {headers: {Accept: 'application/json'}})
         return result.data
     }
@@ -158,6 +164,8 @@ export class apiCore {
         const result = await axios.get(uri, {headers: {Accept: 'application/json'}})
         return result.data
     }
+
+
 }
 
 

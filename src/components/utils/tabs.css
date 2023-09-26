@@ -8,8 +8,8 @@
 /*}*/
 .nav-pills .nav-link.active, .nav-pills .show>.nav-link{
     color: #ffffff;
-    background-color: #6c6d72;
+    background-color: #2d2a2a;
 }
 .nav-pills .nav-link{
-    color: #6c6d72;
+    color: #2d2a2a;
 }

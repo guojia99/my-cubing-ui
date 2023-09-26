@@ -98,6 +98,7 @@ export const ScoreChat = (v: ScoreChatValue) => {
                 saveAsImage: {}
             }
         },
+        backgroundColor: "#ffffff",
         xAxis: {
             type: 'category',
             boundaryGap: false,

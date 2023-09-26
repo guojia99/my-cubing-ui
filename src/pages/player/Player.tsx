@@ -28,6 +28,8 @@ import {PR_And_GR_Record} from "../../components/cube/components/cube_record";
 import {CubeScoreTds, RecordType} from "../../components/cube/components/cube_score_tabels";
 import {ScoreChat} from "../../components/cube/components/cube_scores_echarts";
 import {SorKeys} from "../../components/cube/components/cube_sor";
+import {SetBackGround} from "../../components/utils/background";
+import {Avatar} from "../../components/utils/avatar";
 
 class PlayerPage extends React.Component {
     state = {
@@ -37,6 +39,7 @@ class PlayerPage extends React.Component {
         allScore: null,
         recordMap: new Map<string, RecordMessage>(),
         sor: null,
+        avatar: null,
         oldEnemy: null,
     }
 
@@ -45,6 +48,14 @@ class PlayerPage extends React.Component {
         const id = Number(p["id"])
 
         API.GetPlayer(id).then(value => this.setState({player: value}))
+        API.GetPlayerImage(id).then(value => {
+            if (value.Background !== undefined) {
+                SetBackGround(value.Background)
+            }
+            if (value.Avatar !== undefined && value.Avatar !== "") {
+                this.setState({avatar: value.Avatar})
+            }
+        }).catch()
         API.GetPlayerBestScore(id).then(value => {
             this.setState({best: value})
         })
@@ -70,7 +81,14 @@ class PlayerPage extends React.Component {
         API.GetPlayerOldEnemy(id).then(value => {
             this.setState({oldEnemy: value})
         })
+    }
 
+    renderAvatar() {
+        if (this.state.avatar === null || this.state.player === null) {
+            return <div></div>
+        }
+        const p = this.state.player as Player
+        return Avatar(this.state.avatar as string, p.Name)
     }
 
     renderHeader() {
@@ -95,6 +113,7 @@ class PlayerPage extends React.Component {
             <div>
                 <h2 style={{textAlign: "center", fontWeight: 700}}>{name}</h2>
                 <div style={{textAlign: "center", margin: "30px"}}>{titles}</div>
+                {this.renderAvatar()}
 
                 <table className="table table-striped table-hover text-center">
                     <thead>
@@ -595,7 +614,7 @@ class PlayerPage extends React.Component {
             const player = this.state.player as Player
             const oldEnemy = this.state.oldEnemy as GetPlayerOldEnemyResponse
             if (oldEnemy === undefined || oldEnemy.length === 0) {
-                return <h2 style={{margin: "30px 30px", textAlign: "center"}}> <p style={{color: "red"}}>{player.Name}</p> 无任何宿敌!</h2>
+                return <h2 style={{margin: "30px 30px", textAlign: "center"}}><p style={{color: "red"}}>{player.Name}</p> 无任何宿敌!</h2>
             }
 
             let items: JSX.Element[] = []
@@ -614,7 +633,7 @@ class PlayerPage extends React.Component {
                     items.push(<tr>
                         <td>{GetCubeIcon(allPj[i])} {CubesCn(allPj[i])}</td>
                         <td>{FormatTime(best.Best, allPj[i], false)}</td>
-                        <td>{avg !== undefined ? FormatTime(avg.Avg, allPj[i], false): "-"}</td>
+                        <td>{avg !== undefined ? FormatTime(avg.Avg, allPj[i], false) : "-"}</td>
                     </tr>)
                 }
                 return (

@@ -1,5 +1,5 @@
 a{
-    color: gray;
+    color: rgb(128, 128, 128);
     text-decoration: none;
 }
 
@@ -9,7 +9,7 @@ h1{
 
 .accordion-button:not(.collapsed){
     color: #ffffff;
-    background-color: #47606b;
+    background-color: #2d2a2a;
 }
 
 @font-face {

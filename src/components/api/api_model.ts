@@ -267,3 +267,9 @@ export type GetPlayerOldEnemyDetail = {
 }
 
 export type GetPlayerOldEnemyResponse = GetPlayerOldEnemyDetail[]
+
+
+export type  GetPlayerImageResponse = {
+    Avatar: string,
+    Background: string,
+}
