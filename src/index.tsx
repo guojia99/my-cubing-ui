@@ -26,6 +26,7 @@ import Best from "./pages/statistics/Best";
 import Sor from "./pages/statistics/Sor";
 import PodiumsPage from "./pages/statistics/podiums";
 import ScrollToTopButton from "./components/utils/top_button";
+import Rule from "./pages/about/Rule";
 
 $(() => {
     setInterval(() => {
@@ -42,7 +43,14 @@ root.render(
         <BrowserRouter>
             <ul className="nav nav-underline" style={{marginBottom: '20px'}}>
                 <li className="nav-item"><NavLink className="nav-link" to="/">主页</NavLink></li>
-                <li className="nav-item"><NavLink className="nav-link" to="/about">关于</NavLink></li>
+                <li className="nav-item dropdown">
+                    <Link to="#" className="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false">说明</Link>
+                    <ul className="dropdown-menu">
+                        <li><NavLink className="dropdown-item" to="/about">关于</NavLink></li>
+                        <li><NavLink className="dropdown-item" to="/rule">规则</NavLink></li>
+                    </ul>
+                </li>
+
                 <li className="nav-item"><NavLink className="nav-link" to="/contests">比赛</NavLink></li>
                 <li className="nav-item"><NavLink className="nav-link" to="/players">玩家</NavLink></li>
 
@@ -61,6 +69,7 @@ root.render(
             <Routes>
                 <Route path="/" Component={Home}/>
                 <Route path="/about" Component={About}/> {/*关于*/}
+                <Route path="/rule" Component={Rule}/> {/*规则*/}
 
                 {/*管理员*/}
                 <Route path="/xadmin" Component={Admin}/>

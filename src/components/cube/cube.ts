@@ -19,9 +19,11 @@ export enum Cubes {
     Cube555BF = "555bf",
     Cube333MBF = "333mbf",
     Cube333Ft = "333ft",
+
     XCube222BF = "222bf",
     XCube666BF = "666bf",
     XCube777BF = "777bf",
+    XCubePyBF = "pyram_bf",
     XCubePyFm = "pyram_fm",
     XcubeSkFm = "skewb_fm",
     XCube333Mini = "333mini",
@@ -48,6 +50,7 @@ export enum Cubes {
     XCube27AlienRelayAll = "27alien_relay",
     XCube333Ghost = "333ghost",
     XCube333ZongZi = "333Zongzi",
+    Xcube333Clone = "333clone"
 }
 
 const cubeCnMap: Map<Cubes, string> = new Map([
@@ -75,6 +78,7 @@ const cubeCnMap: Map<Cubes, string> = new Map([
     [Cubes.XCube222BF, "二盲"],
     [Cubes.XCube666BF, "六盲"],
     [Cubes.XCube777BF, "七盲"],
+    [Cubes.XCubePyBF, "塔盲"],
     [Cubes.XCubePyFm, "塔少步"],
     [Cubes.XcubeSkFm, "斜少步"],
     [Cubes.XCube333Mini, "三阶迷你"],
@@ -101,6 +105,7 @@ const cubeCnMap: Map<Cubes, string> = new Map([
     [Cubes.XCube27AlienRelayAll, "全项目连拧"],
     [Cubes.XCube333Ghost, "鬼魔"],
     [Cubes.XCube333ZongZi, "粽子魔方"],
+    [Cubes.Xcube333Clone, "三阶克隆"]
 ]);
 
 
@@ -154,6 +159,8 @@ export const CubeRouteNumber: Map<Cubes, number> = new Map([
     [Cubes.XCube27AlienRelayAll, 1],
     [Cubes.XCube333Ghost, 5],
     [Cubes.XCube333ZongZi, 5],
+    [Cubes.Xcube333Clone, 3],
+    [Cubes.XCubePyBF, 3],
 ]);
 
 
@@ -214,6 +221,7 @@ export const XCubeProjectList = () => {
         Cubes.XCube222BF,
         Cubes.XCube666BF,
         Cubes.XCube777BF,
+        Cubes.XCubePyBF,
         Cubes.XCube333Mini,
         Cubes.XCube333Mirror,
         Cubes.XCube333Mirroring,
@@ -221,6 +229,7 @@ export const XCubeProjectList = () => {
         Cubes.XCube333ZongZi,
         Cubes.XCubePyFm,
         Cubes.XcubeSkFm,
+        Cubes.Xcube333Clone,
     ]
 }
 

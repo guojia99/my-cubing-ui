@@ -179,3 +179,9 @@
 .cubing-icon.cubing-icon-333Zongzi:before {
     content: "\ea2e"
 }
+.cubing-icon.cubing-icon-pyram_bf:before{
+    content: "\ea4c"
+}
+.cubing-icon.cubing-icon-333clone:before{
+    content: "\ea4d";
+}
