@@ -1,7 +1,7 @@
 // 获取当前所有选择框的数据
 import {CubeRouteNumber, Cubes, CubesCn, WCAProjectList, XCubeOHProjectList, XCubeProjectList, XCubeRelaysList} from "../../components/cube/cube";
 import React, {JSX} from "react";
-import {AddScoreRequest, GetContestsResponse, GetContestsResponseContest, Player, PlayersResponse, Score, ScorePenalty} from "../../components/api/api_model";
+import {AddScoreRequest, Contest, GetContestsResponse, Player, PlayersResponse, Score, ScorePenalty} from "../../components/api/api_model";
 import {GetLocationQueryParams, UpdateBrowserURL} from "../../components/utils/utils";
 import {GetCubeIcon} from "../../components/cube/icon/cube_icon";
 import {FormatTime} from "../../components/cube/components/cube_timeformat";
@@ -31,7 +31,7 @@ export type callback = (obj: {}) => void
 
 export type AdminScoreDataCtx = {
     Contests: GetContestsResponse | null,
-    ContestsMap: Map<number, GetContestsResponseContest>,
+    ContestsMap: Map<number, Contest>,
     Players: PlayersResponse | null,
     PlayersMap: Map<string, Player>,
     Scores: Score[] | null,
@@ -236,7 +236,7 @@ const _contestSelect = (ctx: AdminScoreDataCtx) => {
     let items: JSX.Element[] = []
     if (ctx.Contests !== null) {
         for (let i = 0; i < ctx.Contests.Contests.length; i++) {
-            const c = ctx.Contests.Contests[i].Contest
+            const c = ctx.Contests.Contests[i]
             if (!c.IsEnd) {
                 items.push(
                     <option value={c.ID} selected={contestID !== "" ? contestID === c.ID + "" : i === 0} key={"ContestSelect" + c.ID}>
@@ -346,7 +346,7 @@ const _roundSelect = (ctx: AdminScoreDataCtx) => {
     }
 
     const contest = ctx.ContestsMap.get(Number(data.contest))
-    if (contest === undefined || contest.Contest === undefined || contest.Rounds === undefined) {
+    if (contest === undefined || contest.Rounds === undefined) {
         return <div>2</div>
     }
 

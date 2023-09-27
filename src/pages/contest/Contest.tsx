@@ -5,9 +5,9 @@ import {API} from "../../components/api/api";
 import {AllProjectList, Cubes} from "../../components/cube/cube";
 import {GetLocationQueryParams, SetTitleName} from "../../components/utils/utils";
 import {
+    Contest,
     ContestPodiums,
     ContestRecord,
-    GetContestResponse,
     GetContestScoreResponse,
     GetContestSorResponse,
     Round,
@@ -183,7 +183,7 @@ class ContestPage extends React.Component {
     }
 
     private readerRound() {
-        const contest = this.state.contest as GetContestResponse
+        const contest = this.state.contest as Contest
         if (contest === null || contest === undefined || contest.Rounds === null || contest.Rounds === undefined || contest.Rounds.length === 0) {
             return (<div></div>)
         }
@@ -262,11 +262,11 @@ class ContestPage extends React.Component {
     }
 
     render() {
-        const contest = this.state.contest as GetContestResponse
-        if (contest.Contest === undefined) {
+        const contest = this.state.contest as Contest
+        if (contest === undefined) {
             return <div></div>
         }
-        SetTitleName(contest.Contest.Name)
+        SetTitleName(contest.Name)
 
         const pages: TabNavsPage[] = [
             {
@@ -292,7 +292,7 @@ class ContestPage extends React.Component {
         ]
         return (
             <div>
-                <div><h1 className="text-center">{contest.Contest.Name}</h1></div>
+                <div><h1 className="text-center">{contest.Name}</h1></div>
                 <TabNav Id="contest_nav" SelectedKey="contest_tab" Pages={pages} Center={false}/>
             </div>
         )

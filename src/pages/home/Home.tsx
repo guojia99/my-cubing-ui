@@ -40,7 +40,7 @@ class Home extends React.Component {
         }).finally(() => {
             wg.done()
         })
-        API.GetPlayers().then(value => {
+        API.GetPlayers(1, 20).then(value => {
             this.setState({players: value.Players.reverse()})
         }).finally(() => {
             wg.done()
@@ -104,10 +104,10 @@ class Home extends React.Component {
         if (this.state.contest !== null) {
             const contest = this.state.contest as GetContestsResponse
             for (let i = 0; i < contest.Contests.length; i++) {
-                const ct = contest.Contests[i].Contest
+                const ct = contest.Contests[i]
                 items.push(
                     <li key={"contestCard_item" + i}>
-                        <Link to={"/contest?id=" + contest.Contests[i].Contest.ID}>
+                        <Link to={"/contest?id=" + ct.ID}>
                             {ct.Name} ({ct.IsEnd ? "已结束" : "进行中"})
                         </Link>
                     </li>

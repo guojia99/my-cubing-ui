@@ -29,19 +29,19 @@ const renderContestList = (ctx: AdminContestDataCtx) => {
         const c = ctx.Contests.Contests[i]
 
         let bt = <>已结束</>
-        if (!c.Contest.IsEnd) {
+        if (!c.IsEnd) {
             bt = ModalButton("结束", endContestTarget, () => {
-                ctx.EndContestID = c.Contest.ID
-                ctx.UpdateHandle({ContestRenderEndContestID: c.Contest.ID})
+                ctx.EndContestID = c.ID
+                ctx.UpdateHandle({ContestRenderEndContestID: c.ID})
             }, "btn-danger btn-sm")
         }
 
         items.push(
-            <tr key={"renderContestList_item_contest" + c.Contest.ID}>
-                <td>{convertDateString(c.Contest.StartTime)}</td>
-                <td>{convertDateString(c.Contest.EndTime)}</td>
-                <td>{ContestTypeCn(c.Contest.Type)}</td>
-                <td><Link to={"/contest?id=" + c.Contest.ID}>{c.Contest.Name}</Link></td>
+            <tr key={"renderContestList_item_contest" + c.ID}>
+                <td>{convertDateString(c.StartTime)}</td>
+                <td>{convertDateString(c.EndTime)}</td>
+                <td>{ContestTypeCn(c.Type)}</td>
+                <td><Link to={"/contest?id=" + c.ID}>{c.Name}</Link></td>
                 <td>{bt}</td>
             </tr>
         )

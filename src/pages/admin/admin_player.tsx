@@ -224,6 +224,10 @@ const GetCreateModal = (ctx: AdminPlayerDataCtx) => {
     return CreateModal("创建", bodyHandle, CreateTarget, createPlayerHandle)
 }
 
+const playerPage = (ctx: AdminPlayerDataCtx) => {
+    return <div>page</div>
+}
+
 export class AdminPlayerRender {
     render(ctx: AdminPlayerDataCtx) {
         return (
@@ -237,6 +241,7 @@ export class AdminPlayerRender {
                 </p>
 
                 {renderPlayerTable(ctx)}
+                {playerPage(ctx)}
             </div>
         )
     }

@@ -10,6 +10,7 @@ export type Contest = {
     RoundIdsVal: number[] | null;
     StartTime: string;
     EndTime: string;
+    Rounds: Round[],
 }
 
 export type Round = {
@@ -125,15 +126,10 @@ export type XLog = {
 }
 
 // resp
-export type GetContestsResponseContest = {
-    Contest: Contest;
-    Rounds: Round[];
-}
-
 export type GetContestsResponse = {
     Size: number;
     Count: number;
-    Contests: GetContestsResponseContest[];
+    Contests: Contest[];
 }
 
 export type ProjectMap = {
@@ -143,6 +139,8 @@ export type ProjectMap = {
 }
 
 export type PlayersResponse = {
+    Size: number;
+    Count: number;
     Players: Player[];
 }
 
@@ -178,11 +176,6 @@ export type ContestPodiums = {
     Gold: number;
     Silver: number;
     Bronze: number;
-}
-
-export type GetContestResponse = {
-    Contest: Contest;
-    Rounds: Round[];
 }
 
 export type RankScore = {

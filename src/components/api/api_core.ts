@@ -6,7 +6,6 @@ import {
     ContestPodiums,
     ContestRecord,
     GetBestScoreResponse,
-    GetContestResponse,
     GetContestScoreResponse,
     GetContestSorResponse,
     GetContestsResponse,
@@ -25,7 +24,7 @@ import {
     GetBestByAllScoresResponse,
     XLog,
     PlayerSorResponse,
-    GetPlayerOldEnemyResponse, GetPlayerImageResponse,
+    GetPlayerOldEnemyResponse, GetPlayerImageResponse, Contest,
 } from './api_model';
 
 
@@ -36,15 +35,15 @@ export class apiCore {
         this.uri = uri;
     }
 
-    async GetContest(contestID: number): Promise<GetContestResponse> {
+    async GetContest(contestID: number): Promise<Contest> {
         let uri = this.uri + "/contest/" + contestID
         const result = await axios.get(uri, {headers: {Accept: 'application/json'}})
         return result.data
     }
 
 
-    async GetPlayers(): Promise<PlayersResponse> {
-        let uri = this.uri + "/player"
+    async GetPlayers(page: number, size: number): Promise<PlayersResponse> {
+        let uri = this.uri + "/players?page=" + page + "&size=" + size
         const result = await axios.get(uri, {headers: {Accept: 'application/json'}})
         return result.data
     }
@@ -131,7 +130,7 @@ export class apiCore {
 
 
     async GetContests(page: number, size: number, typ: string): Promise<GetContestsResponse> {
-        let uri = this.uri + "/contest?page=" + page + "&size=" + size + "&type=" + typ
+        let uri = this.uri + "/contests?page=" + page + "&size=" + size + "&type=" + typ
         const result = await axios.get(uri, {headers: {Accept: 'application/json'}})
         return result.data
     }

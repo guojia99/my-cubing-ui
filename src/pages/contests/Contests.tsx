@@ -1,6 +1,6 @@
 import React from 'react';
 import {API} from "../../components/api/api";
-import {GetContestsResponse, GetContestsResponseContest} from "../../components/api/api_model";
+import {Contest, GetContestsResponse} from "../../components/api/api_model";
 import {Link} from "react-router-dom";
 import {GetLocationQueryParam, GetLocationQueryParams, UpdateBrowserURL} from "../../components/utils/utils";
 import {PageNav, PageNavValue} from "../../components/utils/page";
@@ -49,20 +49,20 @@ class Contests extends React.Component {
     }
 
 
-    private contestTrBody(c: GetContestsResponseContest) {
+    private contestTrBody(c: Contest) {
         let status = "进行中"
-        if (c.Contest.IsEnd) {
+        if (c.IsEnd) {
             status = "已结束"
         }
 
 
         return (
-            <tr key={"contestTrBody_" + c.Contest.ID}>
-                <td>{convertDateString(c.Contest.StartTime)}</td>
-                <td>{convertDateString(c.Contest.EndTime)}</td>
-                <td>{ContestTypeCn(c.Contest.Type)}</td>
-                <td><Link to={"/contest?id=" + c.Contest.ID}>{c.Contest.Name}</Link></td>
-                <td style={{color: c.Contest.IsEnd ? "red" : "green"}}>{status}</td>
+            <tr key={"contestTrBody_" + c.ID}>
+                <td>{convertDateString(c.StartTime)}</td>
+                <td>{convertDateString(c.EndTime)}</td>
+                <td>{ContestTypeCn(c.Type)}</td>
+                <td><Link to={"/contest?id=" + c.ID}>{c.Name}</Link></td>
+                <td style={{color: c.IsEnd ? "red" : "green"}}>{status}</td>
             </tr>
         )
     }
@@ -98,7 +98,7 @@ class Contests extends React.Component {
             Id: "contests_page",
             Count: resp.Count,
             CurPage: page,
-            Size: resp.Size,
+            Size: 20,
             Link: "/contests",
         }
         return PageNav(p)

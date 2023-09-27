@@ -159,7 +159,7 @@ export const CubeRouteNumber: Map<Cubes, number> = new Map([
     [Cubes.XCube27AlienRelayAll, 1],
     [Cubes.XCube333Ghost, 5],
     [Cubes.XCube333ZongZi, 5],
-    [Cubes.Xcube333Clone, 3],
+    [Cubes.Xcube333Clone, 5],
     [Cubes.XCubePyBF, 3],
 ]);
 

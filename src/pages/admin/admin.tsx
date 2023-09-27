@@ -2,7 +2,7 @@ import './admin.css'
 
 import React from 'react';
 import {API, AuthAPI} from "../../components/api/api";
-import {GetContestsResponse, GetContestsResponseContest, Player, PlayersResponse, Score} from "../../components/api/api_model";
+import {Contest, GetContestsResponse, Player, PlayersResponse, Score} from "../../components/api/api_model";
 import {WaitGroup} from "../../components/utils/async";
 import {TabNav, TabNavsPage} from "../../components/utils/tabs";
 import {AdminScoreDataCtx, AdminScoreRender} from "./admin_score";
@@ -20,7 +20,7 @@ class Admin extends React.Component {
     state = {
         // 共用
         contests: null,
-        contestsMap: new Map<number, GetContestsResponseContest>(),
+        contestsMap: new Map<number, Contest>(),
         players: null,
         playersMap: new Map<string, Player>(),
 
@@ -111,11 +111,11 @@ class Admin extends React.Component {
             data.contests = value
             for (let i = 0; i < value.Contests.length; i++) {
                 const contest = value.Contests[i]
-                this.state.contestsMap.set(contest.Contest.ID, contest)
+                this.state.contestsMap.set(contest.ID, contest)
             }
             wg.done()
         })
-        API.GetPlayers().then(value => {
+        API.GetPlayers(1, 50).then(value => {
             data.players = value
             for (let i = 0; i < value.Players.length; i++) {
                 this.state.playersMap.set(value.Players[i].Name, value.Players[i])

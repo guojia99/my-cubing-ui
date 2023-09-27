@@ -21,6 +21,7 @@ class Best extends React.Component {
             this.setState({bestTop: value})
         })
         API.GetBestByAllScores().then(value => {
+            console.log(value)
             this.setState({bestAll: value})
         })
     }
