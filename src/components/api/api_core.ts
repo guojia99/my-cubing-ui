@@ -24,7 +24,7 @@ import {
     GetBestByAllScoresResponse,
     XLog,
     PlayerSorResponse,
-    GetPlayerOldEnemyResponse, GetPlayerImageResponse, Contest,
+    GetPlayerOldEnemyResponse, GetPlayerImageResponse, Contest, GetRelativeSor,
 } from './api_model';
 
 
@@ -164,6 +164,11 @@ export class apiCore {
         return result.data
     }
 
+    async GetRelativeSor(): Promise<GetRelativeSor> {
+        let uri = this.uri + "/report/best/relative_sor"
+        const result = await axios.get(uri, {headers: {Accept: 'application/json'}})
+        return result.data
+    }
 
 }
 

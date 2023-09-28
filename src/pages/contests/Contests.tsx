@@ -97,6 +97,7 @@ class Contests extends React.Component {
         const p: PageNavValue = {
             Id: "contests_page",
             Count: resp.Count,
+            PageKey: "page",
             CurPage: page,
             Size: 20,
             Link: "/contests",

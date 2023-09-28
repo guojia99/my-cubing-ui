@@ -28,6 +28,11 @@ export function UpdateBrowserURL(key: string, value: string): void {
     window.history.pushState({ path: newURL }, "", newURL);
 }
 
+export function GetURLParams() {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.toString()
+}
+
 export function IsSubPath(p: string) : boolean{
     console.log(window.location.pathname, p)
     return window.location.pathname.startsWith(p)

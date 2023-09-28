@@ -97,6 +97,7 @@ class Record extends React.Component {
         const p: PageNavValue = {
             Id: "record_page",
             Count: resp.Count,
+            PageKey: "page",
             CurPage: page,
             Size: 50,
             Link: "/statistics/record",

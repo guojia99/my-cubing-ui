@@ -266,3 +266,10 @@ export type  GetPlayerImageResponse = {
     Avatar: string,
     Background: string,
 }
+
+export type RelativeSor = {
+    Player: Player,
+    Sor: number,
+}
+
+export type GetRelativeSor = any // map[key][]RelativeSor

@@ -98,6 +98,7 @@ class Players extends React.Component {
         const p: PageNavValue = {
             Id: "player_page",
             Count: resp.Count,
+            PageKey: "page",
             CurPage: page,
             Size: 50,
             Link: "/players",

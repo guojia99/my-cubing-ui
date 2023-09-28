@@ -27,6 +27,7 @@ import Sor from "./pages/statistics/Sor";
 import PodiumsPage from "./pages/statistics/podiums";
 import ScrollToTopButton from "./components/utils/top_button";
 import Rule from "./pages/about/Rule";
+import RelativeSorPage from "./pages/statistics/RelativeSor";
 
 $(() => {
     setInterval(() => {
@@ -59,7 +60,8 @@ root.render(
                     {/*<a className="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" href="#" aria-expanded="false">统计</a>*/}
                     <ul className="dropdown-menu">
                         <li><NavLink className="dropdown-item" to="/statistics/record">纪录</NavLink></li>
-                        <li><NavLink className="dropdown-item" to="/statistics/sor">排位分数</NavLink></li>
+                        <li><NavLink className="dropdown-item" to="/statistics/sor">Sor排位</NavLink></li>
+                        <li><NavLink className="dropdown-item" to="/statistics/relative_sor">排位分数(兔兔版)</NavLink></li>
                         <li><NavLink className="dropdown-item" to="/statistics/podiums">奖牌榜单</NavLink></li>
                         <li><NavLink className="dropdown-item" to="/statistics/best">最佳成绩</NavLink></li>
                         <li><NavLink className="dropdown-item" to="/statistics/interest">趣味玩法</NavLink></li>
@@ -86,6 +88,7 @@ root.render(
                 {/*统计*/}
                 <Route path="/statistics/best" Component={Best}/> {/*最佳成绩汇总*/}
                 <Route path="/statistics/sor" Component={Sor}/> {/*最佳成绩汇总*/}
+                <Route path="/statistics/relative_sor" Component={RelativeSorPage}/> {/*兔兔版本成绩*/}
                 <Route path="/statistics/record" Component={Record}/> {/*纪录*/}
                 <Route path="/statistics/podiums" Component={PodiumsPage}/> {/*奖牌榜单*/}
                 <Route path="/statistics/interest" Component={() => {

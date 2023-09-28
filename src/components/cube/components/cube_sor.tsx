@@ -1,6 +1,7 @@
-import {SorScore} from "../../api/api_model";
+import {RelativeSor, SorScore} from "../../api/api_model";
 import {Link} from "react-router-dom";
-import React from "react";
+import React, {JSX} from "react";
+import relativeSor from "../../../pages/statistics/RelativeSor";
 
 function sorTableBody(single: SorScore[], avg: SorScore[]) {
     if ((avg === null || avg === undefined) && (single === null || single === undefined)) {
@@ -82,6 +83,35 @@ export const SorTable = (single: SorScore[], avg: SorScore[]) => {
             </tr>
             </thead>
             {sorTableBody(single, avg)}
+        </table>
+    )
+}
+const relativeSorTableBody = (sor: RelativeSor[], key: string) => {
+    let items:JSX.Element[] = []
+
+    for (let i = 0 ; i < sor.length; i++){
+        items.push(
+            <tr key={"relativeSorTableBody_" + i + key}>
+                <td>{i + 1}</td>
+                <td>{sor[i].Player.Name}</td>
+                <td>{sor[i].Sor}</td>
+            </tr>
+        )
+    }
+    return items
+}
+
+export const RelativeSorTable = (sor: RelativeSor[], key: string) => {
+    return (
+        <table className="table text-center table-striped table-hover">
+            <thead>
+            <tr>
+                <th scope="col">排名</th>
+                <th scope="col">选手</th>
+                <th scope="col">分数</th>
+            </tr>
+            </thead>
+            {relativeSorTableBody(sor, key)}
         </table>
     )
 }
