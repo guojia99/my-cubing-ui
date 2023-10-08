@@ -1,7 +1,6 @@
 import {RelativeSor, SorScore} from "../../api/api_model";
 import {Link} from "react-router-dom";
 import React, {JSX} from "react";
-import relativeSor from "../../../pages/statistics/RelativeSor";
 
 function sorTableBody(single: SorScore[], avg: SorScore[]) {
     if ((avg === null || avg === undefined) && (single === null || single === undefined)) {
@@ -93,8 +92,8 @@ const relativeSorTableBody = (sor: RelativeSor[], key: string) => {
         items.push(
             <tr key={"relativeSorTableBody_" + i + key}>
                 <td>{i + 1}</td>
-                <td>{sor[i].Player.Name}</td>
-                <td>{sor[i].Sor}</td>
+                <td><Link to={"/player?id=" + sor[i].Player.ID}>{sor[i].Player.Name}</Link></td>
+                <td>{sor[i].Sor.toFixed(2)}</td>
             </tr>
         )
     }
@@ -111,7 +110,9 @@ export const RelativeSorTable = (sor: RelativeSor[], key: string) => {
                 <th scope="col">分数</th>
             </tr>
             </thead>
+            <tbody>
             {relativeSorTableBody(sor, key)}
+            </tbody>
         </table>
     )
 }
