@@ -253,13 +253,13 @@ export type GetBestByAllScoresResponse = {
     BestAvg: any, // Map<Cubes, Score[]>
 }
 
-export type GetPlayerOldEnemyDetail = {
+export type GetPlayerNemesisDetail = {
     Player: Player,
     Single: any,// Map<Cubes, Score>
     Avg: any,// Map<Cubes, Score>
 }
 
-export type GetPlayerOldEnemyResponse = GetPlayerOldEnemyDetail[]
+export type GetPlayerNemesisResponse = GetPlayerNemesisDetail[]
 
 
 export type  GetPlayerImageResponse = {

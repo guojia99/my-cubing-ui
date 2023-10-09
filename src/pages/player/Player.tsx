@@ -7,7 +7,7 @@ import {AllProjectList, Cubes, CubesCn} from "../../components/cube/cube";
 import {GetLocationQueryParams, SetTitleName} from "../../components/utils/utils";
 import {
     Contest, GetAvgRelativeSor,
-    GetPlayerAllScoreResponse, GetPlayerOldEnemyResponse,
+    GetPlayerAllScoreResponse, GetPlayerNemesisResponse,
     GetPlayerRecord, GetPlayerRelativeSor,
     Player,
     PlayerBestScoreResponse,
@@ -41,7 +41,7 @@ class PlayerPage extends React.Component {
         recordMap: new Map<string, RecordMessage>(),
         sor: null,
         avatar: null,
-        oldEnemy: null,
+        nemesis: null,
         relativeSor: null,
         avgRelativeSor: null,
     }
@@ -98,8 +98,8 @@ class PlayerPage extends React.Component {
         })
 
         // 获取宿敌列表
-        API.GetPlayerOldEnemy(id).then(value => {
-            this.setState({oldEnemy: value})
+        API.GetPlayerNemesis(id).then(value => {
+            this.setState({nemesis: value})
         })
 
         // 获取背景头像
@@ -636,14 +636,14 @@ class PlayerPage extends React.Component {
             )
         }
 
-        const renderPageByOldEnemy = () => {
-            if (this.state.oldEnemy === null || this.state.player === null) {
+        const renderPageByNemesis = () => {
+            if (this.state.nemesis === null || this.state.player === null) {
                 return <h2 style={{margin: "30px 30px"}}>加载中</h2>
             }
 
             const player = this.state.player as Player
-            const oldEnemy = this.state.oldEnemy as GetPlayerOldEnemyResponse
-            if (oldEnemy === undefined || oldEnemy.length === 0) {
+            const nemesis = this.state.nemesis as GetPlayerNemesisResponse
+            if (nemesis === undefined || nemesis.length === 0) {
                 return <h2 style={{margin: "30px 30px", textAlign: "center"}}><p style={{color: "red"}}>{player.Name}</p> 无任何宿敌!</h2>
             }
 
@@ -683,11 +683,11 @@ class PlayerPage extends React.Component {
             }
 
 
-            for (let i = 0; i < oldEnemy.length; i++) {
+            for (let i = 0; i < nemesis.length; i++) {
                 items.push(
-                    <tr key={"renderPageByOldEnemy_item" + oldEnemy[i].Player.ID}>
-                        <td>{oldEnemy[i].Player.Name}</td>
-                        <td>{scoreTable(oldEnemy[i].Single, oldEnemy[i].Avg)}</td>
+                    <tr key={"renderPageByNemesis_item" + nemesis[i].Player.ID}>
+                        <td>{nemesis[i].Player.Name}</td>
+                        <td>{scoreTable(nemesis[i].Single, nemesis[i].Avg)}</td>
                     </tr>
                 )
             }
@@ -696,10 +696,10 @@ class PlayerPage extends React.Component {
                 <div style={{overflowX: "auto"}}>
                     <table className="table table-striped table-hover" style={{minWidth: "600px", marginTop: "20px", marginBottom: "30px"}}>
                         <thead>
-                        <tr key={"renderPageByOldEnemy_thead1"}>
+                        <tr key={"renderPageByNemesis_thead1"}>
                             <th colSpan={2}><h4>宿敌列表</h4></th>
                         </tr>
-                        <tr key={"renderPageByOldEnemy_thead2"}>
+                        <tr key={"renderPageByNemesis_thead2"}>
                             <th>选手</th>
                             <th>成绩对比</th>
                         </tr>
@@ -727,9 +727,9 @@ class PlayerPage extends React.Component {
                 Page: renderPageByPodium(),
             },
             {
-                Id: "old_enemy",
+                Id: "nemesis",
                 Name: (<h4>宿敌</h4>),
-                Page: renderPageByOldEnemy()
+                Page: renderPageByNemesis()
             }
         ]
 

@@ -2,7 +2,7 @@ import './contest.css'
 
 import React, {JSX} from 'react';
 import {API} from "../../components/api/api";
-import {AllProjectList, Cubes} from "../../components/cube/cube";
+import {AllProjectList, Cubes, CubesCn} from "../../components/cube/cube";
 import {GetLocationQueryParams, SetTitleName} from "../../components/utils/utils";
 import {
     Contest,
@@ -17,10 +17,11 @@ import {
 import {Link} from "react-router-dom";
 import {TabNav, TabNavsPage} from "../../components/utils/tabs";
 import {GetCubeIcon} from "../../components/cube/icon/cube_icon";
-import {CubeScoresTable} from "../../components/cube/components/cube_score_tabels";
+import {CubeScoresTable, CubeScoreTds} from "../../components/cube/components/cube_score_tabels";
 import {RoundTables} from "../../components/cube/components/cube_rounds";
 import {SorKeys, SorTable} from "../../components/cube/components/cube_sor";
 import {SetBackGround} from "../../components/utils/background";
+import {FormatTime} from "../../components/cube/components/cube_timeformat";
 
 class ContestPage extends React.Component {
     state = {
@@ -79,7 +80,6 @@ class ContestPage extends React.Component {
     }
 
     private readerScore() {
-        // 确认是否为空
         if (this.state.score === null) {
             return (<div></div>)
         }
@@ -142,6 +142,77 @@ class ContestPage extends React.Component {
         }
 
         return (<TabNav Id="constest_socre" SelectedKey="score_cubes" Pages={pages} Center={false}/>)
+    }
+
+
+    private readerScoreAll() {
+        if (this.state.score === null) {
+            return (<div></div>)
+        }
+
+        const s = this.state.score as GetContestScoreResponse
+        if (s.Scores === undefined) {
+            return (<div></div>)
+        }
+
+
+        let items: JSX.Element[] = []
+
+
+        AllProjectList().forEach((value) => {
+            const scores = s.Scores[value] as RoutesScores[]
+            if (scores === undefined) {
+                return
+            }
+
+            for (let i = 0; i < scores.length; i++) {
+                const ss = scores[i]
+                if (ss === undefined || ss.Scores === undefined) {
+                    continue
+                }
+
+                for (let j = 0; j < ss.Scores.length; j++) {
+                    const score = ss.Scores[j]
+                    let sp =  <td rowSpan={ss.Scores.length}>{GetCubeIcon(score.Project)} {CubesCn(score.Project)}</td>
+                    if (j !== 0){
+                        sp = <></>
+                    }
+
+                    items.push(
+                        <tr key={"readerScoreAll" + score.ID}>
+                            {sp}
+                            <td>{j + 1}</td>
+                            <td>{score.RouteValue.Name}</td>
+                            <td><Link to={"/player?id=" + score.PlayerID}>{score.PlayerName}</Link></td>
+                            <td>{FormatTime(score.Best, score.Project, false)}</td>
+                            <td>{FormatTime(score.Avg, score.Project, true)}</td>
+                            <>{CubeScoreTds(score)}</>
+                        </tr>
+                    )
+                }
+
+            }
+        })
+
+
+        return (
+            <div style={{marginTop:"20px", marginBottom:"20px"}}>
+                <table className="table table-bordered table-striped table-hover text-center" style={{minWidth: "800px"}}>
+                    <thead>
+                    <tr>
+                        <th>项目</th>
+                        <th>排名</th>
+                        <th>轮次</th>
+                        <th>选手</th>
+                        <th>单次</th>
+                        <th>平均</th>
+                        <th colSpan={5}>详情</th>
+                    </tr>
+                    </thead>
+                    <tbody>{items}</tbody>
+                </table>
+            </div>
+        )
     }
 
     private readerPodiums() {
@@ -273,6 +344,11 @@ class ContestPage extends React.Component {
                 Id: "tab_nav_score",
                 Name: (<p>成绩 <i className="bi bi-kanban"></i></p>),
                 Page: this.readerScore(),
+            },
+            {
+                Id: "tab_nav_all_score_table",
+                Name: (<p>汇总 <i className="bi bi-kanban-fill"></i></p>),
+                Page: this.readerScoreAll(),
             },
             {
                 Id: "tab_nav_podium",

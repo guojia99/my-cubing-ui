@@ -24,7 +24,12 @@ import {
     GetBestByAllScoresResponse,
     XLog,
     PlayerSorResponse,
-    GetPlayerOldEnemyResponse, GetPlayerImageResponse, Contest, GetRelativeSor, GetPlayerRelativeSor, GetAvgRelativeSor,
+    GetPlayerImageResponse,
+    Contest,
+    GetRelativeSor,
+    GetPlayerRelativeSor,
+    GetAvgRelativeSor,
+    GetPlayerNemesisResponse,
 } from './api_model';
 
 
@@ -110,8 +115,8 @@ export class apiCore {
         return result.data
     }
 
-    async GetPlayerOldEnemy(playerID: number) : Promise<GetPlayerOldEnemyResponse>{
-        let uri = this.uri + "/report/player/" + playerID + "/old_enemy"
+    async GetPlayerNemesis(playerID: number) : Promise<GetPlayerNemesisResponse>{
+        let uri = this.uri + "/report/player/" + playerID + "/nemesis"
         const result = await axios.get(uri, {headers: {Accept: 'application/json'}})
         return result.data
     }

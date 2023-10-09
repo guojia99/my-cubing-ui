@@ -169,7 +169,7 @@ export const CubesCn = (c: Cubes) => {
     return out ? out : "其他"
 }
 
-export const AllProjectList = () => {
+export const AllProjectList = (): Cubes[] => {
     let all = WCAProjectList()
     all.push(...XCubeProjectList())
     all.push(...XCubeOHProjectList())
