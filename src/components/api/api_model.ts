@@ -270,6 +270,11 @@ export type  GetPlayerImageResponse = {
 export type RelativeSor = {
     Player: Player,
     Sor: number,
+    Avg: number,
+    Top5: number,
+    Max: number,
 }
 
 export type GetRelativeSor = any // map[key][]RelativeSor
+export type GetPlayerRelativeSor = any // map[key]RelativeSor
+export type GetAvgRelativeSor = any // map[key]RelativeSor

@@ -43,8 +43,8 @@ export const PageNav = (p: PageNavValue) => {
         }
 
         // Pagination.Next Pagination.Last
-        paginationItems.push(<Pagination.Next key={`${Id}-next`} disabled={isLastPage} href={`${Link}?${pKey}=${CurPage + 1}`}/>);
-        paginationItems.push(<Pagination.Last key={`${Id}-last`} disabled={isLastPage} href={`${Link}?${pKey}=${Math.ceil(Count / Size)}`}/>);
+        paginationItems.push(<Pagination.Next key={`${Id}-next`} disabled={isLastPage} href={`${Link}${pKey}=${CurPage + 1}`}/>);
+        paginationItems.push(<Pagination.Last key={`${Id}-last`} disabled={isLastPage} href={`${Link}${pKey}=${Math.ceil(Count / Size)}`}/>);
         return paginationItems;
     };
 

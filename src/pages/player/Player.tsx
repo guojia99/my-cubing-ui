@@ -6,15 +6,15 @@ import {API} from "../../components/api/api";
 import {AllProjectList, Cubes, CubesCn} from "../../components/cube/cube";
 import {GetLocationQueryParams, SetTitleName} from "../../components/utils/utils";
 import {
-    Contest,
+    Contest, GetAvgRelativeSor,
     GetPlayerAllScoreResponse, GetPlayerOldEnemyResponse,
-    GetPlayerRecord,
+    GetPlayerRecord, GetPlayerRelativeSor,
     Player,
     PlayerBestScoreResponse,
     PlayerSorResponse,
     Podiums,
     RankScore,
-    RecordMessage,
+    RecordMessage, RelativeSor,
     Round,
     Score,
     ScoresByContest,
@@ -26,10 +26,11 @@ import {TabNav, TabNavsPage} from "../../components/utils/tabs";
 import {Link} from "react-router-dom";
 import {PR_And_GR_Record} from "../../components/cube/components/cube_record";
 import {CubeScoreTds, RecordType} from "../../components/cube/components/cube_score_tabels";
-import {ScoreChat} from "../../components/cube/components/cube_scores_echarts";
 import {SorKeys} from "../../components/cube/components/cube_sor";
 import {SetBackGround} from "../../components/utils/background";
 import {Avatar} from "../../components/utils/avatar";
+import {ScoreChat} from "../../components/cube/echarts/cube_scores_echarts";
+import {SorChat, SorChatItem, SorChatValue, SorChatValueKeyMap} from "../../components/cube/echarts/cube_scores_sor_echarts";
 
 class PlayerPage extends React.Component {
     state = {
@@ -41,35 +42,50 @@ class PlayerPage extends React.Component {
         sor: null,
         avatar: null,
         oldEnemy: null,
+        relativeSor: null,
+        avgRelativeSor: null,
     }
 
-    componentDidMount() {
+    async componentDidMount() {
         SetBackGround("")
 
         const p = GetLocationQueryParams()
         const id = Number(p["id"])
 
-        API.GetPlayer(id).then(value => this.setState({player: value}))
-        API.GetPlayerImage(id).then(value => {
-            if (value.Background !== undefined) {
-                SetBackGround(value.Background)
-            }
-            if (value.Avatar !== undefined && value.Avatar !== "") {
-                this.setState({avatar: value.Avatar})
-            }
-        }).catch()
-        API.GetPlayerBestScore(id).then(value => {
+        // 获取个人详细
+        await API.GetPlayer(id).then(value => this.setState({player: value}))
+
+        // 获取个人最佳成绩榜单
+        await API.GetPlayerBestScore(id).then(value => {
             this.setState({best: value})
         })
-        API.GetPlayerAllScore(id).then(value => {
+
+        // 获取所有成绩
+        await API.GetPlayerAllScore(id).then(value => {
             this.setState({allScore: value})
         })
+
+        // 获取个人排名分
+        await API.GetPlayerRelativeSor(id).then(value => {
+            this.setState({relativeSor: value})
+        })
+
+        // 获取平均个人排名分
+        API.GetAvgRelativeSor().then(value => {
+            this.setState({avgRelativeSor: value})
+        })
+
+        // 获取奖牌榜
         API.GetPlayerPodium(id).then(value => {
             this.setState({podium: value})
         })
+
+        // 获取sor
         API.GetPlayerSor(id).then(value => {
             this.setState({sor: value})
         })
+
+        // 获取记录
         API.GetPlayerRecord(id).then(value => {
             let record = value as GetPlayerRecord
             if (record === null || record === undefined) {
@@ -80,9 +96,21 @@ class PlayerPage extends React.Component {
                 this.state.recordMap.set(record[i].Score.ID + "_" + record[i].Record.RType, record[i])
             }
         })
+
+        // 获取宿敌列表
         API.GetPlayerOldEnemy(id).then(value => {
             this.setState({oldEnemy: value})
         })
+
+        // 获取背景头像
+        API.GetPlayerImage(id).then(value => {
+            if (value.Background !== undefined) {
+                SetBackGround(value.Background)
+            }
+            if (value.Avatar !== undefined && value.Avatar !== "") {
+                this.setState({avatar: value.Avatar})
+            }
+        }).catch()
     }
 
     renderAvatar() {
@@ -713,11 +741,77 @@ class PlayerPage extends React.Component {
         )
     }
 
+    renderRelativeSor() {
+        if (this.state.player === null) {
+            return <div></div>
+        }
+        if (this.state.relativeSor === null || this.state.avgRelativeSor === null) {
+            return <div></div>
+        }
+        const player = this.state.player as Player
+        if (player === undefined) {
+            return <div></div>
+        }
+
+        const sor = this.state.relativeSor as GetPlayerRelativeSor
+        console.log(sor)
+        const avg = this.state.avgRelativeSor as GetAvgRelativeSor
+
+
+        let keyMap: SorChatValueKeyMap[] = []
+        let items: SorChatItem[] = [
+            {
+                Name: "平均",
+                Data: [],
+            },
+            {
+                Name: "前五",
+                Data: [],
+            },
+            {
+                Name: player.Name,
+                Data: [],
+            }
+        ]
+        SorKeys.forEach((value, key) => {
+            const s = sor[key] as RelativeSor
+            const a = avg[key] as RelativeSor
+
+            if (a === undefined) {
+                return
+            }
+            keyMap.push({Name: value, Max: a.Max})
+            items[0].Data.push(a.Avg)
+            items[1].Data.push(a.Top5)
+            if (s === undefined) {
+                items[2].Data.push(0)
+                return;
+            }
+            items[2].Data.push(s.Sor)
+        })
+
+
+        const v: SorChatValue = {
+            Title: "选手能力六芒星",
+            Items: items,
+            KeyMap: keyMap,
+        }
+        console.log(v)
+
+        return (
+            <div>
+                <h4 style={{textAlign: "center", fontWeight: 700, marginTop: "20px", marginBottom: "20px"}}>能力芒星图</h4>
+                {SorChat(v)}
+            </div>
+        )
+    }
+
     render() {
         return (
             <div>
                 {this.renderHeader()}
                 {this.renderBestTable()}
+                {this.renderRelativeSor()}
                 {this.renderPodiumsTable()}
                 {this.renderSorTable()}
                 {this.renderAllScore()}

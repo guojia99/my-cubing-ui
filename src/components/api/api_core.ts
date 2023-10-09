@@ -24,10 +24,11 @@ import {
     GetBestByAllScoresResponse,
     XLog,
     PlayerSorResponse,
-    GetPlayerOldEnemyResponse, GetPlayerImageResponse, Contest, GetRelativeSor,
+    GetPlayerOldEnemyResponse, GetPlayerImageResponse, Contest, GetRelativeSor, GetPlayerRelativeSor, GetAvgRelativeSor,
 } from './api_model';
 
 
+// todo 异常判断
 export class apiCore {
     uri: string;
 
@@ -115,6 +116,11 @@ export class apiCore {
         return result.data
     }
 
+    async GetPlayerRelativeSor(playerID: number): Promise<GetPlayerRelativeSor>{
+        let uri = this.uri + "/report/player/" + playerID + "/relative_sor"
+        const result = await axios.get(uri, {headers: {Accept: 'application/json'}})
+        return result.data
+    }
 
     async GetBestPodium(): Promise<Podiums[]> {
         let uri = this.uri + "/report/best/podium"
@@ -170,6 +176,11 @@ export class apiCore {
         return result.data
     }
 
+    async GetAvgRelativeSor(): Promise<GetAvgRelativeSor>{
+        let uri = this.uri + "/report/best/avg_relative_sor"
+        const result = await axios.get(uri, {headers: {Accept: 'application/json'}})
+        return result.data
+    }
 }
 
 

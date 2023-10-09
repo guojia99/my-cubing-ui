@@ -63,9 +63,9 @@ function sorTableBody(single: SorScore[], avg: SorScore[]) {
 export const SorKeys: Map<string, string> = new Map([
     ["wca", "WCA项目"],
     ["xcube", "趣味项目"],
-    ["wca2345", "WCA低正阶"],
-    ["wca234567", "WCA全正阶"],
-    ["wca_alien", "WCA全异型"],
+    ["wca2345", "WCA二三四五"],
+    ["wca234567", "WCA二至七"],
+    ["wca_alien", "WCA异形"],
     ["wca333", "WCA三阶"],
     ["wca_bf", "WCA盲拧"],
 ])

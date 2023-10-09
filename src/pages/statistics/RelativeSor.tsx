@@ -23,7 +23,6 @@ class RelativeSorPage extends React.Component {
             return <div></div>
         }
         const data = this.state.data as GetRelativeSor
-        console.log(data)
         let tabs: TabNavsPage[] = []
         SorKeys.forEach((value, key) => {
             const sor = data[key] as RelativeSor[]

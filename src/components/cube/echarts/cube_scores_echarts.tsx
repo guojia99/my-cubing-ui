@@ -1,7 +1,7 @@
 import * as echarts from "echarts";
 import ReactEcharts from "echarts-for-react";
 import {Cubes, CubesCn} from "../cube";
-import {FormatTime} from "./cube_timeformat";
+import {FormatTime} from "../components/cube_timeformat";
 import {Contest, Score} from "../../api/api_model";
 
 type Format = echarts.EChartOption.Tooltip.Format;
