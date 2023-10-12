@@ -8,7 +8,7 @@ import {PR_And_GR_Record} from "./cube_record";
 import React, {JSX} from "react";
 
 
-function RecordsToMap(records: ContestRecord[]) {
+export function RecordsToMap(records: ContestRecord[]) {
     let m = new Map<string, ContestRecord>()
     if (records === null || records === undefined || records.length === 0) {
         return m

@@ -72,7 +72,6 @@ export type Record = {
     ContestValue: Contest;
 }
 
-
 export type RoutesScores = {
     Round: Round[];
     Scores: Score[];

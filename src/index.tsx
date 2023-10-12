@@ -2,6 +2,7 @@
 import 'bootstrap/dist/css/bootstrap.min.css'
 import './css/best.css'
 import './index.css'
+import 'react-toastify/dist/ReactToastify.css';
 
 // index
 import React from 'react';
@@ -28,6 +29,7 @@ import PodiumsPage from "./pages/statistics/podiums";
 import ScrollToTopButton from "./components/utils/top_button";
 import Rule from "./pages/about/Rule";
 import RelativeSorPage from "./pages/statistics/RelativeSor";
+import {ToastContainer} from "react-toastify";
 
 $(() => {
     setInterval(() => {
@@ -41,6 +43,9 @@ const root = ReactDOM.createRoot(
 );
 root.render(
     <div>
+        <div>
+            <ToastContainer />
+        </div>
         <BrowserRouter>
             <ul className="nav nav-underline" style={{marginBottom: '20px'}}>
                 <li className="nav-item"><NavLink className="nav-link" to="/">主页</NavLink></li>
@@ -98,6 +103,6 @@ root.render(
         </BrowserRouter>
 
         <ScrollToTopButton/>
-    </div>
 
+    </div>
 );

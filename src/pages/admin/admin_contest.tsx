@@ -7,9 +7,10 @@ import {callback} from "./admin_score";
 import {API, AuthAPI} from "../../components/api/api";
 import {AllProjectList, CubesCn} from "../../components/cube/cube";
 import {GetCubeIcon} from "../../components/cube/icon/cube_icon";
-import {Once} from "../../components/utils/async";
+import {Once, Sleep} from "../../components/utils/async";
 import {GetLocationQueryParams} from "../../components/utils/utils";
 import {PageNav, PageNavValue} from "../../components/utils/page";
+import {WaitToast, WarnToast} from "../../components/utils/alert";
 
 type AdminContestDataCtx = {
     Contests: GetContestsResponse | null,
@@ -83,12 +84,14 @@ export class AdminContestRender {
             </div>
         }
 
-        const endContestHandle = () => {
-            AuthAPI.EndContest(this.ctx.EndContestID).then(() => {
-                alert("结束成功")
-            }).catch(() => {
-                alert("结束失败")
-            }).finally(() => {
+        const endContestHandle = async () => {
+            await WaitToast(
+                AuthAPI.EndContest(this.ctx.EndContestID),
+                (<p>等待结束比赛</p>),
+                (<p>结束比赛成功</p>),
+                (<p>结束比赛失败</p>),
+            )
+            Sleep(1000).then(() => {
                 window.location.reload()
             })
         }
@@ -186,7 +189,7 @@ export class AdminContestRender {
             //                 </div>
         }
 
-        const createContestHandle = () => {
+        const  createContestHandle = async () => {
             const rounds: CreateContestRequestRound[] = []
             const roundKeyMap1: Map<number, string> = new Map([
                 [0, "单轮赛"]
@@ -234,7 +237,7 @@ export class AdminContestRender {
             }
 
             if (rounds.length === 0) {
-                alert("轮次不能为空")
+                WarnToast("轮次不能为空")
                 return
             }
 
@@ -243,11 +246,11 @@ export class AdminContestRender {
             const typ = document.getElementById(inputTypeID) as HTMLSelectElement
 
             if (!name.value) {
-                alert("比赛名称不能为空")
+                WarnToast("比赛名称不能为空")
                 return;
             }
             if (!desc.value) {
-                alert("备注不能为空")
+                WarnToast("备注不能为空")
                 return;
             }
 
@@ -260,15 +263,17 @@ export class AdminContestRender {
                 StartTime: 0,
                 EndTime: 0
             }
-            AuthAPI.AddContest(req).then(() => {
-                alert("创建成功")
-            }).catch(() => {
-                alert("创建失败")
-            }).finally(() => {
+
+            await WaitToast(
+                AuthAPI.AddContest(req),
+                (<p>等待添加比赛</p>),
+                (<p>添加比赛成功</p>),
+                (<p>添加比赛失败</p>),
+            )
+            Sleep(1000).then(() => {
                 window.location.reload()
             })
         }
-
 
         return CreateModal("创建", bodyHandle, createContestTarget, createContestHandle)
     }

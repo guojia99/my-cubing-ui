@@ -6,6 +6,7 @@ import {GetLocationQueryParams} from "../../components/utils/utils";
 import {PageNav, PageNavValue} from "../../components/utils/page";
 import {Once} from "../../components/utils/async";
 import {callback} from "./admin_score";
+import {WarnToast} from "../../components/utils/alert";
 
 export type AdminPlayerDataCtx = {
     Players: PlayersResponse | null,
@@ -92,9 +93,9 @@ export class AdminPlayerRender {
 
         const deletePlayerHandle = async () => {
             await AuthAPI.DeletePlayer(this.ctx.DeleteID).then(() => {
-                alert("删除成功")
+                WarnToast("删除成功")
             }).catch(() => {
-                alert("删除失败")
+                WarnToast("删除失败")
             }).finally(() => {
                 window.location.reload()
             })
@@ -117,7 +118,7 @@ export class AdminPlayerRender {
         // const title = document.getElementById(inputTitleID) as HTMLInputElement
 
         if (name.value === "") {
-            alert("无法输入空名称")
+            WarnToast("无法输入空名称")
             return
         }
         // todo 校验
@@ -177,9 +178,9 @@ export class AdminPlayerRender {
         const updatePlayerHandle = async () => {
             const f = async (req: Player) => {
                 await AuthAPI.UpdatePlayer(this.ctx.UpdateID, req).then(() => {
-                    alert("更新成功")
+                    WarnToast("更新成功")
                 }).catch(() => {
-                    alert("更新失败")
+                    WarnToast("更新失败")
                 }).finally(() => {
                     window.location.reload()
                 })
@@ -218,9 +219,9 @@ export class AdminPlayerRender {
         const createPlayerHandle = () => {
             const f = (req: Player) => {
                 AuthAPI.AddPlayer(req).then(() => {
-                    alert("添加成功")
+                    WarnToast("添加成功")
                 }).catch(() => {
-                    alert("添加失败")
+                    WarnToast("添加失败")
                 }).finally(() => {
                     window.location.reload()
                 })

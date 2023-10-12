@@ -754,7 +754,6 @@ class PlayerPage extends React.Component {
         }
 
         const sor = this.state.relativeSor as GetPlayerRelativeSor
-        console.log(sor)
         const avg = this.state.avgRelativeSor as GetAvgRelativeSor
 
 
@@ -796,7 +795,6 @@ class PlayerPage extends React.Component {
             Items: items,
             KeyMap: keyMap,
         }
-        console.log(v)
 
         return (
             <div>

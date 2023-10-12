@@ -17,11 +17,12 @@ import {
 import {Link} from "react-router-dom";
 import {TabNav, TabNavsPage} from "../../components/utils/tabs";
 import {GetCubeIcon} from "../../components/cube/icon/cube_icon";
-import {CubeScoresTable, CubeScoreTds} from "../../components/cube/components/cube_score_tabels";
+import {CubeScoresTable, CubeScoreTds, RecordsToMap, RecordType} from "../../components/cube/components/cube_score_tabels";
 import {RoundTables} from "../../components/cube/components/cube_rounds";
 import {SorKeys, SorTable} from "../../components/cube/components/cube_sor";
 import {SetBackGround} from "../../components/utils/background";
 import {FormatTime} from "../../components/cube/components/cube_timeformat";
+import {PR_And_GR_Record} from "../../components/cube/components/cube_record";
 
 class ContestPage extends React.Component {
     state = {
@@ -29,6 +30,7 @@ class ContestPage extends React.Component {
         sor: {},
         contest: {},
         record: {},
+        recordMap: new Map<string, ContestRecord>(),
         podium: {},
     }
 
@@ -38,7 +40,10 @@ class ContestPage extends React.Component {
         const id = Number(p['id'])
 
         API.GetContestRecord(id).then(value => {
-            this.setState({record: value})
+            this.setState({
+                record: value,
+                recordMap: RecordsToMap(value),
+            })
         })
         API.GetContest(id).then(value => {
             this.setState({contest: value})
@@ -158,7 +163,6 @@ class ContestPage extends React.Component {
 
         let items: JSX.Element[] = []
 
-
         AllProjectList().forEach((value) => {
             const scores = s.Scores[value] as RoutesScores[]
             if (scores === undefined) {
@@ -182,10 +186,10 @@ class ContestPage extends React.Component {
                         <tr key={"readerScoreAll" + score.ID}>
                             {sp}
                             <td>{j + 1}</td>
-                            <td>{score.RouteValue.Name}</td>
+                            {/*<td>{score.RouteValue.Name}</td>*/}
                             <td><Link to={"/player?id=" + score.PlayerID}>{score.PlayerName}</Link></td>
-                            <td>{FormatTime(score.Best, score.Project, false)}</td>
-                            <td>{FormatTime(score.Avg, score.Project, true)}</td>
+                            <td>{PR_And_GR_Record(score.IsBestSingle, this.state.recordMap.get(score.ID.toString() + RecordType.RecordBySingle.toString()) !== undefined)}{FormatTime(score.Best, score.Project, false)}</td>
+                            <td>{PR_And_GR_Record(score.IsBestAvg, this.state.recordMap.get(score.ID.toString() + RecordType.RecordByAvg.toString()) !== undefined)}{FormatTime(score.Avg, score.Project, true)}</td>
                             <>{CubeScoreTds(score)}</>
                         </tr>
                     )
@@ -196,13 +200,13 @@ class ContestPage extends React.Component {
 
 
         return (
-            <div style={{marginTop:"20px", marginBottom:"20px"}}>
+            <div style={{marginTop:"20px", marginBottom:"20px", overflowX: "auto"}}>
                 <table className="table table-bordered table-striped table-hover text-center" style={{minWidth: "800px"}}>
                     <thead>
                     <tr>
                         <th>项目</th>
                         <th>排名</th>
-                        <th>轮次</th>
+                        {/*<th>轮次</th>*/}
                         <th>选手</th>
                         <th>单次</th>
                         <th>平均</th>

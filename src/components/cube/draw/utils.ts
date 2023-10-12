@@ -5,7 +5,6 @@ export const hsq3 = Math.sqrt(3) / 2
 // 对2D坐标进行线性变换
 export function Transform(arr: number[][], trans: number[]): number[][] {
     if ((trans.length !== 3 && trans.length !== 6) || (arr.length !== 2)) {
-        console.log("the transform error")
         return arr
     }
 

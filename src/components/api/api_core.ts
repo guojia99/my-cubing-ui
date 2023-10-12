@@ -1,5 +1,3 @@
-import axios from 'axios';
-
 import Cookies from 'js-cookie';
 
 import {
@@ -31,6 +29,7 @@ import {
     GetAvgRelativeSor,
     GetPlayerNemesisResponse,
 } from './api_model';
+import {Request} from "./api_error";
 
 
 // todo 异常判断
@@ -43,147 +42,145 @@ export class apiCore {
 
     async GetContest(contestID: number): Promise<Contest> {
         let uri = this.uri + "/contest/" + contestID
-        const result = await axios.get(uri, {headers: {Accept: 'application/json'}})
+        const result = await Request.get(uri, {headers: {Accept: 'application/json'}})
         return result.data
     }
 
-
     async GetPlayers(page: number, size: number): Promise<PlayersResponse> {
         let uri = this.uri + "/players?page=" + page + "&size=" + size
-        const result = await axios.get(uri, {headers: {Accept: 'application/json'}})
+        const result = await Request.get(uri, {headers: {Accept: 'application/json'}})
         return result.data
     }
 
     async GetPlayer(id: number): Promise<Player> {
         let uri = this.uri + "/player/" + id
-        const result = await axios.get(uri, {headers: {Accept: 'application/json'}})
+        const result = await Request.get(uri, {headers: {Accept: 'application/json'}})
         return result.data
     }
 
-    async GetPlayerImage(playerId: number): Promise<GetPlayerImageResponse>{
+    async GetPlayerImage(playerId: number): Promise<GetPlayerImageResponse> {
         let uri = this.uri + "/player/" + playerId + "/images"
-        const result = await axios.get(uri, {headers: {Accept: 'application/json'}})
+        const result = await Request.get(uri, {headers: {Accept: 'application/json'}})
         return result.data
     }
 
     async GetPlayerBestScore(id: number): Promise<PlayerBestScoreResponse> {
         let uri = this.uri + "/report/player/" + id + "/best"
-        const result = await axios.get(uri, {headers: {Accept: 'application/json'}})
+        const result = await Request.get(uri, {headers: {Accept: 'application/json'}})
         return result.data
     }
 
     async GetPlayerAllScore(id: number): Promise<GetPlayerAllScoreResponse> {
         let uri = this.uri + "/report/player/" + id + "/score"
-        const result = await axios.get(uri, {headers: {Accept: 'application/json'}})
+        const result = await Request.get(uri, {headers: {Accept: 'application/json'}})
         return result.data
     }
 
     async GetPlayerRecord(id: number): Promise<GetPlayerRecord> {
         let uri = this.uri + "/report/player/" + id + "/record"
-        const result = await axios.get(uri, {headers: {Accept: 'application/json'}})
+        const result = await Request.get(uri, {headers: {Accept: 'application/json'}})
         return result.data
     }
 
     async GetPlayerPodium(id: number): Promise<Podiums> {
         let uri = this.uri + "/report/player/" + id + "/podium"
-        const result = await axios.get(uri, {headers: {Accept: 'application/json'}})
+        const result = await Request.get(uri, {headers: {Accept: 'application/json'}})
         return result.data
     }
 
     async GetBestScore(): Promise<GetBestScoreResponse> {
         let uri = this.uri + "/report/best/score"
-        const result = await axios.get(uri, {headers: {Accept: 'application/json'}})
+        const result = await Request.get(uri, {headers: {Accept: 'application/json'}})
         return result.data
     }
 
     async GetBestByAllScores(): Promise<GetBestByAllScoresResponse> {
         let uri = this.uri + "/report/best/all_scores"
-        const result = await axios.get(uri, {headers: {Accept: 'application/json'}})
+        const result = await Request.get(uri, {headers: {Accept: 'application/json'}})
         return result.data
     }
-
 
     async GetBestSor(): Promise<BestSorReportResponse> {
         let uri = this.uri + "/report/best/sor"
-        const result = await axios.get(uri, {headers: {Accept: 'application/json'}})
+        const result = await Request.get(uri, {headers: {Accept: 'application/json'}})
         return result.data
     }
 
-    async GetPlayerSor(playerID: number): Promise<PlayerSorResponse>{
-        let uri = this.uri +  "/report/player/" + playerID + "/sor"
-        const result = await axios.get(uri, {headers: {Accept: 'application/json'}})
+    async GetPlayerSor(playerID: number): Promise<PlayerSorResponse> {
+        let uri = this.uri + "/report/player/" + playerID + "/sor"
+        const result = await Request.get(uri, {headers: {Accept: 'application/json'}})
         return result.data
     }
 
-    async GetPlayerNemesis(playerID: number) : Promise<GetPlayerNemesisResponse>{
+    async GetPlayerNemesis(playerID: number): Promise<GetPlayerNemesisResponse> {
         let uri = this.uri + "/report/player/" + playerID + "/nemesis"
-        const result = await axios.get(uri, {headers: {Accept: 'application/json'}})
+        const result = await Request.get(uri, {headers: {Accept: 'application/json'}})
         return result.data
     }
 
-    async GetPlayerRelativeSor(playerID: number): Promise<GetPlayerRelativeSor>{
+    async GetPlayerRelativeSor(playerID: number): Promise<GetPlayerRelativeSor> {
         let uri = this.uri + "/report/player/" + playerID + "/relative_sor"
-        const result = await axios.get(uri, {headers: {Accept: 'application/json'}})
+        const result = await Request.get(uri, {headers: {Accept: 'application/json'}})
         return result.data
     }
 
     async GetBestPodium(): Promise<Podiums[]> {
         let uri = this.uri + "/report/best/podium"
-        const result = await axios.get(uri, {headers: {Accept: 'application/json'}})
+        const result = await Request.get(uri, {headers: {Accept: 'application/json'}})
         return result.data
     }
 
     async GetRecords(page: number, size: number): Promise<GetRecordsResponse> {
         let uri = this.uri + "/report/record?page=" + page + "&size=" + size
-        const result = await axios.get(uri, {headers: {Accept: 'application/json'}})
+        const result = await Request.get(uri, {headers: {Accept: 'application/json'}})
         return result.data
     }
 
-
     async GetContests(page: number, size: number, typ: string): Promise<GetContestsResponse> {
         let uri = this.uri + "/contests?page=" + page + "&size=" + size + "&type=" + typ
-        const result = await axios.get(uri, {headers: {Accept: 'application/json'}})
+        const result = await Request.get(uri, {headers: {Accept: 'application/json'}})
         return result.data
     }
 
     async GetContestSor(contestID: number): Promise<GetContestSorResponse> {
         let uri = this.uri + "/report/contest/" + contestID + "/sor"
-        const result = await axios.get(uri, {headers: {Accept: 'application/json'}})
+        const result = await Request.get(uri, {headers: {Accept: 'application/json'}})
         return result.data
     }
 
     async GetContestScore(contestID: number): Promise<GetContestScoreResponse> {
         let uri = this.uri + "/report/contest/" + contestID + "/score"
-        const result = await axios.get(uri, {headers: {Accept: 'application/json'}})
+        const result = await Request.get(uri, {headers: {Accept: 'application/json'}})
         return result.data
     }
 
     async GetContestRecord(contestID: number): Promise<ContestRecord[]> {
         let uri = this.uri + "/report/contest/" + contestID + "/record"
-        const result = await axios.get(uri, {headers: {Accept: 'application/json'}})
+        const result = await Request.get(uri, {headers: {Accept: 'application/json'}})
         return result.data
     }
 
     async GetContestPodium(contestID: number): Promise<ContestPodiums[]> {
         let uri = this.uri + "/report/contest/" + contestID + "/podium"
-        const result = await axios.get(uri, {headers: {Accept: 'application/json'}})
+        const result = await Request.get(uri, {headers: {Accept: 'application/json'}})
         return result.data
     }
+
     async GetXLog(): Promise<XLog[]> {
         let uri = this.uri + "/x-log/"
-        const result = await axios.get(uri, {headers: {Accept: 'application/json'}})
+        const result = await Request.get(uri, {headers: {Accept: 'application/json'}})
         return result.data
     }
 
     async GetRelativeSor(): Promise<GetRelativeSor> {
         let uri = this.uri + "/report/best/relative_sor"
-        const result = await axios.get(uri, {headers: {Accept: 'application/json'}})
+        const result = await Request.get(uri, {headers: {Accept: 'application/json'}})
         return result.data
     }
 
-    async GetAvgRelativeSor(): Promise<GetAvgRelativeSor>{
+    async GetAvgRelativeSor(): Promise<GetAvgRelativeSor> {
         let uri = this.uri + "/report/best/avg_relative_sor"
-        const result = await axios.get(uri, {headers: {Accept: 'application/json'}})
+        const result = await Request.get(uri, {headers: {Accept: 'application/json'}})
         return result.data
     }
 }
@@ -210,7 +207,7 @@ export class authApiCore {
     async GetToken(user: string, password: string): Promise<GetTokenResponse> {
         try {
             let uri = this.apiCore.uri + "/auth/token"
-            const value = await axios.post(uri, {user_name: user, password: password}, {headers: {Accept: 'application/json'}})
+            const value = await Request.post(uri, {user_name: user, password: password}, {headers: {Accept: 'application/json'}})
             this.token = value.data as GetTokenResponse
             if (this.token.Token !== "") {
                 Cookies.set(this.key, JSON.stringify(this.token), {expires: 2})
@@ -251,7 +248,6 @@ export class authApiCore {
         }
     }
 
-
     async checkResp(method: string, uri: string, data?: any): Promise<any> {
         const reload = () => {
             alert("授权过期,需要重新登录")
@@ -266,36 +262,36 @@ export class authApiCore {
 
             switch (method) {
                 case "get":
-                    await axios.get(uri, this.config()).then((value) => {
+                    await Request.get(uri, this.config()).then((value) => {
                         output = value.data
                     }).catch((error) => {
                         status = error.response.status
                     })
                     break
                 case "post":
-                    await axios.post(uri, data, this.config()).then((value) => {
+                    await Request.post(uri, data, this.config()).then((value) => {
                         output = value.data
                     }).catch((error) => {
                         status = error.response.status
                     })
                     break
                 case "put":
-                    await axios.put(uri, data, this.config()).then((value) => {
+                    await Request.put(uri, data, this.config()).then((value) => {
                         output = value.data
                     }).catch((error) => {
                         status = error.response.status
                     })
                     break
                 case "delete":
-                    await axios.delete(uri, this.config()).then((value) => {
+                    await Request.delete(uri, this.config()).then((value) => {
                         output = value.data
                     }).catch((error) => {
                         status = error.response.status
                     })
                     break
             }
-            if (output === null ) {
-                if (status === 401){
+            if (output === null) {
+                if (status === 401) {
                     reload()
                 }
                 alert("存在未知错误1")
@@ -303,7 +299,6 @@ export class authApiCore {
             }
             return output
         } catch (e) {
-            console.log(e)
             if (status === 0) {
                 alert("存在未知错误2")
                 return
@@ -314,12 +309,10 @@ export class authApiCore {
         }
     }
 
-
     async GetPlayerScoreByContest(playerID: number, contestID: number): Promise<Score[]> {
         let uri = this.apiCore.uri + "/score/player/" + playerID + "/contest/" + contestID
         return await this.checkResp("get", uri)
     }
-
 
     async AddContest(req: CreateContestRequest) {
         let uri = this.apiCore.uri + "/contest"
@@ -360,7 +353,6 @@ export class authApiCore {
         return await this.checkResp("delete", uri)
     }
 
-
     async AddXLog(log: XLog) {
         let uri = this.apiCore.uri + "/x-log"
         return await this.checkResp("put", uri, log)
@@ -370,5 +362,7 @@ export class authApiCore {
         let uri = this.apiCore.uri + "/x-log/" + id
         return await this.checkResp("delete", uri)
     }
+
+
 }
 

@@ -139,7 +139,6 @@ export class SQ1CubeDrawerUtils {
     draw(ctx: CanvasRenderingContext2D, seq: string, width: number) {
         const [posit, mid] = this.genPositAndMid(seq)
         let drawCache = this.initDrawFaceCache()
-        console.log(posit, mid)
         for (let i = 0; i < 24; i++) {
             drawCache = this.drawFace(ctx, posit, width, i, drawCache)
         }

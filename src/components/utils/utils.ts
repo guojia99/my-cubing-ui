@@ -34,7 +34,6 @@ export function GetURLParams() {
 }
 
 export function IsSubPath(p: string) : boolean{
-    console.log(window.location.pathname, p)
     return window.location.pathname.startsWith(p)
 }
 

@@ -10,6 +10,7 @@ import {parseTimeToSeconds} from "./admin_utils";
 import {Once, WaitGroup} from "../../components/utils/async";
 import {CreateModal, ModalButton} from "../../components/utils/modal";
 import {CubeScoreTds} from "../../components/cube/components/cube_score_tabels";
+import {WarnToast} from "../../components/utils/alert";
 
 export const _playerSelectKey = "_player"
 export const _contestSelectKey = "_contest"
@@ -161,9 +162,7 @@ export class AdminScoreRender {
         PlayersMap: new Map<string, Player>(),
         Scores: null,
         DeleteScoreId: -1,
-        UpdateHandle: () => {
-            console.log("empty")
-        },
+        UpdateHandle: () => {},
     }
 
 
@@ -421,7 +420,7 @@ export class AdminScoreRender {
             event.target.value = match[0]
             return
         }
-        alert(event.target.value + "不符合格式")
+        WarnToast(event.target.value + "不符合格式")
         event.target.value = ""
     }
 
@@ -504,7 +503,7 @@ export class AdminScoreRender {
         // 其他参数
         const data = _getSelectData()
         if (data.player === null || data.contest === null || data.round === null) {
-            alert("请填玩家、比赛、轮次信息")
+            WarnToast("请填玩家、比赛、轮次信息")
             return
         }
 
@@ -513,7 +512,7 @@ export class AdminScoreRender {
         // 成绩
         const scores = this.getAllScores()
         if (scores.length !== CubeRouteNumber.get(pj)) {
-            alert("必须输入全部成绩")
+            WarnToast("必须输入全部成绩")
             return
         }
 
@@ -550,9 +549,9 @@ export class AdminScoreRender {
         }
 
         await AuthAPI.AddScore(req).then(value => {
-            alert("添加成功")
+            WarnToast("添加成功")
         }).catch(() => {
-            alert("添加失败")
+            WarnToast("添加失败")
         }).finally(() => {
             window.location.reload()
         })
@@ -679,7 +678,6 @@ export class AdminScoreRender {
 
             await AuthAPI.GetPlayerScoreByContest(Number(p.ID), Number(contest)).then(value => {
                 this.ctx.Scores = value
-                console.log(value)
                 this.ctx.UpdateHandle({})
             }).catch().finally(() => {
                 lastContest = contest
@@ -824,9 +822,9 @@ export class AdminScoreRender {
 
         const deleteScoreHandle = () => {
             AuthAPI.DeleteScore(this.ctx.DeleteScoreId).then(() => {
-                alert("删除成功")
+                WarnToast("删除成功")
             }).catch(() => {
-                alert("删除失败")
+                WarnToast("删除失败")
             }).finally(() => {
                 window.location.reload()
             })
