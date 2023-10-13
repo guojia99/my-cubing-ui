@@ -2,7 +2,8 @@ import './contest.css'
 
 import React, {JSX} from 'react';
 import {API} from "../../components/api/api";
-import {AllProjectList, Cubes, CubesCn} from "../../components/cube/cube";
+import {AllProjectList,  CubesCn} from "../../components/cube/cube";
+import {Cubes} from "../../components/cube/cube_map";
 import {GetLocationQueryParams, SetTitleName} from "../../components/utils/utils";
 import {
     Contest,

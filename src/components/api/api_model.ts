@@ -1,4 +1,4 @@
-import {Cubes} from "../cube/cube";
+import {Cubes} from "../cube/cube_map";
 
 
 export type Contest = {

@@ -1,7 +1,8 @@
 import React, {JSX} from 'react';
 import {API} from "../../components/api/api";
 import {GetBestByAllScoresResponse, GetBestScoreResponse, Score} from "../../components/api/api_model";
-import {AllProjectList, Cubes, CubesCn} from "../../components/cube/cube";
+import {AllProjectList, CubesCn} from "../../components/cube/cube";
+import {Cubes} from "../../components/cube/cube_map";
 import {GetCubeIcon} from "../../components/cube/icon/cube_icon";
 import {FormatTime} from "../../components/cube/components/cube_timeformat";
 import {Link} from "react-router-dom";

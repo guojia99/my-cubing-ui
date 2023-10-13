@@ -2,10 +2,11 @@ import './cube_score_tables.css'
 
 import {ContestRecord, Score} from "../../api/api_model";
 import {Link} from "react-router-dom";
-import {CubeRouteNumber, Cubes} from "../cube";
+import {CubeRouteNumber} from "../cube";
 import {FormatTime} from "./cube_timeformat";
 import {PR_And_GR_Record} from "./cube_record";
 import React, {JSX} from "react";
+import {Cubes} from "../cube_map";
 
 
 export function RecordsToMap(records: ContestRecord[]) {
@@ -146,7 +147,7 @@ export const CubeScoresTable = (pj: Cubes, Scores: Score[], records: ContestReco
     const recordMp = RecordsToMap(records)
 
     let handler = FiveResultCubeScoreTableFn
-    switch (CubeRouteNumber.get(pj)) {
+    switch (CubeRouteNumber(pj)) {
         case 1:
             handler = OneResultCubeScoreTableFn
             break
@@ -170,7 +171,7 @@ export const CubeScoreTds = (s: Score) => {
     if (s.Project === Cubes.Cube333MBF) {
         return (<td colSpan={5}>{FormatTime(s.R1, s.Project, false)} / {FormatTime(s.R2, s.Project, false)} ({FormatTime(s.R3, Cubes.Cube333, true)})</td>)
     }
-    const round = CubeRouteNumber.get(s.Project) as number
+    const round = CubeRouteNumber(s.Project)
     let tds = [
         <td>{FormatTime(s.R1, s.Project, false)}</td>,
     ]

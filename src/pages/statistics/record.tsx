@@ -5,10 +5,11 @@ import {GetRecordsResponse, Record as rc} from "../../components/api/api_model";
 import {Link} from "react-router-dom";
 import {PageNav, PageNavValue} from "../../components/utils/page";
 import {GetCubeIcon} from "../../components/cube/icon/cube_icon";
-import {Cubes, CubesCn} from "../../components/cube/cube";
+import {CubesCn} from "../../components/cube/cube";
 import {RecordType} from "../../components/cube/components/cube_score_tabels";
 import {FormatTime} from "../../components/cube/components/cube_timeformat";
 import {SetBackGround} from "../../components/utils/background";
+import {Cubes} from "../../components/cube/cube_map";
 
 class Record extends React.Component {
     state = {

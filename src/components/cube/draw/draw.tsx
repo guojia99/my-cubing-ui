@@ -1,20 +1,15 @@
 import {JSX} from "react";
-import {Cubes} from "../cube";
 import {DrawClockCubeImage} from "./draw_clock";
 import {DrawNumberCubeImage} from "./draw_cube";
 import {DrawMinx} from "./draw_minx";
 import {DrawPyCubeImage} from "./draw_py";
 import {DrawSkCubeImage} from "./draw_skewb";
 import {DrawSQ1Cube} from "./draw_sq1";
-
-const use = true
+import {Cubes} from "../cube_map";
 
 export const DrawByCubeImage = (id: string, cube: Cubes, imageWidth: number, seq: string): JSX.Element => {
-    if (!use) {
-        return <p>本功能开发中</p>
-    }
     if (seq === undefined || seq === "") {
-        return <p>no cube {cube} image</p>
+        return <p>{cube} 无打乱</p>
     }
 
     // todo 其他项目

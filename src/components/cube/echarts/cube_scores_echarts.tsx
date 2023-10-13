@@ -1,8 +1,9 @@
 import * as echarts from "echarts";
 import ReactEcharts from "echarts-for-react";
-import {Cubes, CubesCn} from "../cube";
+import {CubesCn} from "../cube";
 import {FormatTime} from "../components/cube_timeformat";
 import {Contest, Score} from "../../api/api_model";
+import {Cubes} from "../cube_map";
 
 type Format = echarts.EChartOption.Tooltip.Format;
 type EChartsOption = echarts.EChartOption;
@@ -28,7 +29,7 @@ export const ScoreChat = (v: ScoreChatValue) => {
 
 
         let b = v.scores[i].Best
-        if (b < -10000) {
+        if (b <= -10000) {
             b = NaN
         }
         single.push(b)
@@ -62,7 +63,7 @@ export const ScoreChat = (v: ScoreChatValue) => {
             lastValue = v.scores[idx - 1].Best
         }
 
-        if (lastValue <= -10000 || lastValue === undefined || isNaN(value)){
+        if (lastValue <= -10000 || lastValue === undefined || isNaN(value)) {
             return baseOut
         }
 

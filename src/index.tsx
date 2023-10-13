@@ -30,6 +30,7 @@ import ScrollToTopButton from "./components/utils/top_button";
 import Rule from "./pages/about/Rule";
 import RelativeSorPage from "./pages/statistics/RelativeSor";
 import {ToastContainer} from "react-toastify";
+import Projects from "./pages/about/Projects";
 
 $(() => {
     setInterval(() => {
@@ -54,6 +55,7 @@ root.render(
                     <ul className="dropdown-menu">
                         <li><NavLink className="dropdown-item" to="/about">关于</NavLink></li>
                         <li><NavLink className="dropdown-item" to="/rule">规则</NavLink></li>
+                        <li><NavLink className="dropdown-item" to="/projects">项目列表</NavLink></li>
                     </ul>
                 </li>
 
@@ -99,6 +101,7 @@ root.render(
                 <Route path="/statistics/interest" Component={() => {
                     return (<div>没开发</div>)
                 }}></Route> {/*趣味玩法*/}
+                <Route path="/projects" Component={Projects}></Route>
             </Routes>
         </BrowserRouter>
 

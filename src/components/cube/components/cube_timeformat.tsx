@@ -1,4 +1,5 @@
-import {Cubes} from "../cube";
+import {Cubes} from "../cube_map";
+
 
 export function FormatTime(result: number, pj: Cubes, isAvg: boolean) {
 

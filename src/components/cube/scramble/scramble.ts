@@ -1,4 +1,4 @@
-import {Cubes} from "../cube";
+import {Cubes} from "../cube_map";
 
 
 export const Scramble = (cube: Cubes): string =>{

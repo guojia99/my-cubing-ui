@@ -1,6 +1,7 @@
-import {AllProjectList, Cubes, CubesCn} from "../../components/cube/cube";
+// import {AllProjectList, CubesCn} from "../../components/cube/cube";
+import {Cubes} from "../../components/cube/cube_map";
 import {DrawByCubeImage} from "../../components/cube/draw/draw";
-import {GetCubeIcon} from "../../components/cube/icon/cube_icon";
+// import {GetCubeIcon} from "../../components/cube/icon/cube_icon";
 import {SetBackGround} from "../../components/utils/background";
 
 const Debug = () => {
@@ -10,13 +11,13 @@ const Debug = () => {
     // items.push(DrawByCubeImage("sk_xxx", Cubes.CubeSk, 25, "B' U' R' U L B U L'"))
     // items.push(DrawByCubeImage("sq1_xxx", Cubes.CubeSq1, 15, "(-3,-1)/ (0,3)/ / (-2,-2)/ (-3,-3)/ (3,0)/ (-3,0)/ (5,0)/ (0,-3)/ (0,-1)/ (-5,0)/ (3,-4)/ (2,-1)/ (-5,-2)"))
     // items.push(DrawByCubeImage("clock_xxx", Cubes.CubeClock, 15, "UR1+ DR4- DL0+ UL3+ U4- R4- D3+ L3- ALL1+ y2 U4+ R2+ D2+ L5+ ALL4- UR DR DL UL"))
-    const allPj = AllProjectList()
-    for (let i = 0; i < allPj.length; i++) {
-        items.push(
-            <div style={{fontSize: "40px"}}>
-                {CubesCn(allPj[i])}{GetCubeIcon(allPj[i])}
-            </div>)
-    }
+    // const allPj = AllProjectList()
+    // for (let i = 0; i < allPj.length; i++) {
+    //     items.push(
+    //         <div style={{fontSize: "40px"}}>
+    //             {CubesCn(allPj[i])}{GetCubeIcon(allPj[i])}
+    //         </div>)
+    // }
 
 
     items.push((<br/>))

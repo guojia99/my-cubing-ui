@@ -1,5 +1,6 @@
 import React, {JSX} from "react";
-import {Cubes, CubesCn} from "../../components/cube/cube";
+import {CubesCn} from "../../components/cube/cube";
+import {Cubes} from "../../components/cube/cube_map";
 import {GetCubeIcon} from "../../components/cube/icon/cube_icon";
 
 

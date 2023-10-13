@@ -1,5 +1,6 @@
 import './cube_icon.css'
-import {Cubes, CubesCn} from "../cube";
+import { CubesCn} from "../cube";
+import {Cubes} from "../cube_map";
 
 
 export const GetCubeIcon = (c: Cubes) => {
@@ -10,23 +11,6 @@ export const GetCubeIcon = (c: Cubes) => {
             data-toggle="tooltip"
             data-placement="top"
             title={CubesCn(c)}
-        >
-        </i>
-    )
-}
-
-
-export const GetCubeIconDebug = (name: string) => {
-    return (
-        <div style={{border: "solid 1px red"}}>
-            <button
-                className={"cubing-icon " + name}
-                data-toggle="tooltip"
-                data-placement="top"
-                title="name"
-            >
-            </button>
-            {name}
-        </div>
+        ></i>
     )
 }

@@ -1,5 +1,6 @@
 // 获取当前所有选择框的数据
-import {CubeRouteNumber, Cubes, CubesCn, WCAProjectList, XCubeOHProjectList, XCubeProjectList, XCubeRelaysList} from "../../components/cube/cube";
+import { CubeRouteNumber,  CubesCn} from "../../components/cube/cube";
+import {Cubes} from "../../components/cube/cube_map";
 import React, {JSX} from "react";
 import {AddScoreRequest, Contest, GetContestsResponse, Player, PlayersResponse, Score, ScorePenalty} from "../../components/api/api_model";
 import {GetLocationQueryParams, UpdateBrowserURL} from "../../components/utils/utils";
@@ -11,6 +12,7 @@ import {Once, WaitGroup} from "../../components/utils/async";
 import {CreateModal, ModalButton} from "../../components/utils/modal";
 import {CubeScoreTds} from "../../components/cube/components/cube_score_tabels";
 import {WarnToast} from "../../components/utils/alert";
+import {CubesAttributes, CubesAttributesList, SegmentationType, SegmentationTypeList} from "../../components/cube/cube_map";
 
 export const _playerSelectKey = "_player"
 export const _contestSelectKey = "_contest"
@@ -285,11 +287,6 @@ export class AdminScoreRender {
             cube = Cubes.Cube333
         }
 
-        let wcaItems: JSX.Element[] = []
-        let xCubeItems: JSX.Element[] = []
-        let xCubeOhItems: JSX.Element[] = []
-        let xCubeRelayItems: JSX.Element[] = []
-
         const data = _getSelectData()
         const pjCache = new Map<Cubes, string>()
         if (this.ctx.Contests !== null && data.contest !== null) {
@@ -301,33 +298,23 @@ export class AdminScoreRender {
             }
         }
 
-        const wca = WCAProjectList()
-        for (let i = 0; i < wca.length; i++) {
-            if (pjCache.get(wca[i]) !== undefined) {
-                wcaItems.push(<option value={wca[i]} selected={wca[i] === cube} key={"ContestSelect" + wca[i]}>{CubesCn(wca[i])}</option>)
+        let optgroup: JSX.Element[] = []
+        SegmentationTypeList().forEach((typ: SegmentationType, idx:number) => {
+            let group : JSX.Element[] = []
+            CubesAttributesList.forEach((att: CubesAttributes) => {
+                if (att.Segmentation !== typ || pjCache.get(att.Cubes) === undefined){
+                    return
+                }
+                group.push(
+                    <option value={att.Cubes} selected={att.Cubes === cube} key={"ContestSelect_" + att.Cubes}>{CubesCn(att.Cubes)}</option>
+                )
+            })
+            if (group.length === 0){
+                return
             }
-        }
+            optgroup.push(<optgroup key={"ContestSelect_" + idx} label={typ}>{group}</optgroup>)
+        })
 
-        const xCube = XCubeProjectList()
-        for (let i = 0; i < xCube.length; i++) {
-            if (pjCache.get(xCube[i]) !== undefined) {
-                xCubeItems.push(<option value={xCube[i]} selected={xCube[i] === cube} key={"ContestSelect" + xCube[i]}>{CubesCn(xCube[i])}</option>)
-            }
-        }
-
-        const xCubeOh = XCubeOHProjectList()
-        for (let i = 0; i < xCubeOh.length; i++) {
-            if (pjCache.get(xCubeOh[i]) !== undefined) {
-                xCubeOhItems.push(<option value={xCubeOh[i]} selected={xCubeOh[i] === cube} key={"ContestSelect" + xCubeOh[i]}>{CubesCn(xCubeOh[i])}</option>)
-            }
-        }
-
-        const xCubeRelay = XCubeRelaysList()
-        for (let i = 0; i < xCubeRelay.length; i++) {
-            if (pjCache.get(xCubeRelay[i]) !== undefined) {
-                xCubeRelayItems.push(<option value={xCubeRelay[i]} selected={xCubeRelay[i] === cube} key={"ContestSelect" + xCubeRelay[i]}>{CubesCn(xCubeRelay[i])}</option>)
-            }
-        }
 
         const updateHandle = () => {
             const data = _getSelectData()
@@ -343,10 +330,7 @@ export class AdminScoreRender {
 
         return (
             <select id={FormID_projectSelect} className="form-select" key="ContestSelect" onChange={updateHandle} onClick={updateHandle}>
-                <optgroup label="WCA">{wcaItems}</optgroup>
-                <optgroup label="趣味">{xCubeItems}</optgroup>
-                <optgroup label="趣味单手">{xCubeOhItems}</optgroup>
-                <optgroup label="趣味连拧">{xCubeRelayItems}</optgroup>
+                {optgroup}
             </select>
         )
     }
@@ -444,7 +428,7 @@ export class AdminScoreRender {
     private scoreInputList = () => {
         const selectData = _getSelectData()
         let scoreItems: JSX.Element[] = []
-        const round = CubeRouteNumber.get(selectData.project as Cubes) as number
+        const round = CubeRouteNumber(selectData.project as Cubes)
         for (let i = 0; i < round; i++) {
             scoreItems.push(this.scoreInputs(i + 1))
         }
@@ -511,7 +495,7 @@ export class AdminScoreRender {
 
         // 成绩
         const scores = this.getAllScores()
-        if (scores.length !== CubeRouteNumber.get(pj)) {
+        if (scores.length !== CubeRouteNumber(pj)) {
             WarnToast("必须输入全部成绩")
             return
         }
