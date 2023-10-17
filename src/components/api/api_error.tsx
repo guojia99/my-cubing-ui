@@ -10,6 +10,7 @@ export type  Error = {
 
 
 export const Request = axios.create();
+Request.defaults.timeout = 30000;
 
 Request.interceptors.response.use(
     (response: AxiosResponse) => {

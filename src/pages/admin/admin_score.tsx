@@ -1,5 +1,5 @@
 // 获取当前所有选择框的数据
-import { CubeRouteNumber,  CubesCn} from "../../components/cube/cube";
+import {CubeRouteNumber, CubesCn} from "../../components/cube/cube";
 import {Cubes} from "../../components/cube/cube_map";
 import React, {JSX} from "react";
 import {AddScoreRequest, Contest, GetContestsResponse, Player, PlayersResponse, Score, ScorePenalty} from "../../components/api/api_model";
@@ -8,10 +8,10 @@ import {GetCubeIcon} from "../../components/cube/icon/cube_icon";
 import {FormatTime} from "../../components/cube/components/cube_timeformat";
 import {API, AuthAPI} from "../../components/api/api";
 import {parseTimeToSeconds} from "./admin_utils";
-import {Once, WaitGroup} from "../../components/utils/async";
+import {Once} from "../../components/utils/async";
 import {CreateModal, ModalButton} from "../../components/utils/modal";
 import {CubeScoreTds} from "../../components/cube/components/cube_score_tabels";
-import {WarnToast} from "../../components/utils/alert";
+import {WaitToast, WarnToast} from "../../components/utils/alert";
 import {CubesAttributes, CubesAttributesList, SegmentationType, SegmentationTypeList} from "../../components/cube/cube_map";
 
 export const _playerSelectKey = "_player"
@@ -164,7 +164,8 @@ export class AdminScoreRender {
         PlayersMap: new Map<string, Player>(),
         Scores: null,
         DeleteScoreId: -1,
-        UpdateHandle: () => {},
+        UpdateHandle: () => {
+        },
     }
 
 
@@ -299,17 +300,17 @@ export class AdminScoreRender {
         }
 
         let optgroup: JSX.Element[] = []
-        SegmentationTypeList().forEach((typ: SegmentationType, idx:number) => {
-            let group : JSX.Element[] = []
+        SegmentationTypeList().forEach((typ: SegmentationType, idx: number) => {
+            let group: JSX.Element[] = []
             CubesAttributesList.forEach((att: CubesAttributes) => {
-                if (att.Segmentation !== typ || pjCache.get(att.Cubes) === undefined){
+                if (att.Segmentation !== typ || pjCache.get(att.Cubes) === undefined) {
                     return
                 }
                 group.push(
                     <option value={att.Cubes} selected={att.Cubes === cube} key={"ContestSelect_" + att.Cubes}>{CubesCn(att.Cubes)}</option>
                 )
             })
-            if (group.length === 0){
+            if (group.length === 0) {
                 return
             }
             optgroup.push(<optgroup key={"ContestSelect_" + idx} label={typ}>{group}</optgroup>)
@@ -817,73 +818,21 @@ export class AdminScoreRender {
     }
 
     private async loadAllPlayer() {
-        let players: PlayersResponse = {
-            Size: 0,
-            Count: 0,
-            Players: [],
-        }
+        await WaitToast(API.LoadAllPlayer().then((value) => {
+            this.ctx.Players = value[1] as PlayersResponse
+            for (let i = 0; i < this.ctx.Players.Size; i++) {
+                this.ctx.PlayersMap.set(this.ctx.Players.Players[i].Name, this.ctx.Players.Players[i])
+            }
 
-        await API.GetPlayers(1, 50).then(value => {
-            players = value
-            players.Size = players.Players.length
-        })
 
-        const wg = new WaitGroup()
-        let ps: number[] = []
-        for (let i = 1; i <= players.Count / 50; i++) {
-            ps.push(i + 1)
-            wg.add(1)
-        }
-        ps.forEach((value, index, array) => {
-            API.GetPlayers(value, 50).then(value => {
-                players.Players.push(...value.Players)
-                players.Size = players.Players.length
-            }).catch().finally(() => {
-                wg.done()
-            })
-        })
-
-        await wg.wait()
-        for (let i = 0; i < players.Size; i++) {
-            this.ctx.PlayersMap.set(players.Players[i].Name, players.Players[i])
-        }
-        this.ctx.Players = players
+        }), "等待加载玩家列表", "加载玩家成功", "加载玩家成功")
     }
 
     private async loadAllContest() {
-        let contests: GetContestsResponse = {
-            Contests: [],
-            Count: 0,
-            Size: 0
-        }
-
-        await API.GetContests(1, 50, "").then(value => {
-            contests = value
-            contests.Size = contests.Contests.length
-        })
-
-        const wg = new WaitGroup()
-        let ps: number[] = []
-        for (let i = 1; i <= contests.Count / 50; i++) {
-            ps.push(i + 1)
-            wg.add(1)
-        }
-
-        ps.forEach((value, index, array) => {
-            API.GetContests(value, 50, "").then(value => {
-                contests.Contests.push(...value.Contests)
-                contests.Size = contests.Contests.length
-            }).catch().finally(() => {
-                wg.done()
-            })
-        })
-
-        await wg.wait()
-
-        for (let i = 0; i < contests.Size; i++) {
-            this.ctx.ContestsMap.set(contests.Contests[i].ID, contests.Contests[i])
-        }
-        this.ctx.Contests = contests
+        await WaitToast(API.LoadAllContest().then((value) => {
+            this.ctx.ContestsMap = value[0] as Map<number, Contest>
+            this.ctx.Contests = value[1] as GetContestsResponse
+        }), "等待加载比赛列表", "加载比赛列表成功", "加载比赛列表失败")
     }
 
     private once = Once(() => {

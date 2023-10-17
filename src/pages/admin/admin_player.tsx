@@ -4,9 +4,9 @@ import {CreateModal, EmptyHandle, ModalButton} from "../../components/utils/moda
 import {API, AuthAPI} from "../../components/api/api";
 import {GetLocationQueryParams} from "../../components/utils/utils";
 import {PageNav, PageNavValue} from "../../components/utils/page";
-import {Once} from "../../components/utils/async";
+import {Once, Sleep} from "../../components/utils/async";
 import {callback} from "./admin_score";
-import {WarnToast} from "../../components/utils/alert";
+import {WaitToast, WarnToast} from "../../components/utils/alert";
 
 export type AdminPlayerDataCtx = {
     Players: PlayersResponse | null,
@@ -28,7 +28,8 @@ export class AdminPlayerRender {
         Players: null,
         DeleteID: -1,
         UpdateID: -1,
-        UpdateHandle: () => {}
+        UpdateHandle: () => {
+        }
     }
 
     private renderPlayerTable = () => {
@@ -40,9 +41,10 @@ export class AdminPlayerRender {
                 items.push(
                     <tr key={"renderPlayerTable_item_player_" + p.ID}>
                         <td>{p.ID}</td>
-                        <td>{p.WcaID}</td>
                         <td>{p.Name}</td>
+                        <td>{p.WcaID}</td>
                         <td>{p.ActualName}</td>
+                        <td>{p.QQ}</td>
                         <td>{ModalButton("删除", DeleteTarget, () => {
                             this.ctx.DeleteID = p.ID
                         }, "btn-danger")}</td>
@@ -59,9 +61,10 @@ export class AdminPlayerRender {
                 <thead>
                 <tr>
                     <th colSpan={1}>ID</th>
-                    <th colSpan={1}>WCA ID</th>
                     <th colSpan={1}>选手</th>
+                    <th colSpan={1}>WCA ID</th>
                     <th colSpan={1}>真实姓名</th>
+                    <th colSpan={1}>QQ</th>
                     <th colSpan={1}>删除</th>
                     <th colSpan={1}>修改</th>
                 </tr>
@@ -76,7 +79,6 @@ export class AdminPlayerRender {
             if (this.ctx.Players === null) {
                 return <div>是否删除</div>
             }
-
             let p = this.ctx.Players.Players[0]
             for (let i = 0; i < this.ctx.Players.Players.length; i++) {
                 if (this.ctx.Players.Players[i].ID === this.ctx.DeleteID) {
@@ -92,11 +94,8 @@ export class AdminPlayerRender {
         }
 
         const deletePlayerHandle = async () => {
-            await AuthAPI.DeletePlayer(this.ctx.DeleteID).then(() => {
-                WarnToast("删除成功")
-            }).catch(() => {
-                WarnToast("删除失败")
-            }).finally(() => {
+            await WaitToast(AuthAPI.DeletePlayer(this.ctx.DeleteID), "删除中", "删除成功", "删除失败")
+            await Sleep(500).then(() => {
                 window.location.reload()
             })
         }
@@ -110,12 +109,13 @@ export class AdminPlayerRender {
         const inputActualNameID = key + "Player_ActualName"
         const inputWcaIDID = key + "Player_WcaID"
         // const inputTitleID = key + "Player_Title"
-
+        const inputQQ = key + "Player_QQ"
 
         const name = document.getElementById(inputNameID) as HTMLInputElement
         const actualName = document.getElementById(inputActualNameID) as HTMLInputElement
         const wcaId = document.getElementById(inputWcaIDID) as HTMLInputElement
         // const title = document.getElementById(inputTitleID) as HTMLInputElement
+        const qq = document.getElementById(inputQQ) as HTMLInputElement
 
         if (name.value === "") {
             WarnToast("无法输入空名称")
@@ -129,6 +129,7 @@ export class AdminPlayerRender {
             WcaID: wcaId.value,
             ActualName: actualName.value,
             TitlesVal: [],
+            QQ: qq.value,
             ContestNumber: 0,
             RecoveryNumber: 0,
             ValidRecoveryNumber: 0,
@@ -142,6 +143,7 @@ export class AdminPlayerRender {
         const inputActualNameID = "updatePlayer_ActualName"
         const inputWcaIDID = "updatePlayer_WcaID"
         // const inputTitleID = "updatePlayer_Title"
+        const inputQQ = "updatePlayer_QQ"
 
         const bodyHandle = () => {
             if (this.ctx.Players === null) {
@@ -171,17 +173,20 @@ export class AdminPlayerRender {
                         <input type="text" className="form-control" id={inputWcaIDID} defaultValue={p.WcaID ? p.WcaID : ""}
                                key={"update_inputs" + inputWcaIDID + "_input" + this.ctx.UpdateID}/>
                     </div>
+
+                    <div className="mb-3" key={"update_inputs" + inputQQ + "_" + this.ctx.UpdateID}>
+                        <label htmlFor={inputQQ} className="form-label">QQ: ({p.QQ})</label>
+                        <input type="text" className="form-control" id={inputQQ} defaultValue={p.QQ ? p.QQ : ""}
+                               key={"update_inputs" + inputQQ + "_input" + this.ctx.UpdateID}/>
+                    </div>
                 </div>
             )
         }
 
         const updatePlayerHandle = async () => {
             const f = async (req: Player) => {
-                await AuthAPI.UpdatePlayer(this.ctx.UpdateID, req).then(() => {
-                    WarnToast("更新成功")
-                }).catch(() => {
-                    WarnToast("更新失败")
-                }).finally(() => {
+                await WaitToast(AuthAPI.UpdatePlayer(this.ctx.UpdateID, req), "更新中", "更新成功", "更新失败")
+                await Sleep(500).then(() => {
                     window.location.reload()
                 })
             }
@@ -196,6 +201,7 @@ export class AdminPlayerRender {
         const inputActualNameID = "createPlayer_ActualName"
         const inputWcaIDID = "createPlayer_WcaID"
         // const inputTitleID = "createPlayer_Title"
+        const inputQQ = "createPlayer_QQ"
 
         const bodyHandle = () => {
             return (
@@ -212,17 +218,18 @@ export class AdminPlayerRender {
                         <label htmlFor={inputWcaIDID} className="form-label">WcaID</label>
                         <input type="text" className="form-control" id={inputWcaIDID}/>
                     </div>
+                    <div className="mb-3">
+                        <label htmlFor={inputQQ} className="form-label">QQ</label>
+                        <input type="text" className="form-control" id={inputQQ}/>
+                    </div>
                 </div>
             )
         }
 
         const createPlayerHandle = () => {
-            const f = (req: Player) => {
-                AuthAPI.AddPlayer(req).then(() => {
-                    WarnToast("添加成功")
-                }).catch(() => {
-                    WarnToast("添加失败")
-                }).finally(() => {
+            const f = async (req: Player) => {
+                await WaitToast(AuthAPI.AddPlayer(req), "添加中", "添加成功", "添加失败")
+                await Sleep(500).then(() => {
                     window.location.reload()
                 })
             }
@@ -263,7 +270,7 @@ export class AdminPlayerRender {
 
     init(callback: callback) {
         this.ctx.UpdateHandle = callback
-        this.once()
+        this.once().then()
     }
 
     render() {

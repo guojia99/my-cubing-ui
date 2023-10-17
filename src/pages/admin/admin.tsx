@@ -34,6 +34,10 @@ class Admin extends React.Component {
     }
 
     render() {
+        if (!AuthAPI.IsAuth()){
+            return <div>等待登录</div>
+        }
+
         const tabs: TabNavsPage[] = [
             {
                 Id: "score",

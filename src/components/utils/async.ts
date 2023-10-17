@@ -43,7 +43,7 @@ export const Sleep = (ms: number) => {
 
 export function Once(fn: () => void) {
     let toggle = false
-    return  () => {
+    return async () => {
         if (toggle) {
             return;
         }

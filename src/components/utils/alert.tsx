@@ -45,7 +45,7 @@ export const WaitToast = async (
         },
         {
             position: "top-right",
-            autoClose: 30000,
+            autoClose: 3000,
             hideProgressBar: false,
             closeOnClick: false,
             pauseOnHover: true,

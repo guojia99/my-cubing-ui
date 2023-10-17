@@ -14,7 +14,6 @@ async function auth() {
             window.location.href = "/xadmin"
             return
         }
-        alert("帐号密码错误")
         password.value = ""
     })
 }

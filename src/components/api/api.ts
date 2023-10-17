@@ -1,4 +1,5 @@
-import {apiCore, authApiCore} from "./api_core";
+import {apiCore} from "./api_core";
+import {authApiCore} from "./api_auth";
 
 function getAPIUrl() {
     const hostname = window.location.hostname;

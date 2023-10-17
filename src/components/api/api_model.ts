@@ -29,6 +29,7 @@ export type Player = {
     Name: string;
     WcaID: string | null;
     ActualName: string | null;
+    QQ: string,
     TitlesVal: string[];
     ContestNumber: number; // 比赛次数
     RecoveryNumber: number; // 还原次数
@@ -153,7 +154,6 @@ export type GetBestScoreResponse = {
     BestAvg: any; // Map<Cubes, Score>
 }
 
-
 export type GetContestSorResponse = {
     Single: any; // map[key][]SorScore
     Avg: any; // map[key][]SorScore
@@ -277,3 +277,29 @@ export type RelativeSor = {
 export type GetRelativeSor = any // map[key][]RelativeSor
 export type GetPlayerRelativeSor = any // map[key]RelativeSor
 export type GetAvgRelativeSor = any // map[key]RelativeSor
+
+
+export type PreScore = Score & {
+    Recorder: string, // 记录人
+    Processor: string, // 处理人
+    Finish: boolean, // 是否已处理
+    FinishDetail: string, // 处理结果
+    Source: string, // 来源
+    RoundName: string, // 轮次名
+    ContestName: string, // 比赛名
+}
+export type GetPreScores = {
+    Size: number,
+    Count: number,
+    Scores: PreScore[],
+}
+
+export type NeglectPreScoresRequest = {
+    ID: number,
+    Processor: string
+}
+
+export type RecordPreScoresRequest = {
+    ID: number,
+    Processor: string
+}

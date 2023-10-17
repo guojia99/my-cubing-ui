@@ -11,6 +11,7 @@ import {Once, Sleep} from "../../components/utils/async";
 import {GetLocationQueryParams} from "../../components/utils/utils";
 import {PageNav, PageNavValue} from "../../components/utils/page";
 import {WaitToast, WarnToast} from "../../components/utils/alert";
+import {CubesAttributesList, SegmentationType, SegmentationTypeList} from "../../components/cube/cube_map";
 
 type AdminContestDataCtx = {
     Contests: GetContestsResponse | null,
@@ -24,10 +25,11 @@ const endContestTarget = "end_contest"
 
 export class AdminContestRender {
 
-    ctx :AdminContestDataCtx = {
+    ctx: AdminContestDataCtx = {
         Contests: null,
         EndContestID: -1,
-        UpdateHandle: () => {}
+        UpdateHandle: () => {
+        }
     }
 
     private renderContestList = () => {
@@ -91,7 +93,7 @@ export class AdminContestRender {
                 (<p>结束比赛成功</p>),
                 (<p>结束比赛失败</p>),
             )
-            Sleep(1000).then(() => {
+            await Sleep(1000).then(() => {
                 window.location.reload()
             })
         }
@@ -99,8 +101,8 @@ export class AdminContestRender {
         return CreateModal("结束", bodyHandle, endContestTarget, endContestHandle)
     }
 
+    // 创建弹窗
     private GetCreateContestModal = () => {
-
 
         const inputNameID = "create_contest_inputNameID"
         const inputDescriptionID = "create_contest_inputDescriptionID"
@@ -108,11 +110,8 @@ export class AdminContestRender {
 
         const roundKeyRoundNumber = "round_number_"
         const roundKeyRoundEnable = "open_pj_"
-        const roundKeyRoundAutoUpsets = "auto_upsets_"
 
         const bodyHandle = () => {
-
-
             let items: JSX.Element[] = []
 
             const allPj = AllProjectList()
@@ -120,7 +119,12 @@ export class AdminContestRender {
                 const pj = allPj[i]
                 items.push(
                     <tr key={"create_contest_pj_item_" + pj}>
-                        <td>{GetCubeIcon(pj)} {CubesCn(pj)}</td>
+                        <td>
+                            <div className="form-check form-switch">
+                                <input className="form-check-input" type="checkbox" role="switch" id={roundKeyRoundEnable + pj} defaultChecked={true}/>
+                                <label className="form-check-label" htmlFor={roundKeyRoundEnable + pj}>  {GetCubeIcon(pj)} {CubesCn(pj)}</label>
+                            </div>
+                        </td>
                         <td>
                             <div>
                                 <select className="form-select" id={roundKeyRoundNumber + pj} defaultValue="1">
@@ -130,15 +134,56 @@ export class AdminContestRender {
                                 </select>
                             </div>
                         </td>
-                        <td>
-                            <input className="form-check-input" type="checkbox" id={roundKeyRoundEnable + pj} defaultChecked={true}/>
-                        </td>
-                        <td>
-                            <input className="form-check-input" type="checkbox" id={roundKeyRoundAutoUpsets + pj}/>
-                        </td>
                     </tr>
                 )
             }
+
+
+            // 全选
+            let checkBoxList = []
+
+            // wca项目
+            const SegmentationTypeID = "GetCreateContestModal_select_by_type"
+            SegmentationTypeList().forEach((k: SegmentationType, v: number) => {
+                const id = SegmentationTypeID + k
+                checkBoxList.push(<div className="form-check form-switch form-check-inline" key={id}>
+                    <input className="form-check-input" type="checkbox" id={id} role="switch" defaultChecked={true} onChange={() => {
+                        const check = document.getElementById(id) as HTMLInputElement
+                        for (let i = 0; i < CubesAttributesList.length; i++) {
+                            const pj = CubesAttributesList[i]
+                            if (pj.Segmentation !== k) {
+                                continue
+                            }
+                            const enable = document.getElementById(roundKeyRoundEnable + pj.Cubes) as HTMLInputElement
+                            if (enable === null) {
+                                continue
+                            }
+                            enable.checked = check.checked
+                        }
+                    }}/>
+                    <label className="form-check-label" htmlFor={id}>{k}</label>
+                </div>)
+            })
+
+
+            // 全选
+            const checkAllBoxID = "GetCreateContestModal_select_all_pj"
+            checkBoxList.push(<div className="form-check form-switch form-check-inline" key={checkAllBoxID}>
+                <input className="form-check-input" type="checkbox" id={checkAllBoxID} role="switch" defaultChecked={true} onChange={() => {
+                    const check = document.getElementById(checkAllBoxID) as HTMLInputElement
+                    for (let i = 0; i < allPj.length; i++) {
+                        const pj = allPj[i]
+                        const enable = document.getElementById(roundKeyRoundEnable + pj) as HTMLInputElement
+                        enable.checked = check.checked
+                    }
+                    SegmentationTypeList().forEach((k: SegmentationType, v: number) => {
+                        const id = SegmentationTypeID + k
+                        const enable = document.getElementById(id) as HTMLInputElement
+                        enable.checked = check.checked
+                    })
+                }}/>
+                <label className="form-check-label" htmlFor={checkAllBoxID}>全选</label>
+            </div>)
 
 
             return (
@@ -167,11 +212,12 @@ export class AdminContestRender {
                             <tr>
                                 <th scope="col">项目</th>
                                 <th scope="col">轮次</th>
-                                <th scope="col">是否开设</th>
-                                <th scope="col">自动打乱(暂不支持)</th>
                             </tr>
                             </thead>
                             <tbody>
+                            <tr>
+                                <th colSpan={2}>{checkBoxList}</th>
+                            </tr>
                             {items}
                             </tbody>
                         </table>
@@ -189,7 +235,7 @@ export class AdminContestRender {
             //                 </div>
         }
 
-        const  createContestHandle = async () => {
+        const createContestHandle = async () => {
             const rounds: CreateContestRequestRound[] = []
             const roundKeyMap1: Map<number, string> = new Map([
                 [0, "单轮赛"]
@@ -296,8 +342,7 @@ export class AdminContestRender {
         return PageNav(p)
     }
 
-
-    private loadContestData(){
+    private loadContestData() {
         const query = GetLocationQueryParams()
         const page = isNaN(Number(query['contest_page'])) ? 1 : Number(query['contest_page'])
         API.GetContests(page, 50, "").then(value => {

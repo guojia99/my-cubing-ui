@@ -1,5 +1,3 @@
-import Cookies from 'js-cookie';
-
 import {
     ContestPodiums,
     ContestRecord,
@@ -9,16 +7,12 @@ import {
     GetContestsResponse,
     GetPlayerAllScoreResponse,
     GetPlayerRecord,
-    GetTokenResponse,
     Player,
     PlayerBestScoreResponse,
     PlayersResponse,
     Podiums,
-    Score,
     GetRecordsResponse,
     BestSorReportResponse,
-    AddScoreRequest,
-    CreateContestRequest,
     GetBestByAllScoresResponse,
     XLog,
     PlayerSorResponse,
@@ -30,6 +24,8 @@ import {
     GetPlayerNemesisResponse,
 } from './api_model';
 import {Request} from "./api_error";
+import {API} from "./api";
+import {WaitGroup} from "../utils/async";
 
 
 // todo 异常判断
@@ -183,186 +179,80 @@ export class apiCore {
         const result = await Request.get(uri, {headers: {Accept: 'application/json'}})
         return result.data
     }
+
+
+    async LoadAllContest() {
+        let contests: GetContestsResponse = {
+            Contests: [],
+            Count: 0,
+            Size: 0
+        }
+
+        await API.GetContests(1, 50, "").then(value => {
+            contests = value
+            contests.Size = contests.Contests.length
+        })
+
+        const wg = new WaitGroup()
+        let ps: number[] = []
+        for (let i = 1; i <= contests.Count / 50; i++) {
+            ps.push(i + 1)
+            wg.add(1)
+        }
+
+        ps.forEach((value, index, array) => {
+            API.GetContests(value, 50, "").then(value => {
+                contests.Contests.push(...value.Contests)
+                contests.Size = contests.Contests.length
+            }).catch().finally(() => {
+                wg.done()
+            })
+        })
+
+        await wg.wait()
+
+        const ContestsMap = new Map<number, Contest>()
+        for (let i = 0; i < contests.Size; i++) {
+            ContestsMap.set(contests.Contests[i].ID, contests.Contests[i])
+        }
+        return [ContestsMap, contests]
+    }
+
+    async LoadAllPlayer() {
+        let players: PlayersResponse = {
+            Size: 0,
+            Count: 0,
+            Players: [],
+        }
+
+        await API.GetPlayers(1, 50).then(value => {
+            players = value
+            players.Size = players.Players.length
+        })
+
+        const wg = new WaitGroup()
+        let ps: number[] = []
+        for (let i = 1; i <= players.Count / 50; i++) {
+            ps.push(i + 1)
+            wg.add(1)
+        }
+        ps.forEach((value, index, array) => {
+            API.GetPlayers(value, 50).then(value => {
+                players.Players.push(...value.Players)
+                players.Size = players.Players.length
+            }).catch().finally(() => {
+                wg.done()
+            })
+        })
+
+        await wg.wait()
+
+        const playerMap = new Map<number, Player>()
+        for (let i = 0; i < players.Size; i++) {
+            playerMap.set(players.Players[i].ID, players.Players[i])
+        }
+        return [playerMap, players]
+    }
 }
 
-
-function getCurrentTimestampInSeconds(): number {
-    const currentTimeInMilliseconds = Date.now();
-    return Math.floor(currentTimeInMilliseconds / 1000);
-}
-
-export class authApiCore {
-    key = "Token"
-
-    apiCore: apiCore;
-    token: GetTokenResponse = {
-        Ts: 0,
-        Token: ""
-    };
-
-    constructor(core: apiCore) {
-        this.apiCore = core
-    }
-
-    async GetToken(user: string, password: string): Promise<GetTokenResponse> {
-        try {
-            let uri = this.apiCore.uri + "/auth/token"
-            const value = await Request.post(uri, {user_name: user, password: password}, {headers: {Accept: 'application/json'}})
-            this.token = value.data as GetTokenResponse
-            if (this.token.Token !== "") {
-                Cookies.set(this.key, JSON.stringify(this.token), {expires: 2})
-            }
-            return this.token
-        } catch (error) {
-            return this.token
-        }
-    }
-
-    private updateByCache() {
-        const cache = Cookies.get(this.key)
-        if (cache !== null && typeof cache === "string" && cache !== "") {
-            this.token = JSON.parse(cache)
-        }
-    }
-
-    IsAuth(): boolean {
-        this.updateByCache()
-        const timestamp: number = getCurrentTimestampInSeconds()
-        const tk = this.token as GetTokenResponse
-        return tk.Token !== "" && tk.Ts > timestamp
-    }
-
-    DeleteToken() {
-        this.token.Token = ""
-        this.token.Ts = 0
-        Cookies.remove(this.key)
-    }
-
-    config() {
-        return {
-            method: "GET",
-            headers: {
-                Accept: 'application/json',
-                Authorization: this.token.Token,
-            },
-        }
-    }
-
-    async checkResp(method: string, uri: string, data?: any): Promise<any> {
-        const reload = () => {
-            alert("授权过期,需要重新登录")
-            this.DeleteToken()
-            window.location.href = "/xauth"
-            return
-        }
-
-        let status = 0
-        let output = null
-        try {
-
-            switch (method) {
-                case "get":
-                    await Request.get(uri, this.config()).then((value) => {
-                        output = value.data
-                    }).catch((error) => {
-                        status = error.response.status
-                    })
-                    break
-                case "post":
-                    await Request.post(uri, data, this.config()).then((value) => {
-                        output = value.data
-                    }).catch((error) => {
-                        status = error.response.status
-                    })
-                    break
-                case "put":
-                    await Request.put(uri, data, this.config()).then((value) => {
-                        output = value.data
-                    }).catch((error) => {
-                        status = error.response.status
-                    })
-                    break
-                case "delete":
-                    await Request.delete(uri, this.config()).then((value) => {
-                        output = value.data
-                    }).catch((error) => {
-                        status = error.response.status
-                    })
-                    break
-            }
-            if (output === null) {
-                if (status === 401) {
-                    reload()
-                }
-                alert("存在未知错误1")
-                return {}
-            }
-            return output
-        } catch (e) {
-            if (status === 0) {
-                alert("存在未知错误2")
-                return
-            }
-            if (status === 401) {
-                reload()
-            }
-        }
-    }
-
-    async GetPlayerScoreByContest(playerID: number, contestID: number): Promise<Score[]> {
-        let uri = this.apiCore.uri + "/score/player/" + playerID + "/contest/" + contestID
-        return await this.checkResp("get", uri)
-    }
-
-    async AddContest(req: CreateContestRequest) {
-        let uri = this.apiCore.uri + "/contest"
-        return await this.checkResp("post", uri, req)
-    }
-
-    async DeleteContest() {
-    }
-
-    async EndContest(id: number) {
-        let uri = this.apiCore.uri + "/score/end_contest"
-        return await this.checkResp("put", uri, {ContestID: id})
-    }
-
-    async AddPlayer(req: Player): Promise<void> {
-        let uri = this.apiCore.uri + "/player"
-        return await this.checkResp("post", uri, req)
-    }
-
-    async UpdatePlayer(playerID: number, req: Player): Promise<void> {
-        req.ID = playerID
-        let uri = this.apiCore.uri + "/player"
-        return await this.checkResp("put", uri, req)
-    }
-
-    async DeletePlayer(playerID: number): Promise<void> {
-        let uri = this.apiCore.uri + "/player/" + playerID
-        return await this.checkResp("delete", uri)
-    }
-
-    async AddScore(req: AddScoreRequest): Promise<void> {
-        let uri = this.apiCore.uri + "/score"
-        return await this.checkResp("post", uri, req)
-    }
-
-    async DeleteScore(scoreID: number) {
-        let uri = this.apiCore.uri + "/score/" + scoreID
-        return await this.checkResp("delete", uri)
-    }
-
-    async AddXLog(log: XLog) {
-        let uri = this.apiCore.uri + "/x-log"
-        return await this.checkResp("put", uri, log)
-    }
-
-    async DeleteXLog(id: number) {
-        let uri = this.apiCore.uri + "/x-log/" + id
-        return await this.checkResp("delete", uri)
-    }
-
-
-}
 
