@@ -253,7 +253,7 @@
 }
 
 .cubing-icon.cubing-icon-sudoku_very_easy:before {
-
+    content: "\ea50" !important;
 }
 
 .cubing-icon.cubing-icon-sudoku_easy:before {
@@ -281,7 +281,7 @@
 }
 
 .cubing-icon.cubing-icon-15puzzle:before {
-
+    content: "\ea4f" !important;
 }
 
 .cubing-icon.cubing-icon-24puzzle:before {
