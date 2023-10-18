@@ -8,30 +8,30 @@ import 'react-toastify/dist/ReactToastify.css';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import {BrowserRouter, Link, NavLink, Route, Routes} from "react-router-dom";
+import ScrollToTopButton from "./components/utils/top_button";
+import {ToastContainer} from "react-toastify";
+
 
 
 // page
-import Auth from "./pages/admin/auth";
-import Home from "./pages/home/Home";
-import About from "./pages/about/About";
-
-import Players from "./pages/players/Players";
-import Admin from "./pages/admin/admin";
-import Contests from "./pages/contests/Contests";
-import ContestPage from "./pages/contest/Contest";
-import Debug from "./pages/debug/debug";
-import PlayerPage from "./pages/player/Player";
-
-import Record from "./pages/statistics/record";
-import Best from "./pages/statistics/Best";
-import Sor from "./pages/statistics/Sor";
-import PodiumsPage from "./pages/statistics/podiums";
-import ScrollToTopButton from "./components/utils/top_button";
-import Rule from "./pages/about/Rule";
-import RelativeSorPage from "./pages/statistics/RelativeSor";
-import {ToastContainer} from "react-toastify";
-import Projects from "./pages/about/Projects";
-
+const Home = React.lazy(() => import('./pages/home/Home'))
+const Debug = React.lazy(() => import('./pages/debug/debug'))
+const Auth = React.lazy(() => import('./pages/admin/auth'))
+const Admin = React.lazy(() => import('./pages/admin/admin'))
+const About = React.lazy(() => import('./pages/about/About'))
+const Players = React.lazy(() => import('./pages/players/Players'))
+const Contests = React.lazy(() => import('./pages/contests/Contests'))
+const ContestPage = React.lazy(() => import('./pages/contest/Contest'))
+const PlayerPage = React.lazy(() => import('./pages/player/Player'))
+const Record = React.lazy(() => import('./pages/statistics/record'))
+const Best = React.lazy(() => import('./pages/statistics/Best'))
+const Sor = React.lazy(() => import('./pages/statistics/Sor'))
+const PodiumsPage = React.lazy(() => import('./pages/statistics/podiums'))
+const Rule = React.lazy(() => import('./pages/about/Rule'))
+const RelativeSorPage = React.lazy(() => import('./pages/statistics/RelativeSor'))
+const Projects = React.lazy(() => import('./pages/about/Projects'))
+const Sudoku = React.lazy(() => import('./games/sudoku/Sudoku'))
+// main
 $(() => {
     setInterval(() => {
         $('i').tooltip().show()
@@ -45,7 +45,7 @@ const root = ReactDOM.createRoot(
 root.render(
     <div>
         <div>
-            <ToastContainer />
+            <ToastContainer/>
         </div>
         <BrowserRouter>
             <ul className="nav nav-underline" style={{marginBottom: '20px'}}>
@@ -59,12 +59,16 @@ root.render(
                     </ul>
                 </li>
 
-                <li className="nav-item"><NavLink className="nav-link" to="/contests">比赛</NavLink></li>
-                <li className="nav-item"><NavLink className="nav-link" to="/players">玩家</NavLink></li>
+                <li className="nav-item dropdown">
+                    <Link to="#" className="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false">列表</Link>
+                    <ul className="dropdown-menu">
+                        <li><NavLink className="dropdown-item" to="/contests">比赛</NavLink></li>
+                        <li><NavLink className="dropdown-item" to="/players">玩家</NavLink></li>
+                    </ul>
+                </li>
 
                 <li className="nav-item dropdown">
                     <Link to="#" className="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false">统计</Link>
-                    {/*<a className="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" href="#" aria-expanded="false">统计</a>*/}
                     <ul className="dropdown-menu">
                         <li><NavLink className="dropdown-item" to="/statistics/record">纪录</NavLink></li>
                         <li><NavLink className="dropdown-item" to="/statistics/sor">Sor排位</NavLink></li>
@@ -74,37 +78,50 @@ root.render(
                         <li><NavLink className="dropdown-item" to="/statistics/interest">趣味玩法</NavLink></li>
                     </ul>
                 </li>
+
+                <li className="nav-item dropdown">
+                    <Link to="#" className="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false">游戏</Link>
+                    <ul className="dropdown-menu">
+                        <li><NavLink className="dropdown-item" to="/game/sudoku">比赛</NavLink></li>
+                    </ul>
+                </li>
             </ul>
-            <Routes>
-                <Route path="/" Component={Home}/>
-                <Route path="/about" Component={About}/> {/*关于*/}
-                <Route path="/rule" Component={Rule}/> {/*规则*/}
 
-                {/*管理员*/}
-                <Route path="/xadmin" Component={Admin}/>
-                <Route path="/xauth" Component={Auth}/>
-                <Route path="/debug" Component={Debug}/>
+            <React.Suspense fallback={<div>Loading...</div>}>
+                <Routes>
+                    <Route path="/" Component={Home}/>
+                    <Route path="/about" Component={About}/> {/*关于*/}
+                    <Route path="/rule" Component={Rule}/> {/*规则*/}
+
+                    {/*管理员*/}
+                    <Route path="/xadmin" Component={Admin}/>
+                    <Route path="/xauth" Component={Auth}/>
+                    <Route path="/debug" Component={Debug}/>
 
 
-                {/*比赛*/}
-                <Route path="/contest" Component={ContestPage}/> {/*比赛*/}
-                <Route path="/contests" Component={Contests}/>{/*比赛列表*/}
-                <Route path="/player" Component={PlayerPage}/>{/*玩家*/}
-                <Route path="/players" Component={Players}/>{/*玩家列表*/}
+                    {/*比赛*/}
+                    <Route path="/contest" Component={ContestPage}/> {/*比赛*/}
+                    <Route path="/contests" Component={Contests}/>{/*比赛列表*/}
+                    <Route path="/player" Component={PlayerPage}/>{/*玩家*/}
+                    <Route path="/players" Component={Players}/>{/*玩家列表*/}
 
-                {/*统计*/}
-                <Route path="/statistics/best" Component={Best}/> {/*最佳成绩汇总*/}
-                <Route path="/statistics/sor" Component={Sor}/> {/*最佳成绩汇总*/}
-                <Route path="/statistics/relative_sor" Component={RelativeSorPage}/> {/*兔兔版本成绩*/}
-                <Route path="/statistics/record" Component={Record}/> {/*纪录*/}
-                <Route path="/statistics/podiums" Component={PodiumsPage}/> {/*奖牌榜单*/}
-                <Route path="/statistics/interest" Component={() => {
-                    return (<div>没开发</div>)
-                }}></Route> {/*趣味玩法*/}
-                <Route path="/projects" Component={Projects}></Route>
-            </Routes>
+                    {/*统计*/}
+                    <Route path="/statistics/best" Component={Best}/> {/*最佳成绩汇总*/}
+                    <Route path="/statistics/sor" Component={Sor}/> {/*最佳成绩汇总*/}
+                    <Route path="/statistics/relative_sor" Component={RelativeSorPage}/> {/*兔兔版本成绩*/}
+                    <Route path="/statistics/record" Component={Record}/> {/*纪录*/}
+                    <Route path="/statistics/podiums" Component={PodiumsPage}/> {/*奖牌榜单*/}
+                    <Route path="/statistics/interest" Component={() => {
+                        return (<div>没开发</div>)
+                    }}></Route> {/*趣味玩法*/}
+                    <Route path="/projects" Component={Projects}></Route>
+
+
+                    {/*游戏*/}
+                    <Route path="/game/sudoku" Component={Sudoku}/> {/*数独*/}
+                </Routes>
+            </React.Suspense>
         </BrowserRouter>
-
         <ScrollToTopButton/>
 
     </div>
