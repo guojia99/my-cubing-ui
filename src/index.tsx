@@ -82,7 +82,7 @@ root.render(
                 <li className="nav-item dropdown">
                     <Link to="#" className="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false">游戏</Link>
                     <ul className="dropdown-menu">
-                        <li><NavLink className="dropdown-item" to="/game/sudoku">比赛</NavLink></li>
+                        <li><NavLink className="dropdown-item" to="/game/sudoku">数独</NavLink></li>
                     </ul>
                 </li>
             </ul>
