@@ -1,5 +1,5 @@
 import { Rotate, Transform} from "./utils";
-import React from "react";
+import React, {JSX} from "react";
 export class ClockCubeDrawerUtils {
 
     private colors = [
@@ -167,4 +167,15 @@ export const DrawClockCubeImage = (id: string, imageWidth: number, seq: string) 
     return (
         <img src={canvas.toDataURL()} alt={id + ".jpeg"} id={id} key={id}/>
     )
+}
+
+export const DrawClockCubeImages = (id: string, size: number, imageWidth: number, seq: string[]): JSX.Element[] => {
+    let items: JSX.Element[] = []
+    if (!seq) {
+        return items
+    }
+    for (let i = 0; i < seq.length; i++) {
+        items.push(DrawClockCubeImage(id + i, imageWidth, seq[i]))
+    }
+    return items
 }

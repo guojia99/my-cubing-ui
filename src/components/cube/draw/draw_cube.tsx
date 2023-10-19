@@ -190,7 +190,7 @@ class NumberCubeDrawerUtils {
     }
 }
 
-export const DrawNumberCubeCanvas = (size: number, imageWidth: number, seq: string) : HTMLCanvasElement => {
+export const DrawNumberCubeCanvas = (size: number, imageWidth: number, seq: string): HTMLCanvasElement => {
     const imgSize = (imageWidth / 100)
     const canvasW = (39 * size / 9 + 0.2) * imageWidth
     const canvasH = (29 * size / 9 + 0.2) * imageWidth
@@ -211,9 +211,21 @@ export const DrawNumberCubeCanvas = (size: number, imageWidth: number, seq: stri
 }
 
 
-export const DrawNumberCubeImage = (id: string, size: number, imageWidth: number, seq: string) : JSX.Element => {
+export const DrawNumberCubeImage = (id: string, size: number, imageWidth: number, seq: string): JSX.Element => {
     const canvas = DrawNumberCubeCanvas(size, imageWidth, seq)
     return (
         <img src={canvas.toDataURL()} alt={id + ".jpeg"} id={id} key={id}/>
     )
+}
+
+export const DrawNumberCubeImages = (id: string, size: number, imageWidth: number, seq: string[]): JSX.Element[] => {
+    let items: JSX.Element[] = []
+    if (!seq) {
+        return items
+    }
+
+    for (let i = 0; i < seq.length; i++) {
+        items.push(DrawNumberCubeImage(id + i, size, imageWidth, seq[i]))
+    }
+    return items
 }

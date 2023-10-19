@@ -8,7 +8,6 @@ import {GetCubeIcon} from "../../components/cube/icon/cube_icon";
 import {FormatTime} from "../../components/cube/components/cube_timeformat";
 import {API, AuthAPI} from "../../components/api/api";
 import {parseTimeToSeconds} from "./admin_utils";
-import {Once} from "../../components/utils/async";
 import {CreateModal, ModalButton} from "../../components/utils/modal";
 import {CubeScoreTds} from "../../components/cube/components/cube_score_tabels";
 import {WaitToast, WarnToast} from "../../components/utils/alert";
@@ -168,6 +167,16 @@ export class AdminScoreRender {
         },
     }
 
+    constructor(callback: callback) {
+        this.ctx.UpdateHandle = callback
+        this.loadAllPlayer().then()
+        this.loadAllContest().then()
+        setInterval(this._loadScoresSelect(), 100)
+        setInterval(this._loadScoreValue, 100)
+        setInterval(() => {
+            this.ctx.UpdateHandle({})
+        }, 300)
+    }
 
 // 渲染判罚列表： 单行
     private _renderPenaltyList = (input: number) => {
@@ -823,8 +832,6 @@ export class AdminScoreRender {
             for (let i = 0; i < this.ctx.Players.Size; i++) {
                 this.ctx.PlayersMap.set(this.ctx.Players.Players[i].Name, this.ctx.Players.Players[i])
             }
-
-
         }), "等待加载玩家列表", "加载玩家成功", "加载玩家成功")
     }
 
@@ -835,20 +842,6 @@ export class AdminScoreRender {
         }), "等待加载比赛列表", "加载比赛列表成功", "加载比赛列表失败")
     }
 
-    private once = Once(() => {
-        setInterval(this._loadScoresSelect(), 100)
-        setInterval(this._loadScoreValue, 100)
-        setInterval(() => {
-            this.ctx.UpdateHandle({})
-        }, 300)
-        this.loadAllPlayer().then()
-        this.loadAllContest().then()
-    })
-
-    init(callback: callback) {
-        this.ctx.UpdateHandle = callback
-        this.once()
-    }
 
     render() {
         return (

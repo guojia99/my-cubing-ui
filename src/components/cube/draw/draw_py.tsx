@@ -1,6 +1,6 @@
 import {ParseScramble} from "./scramble";
 import {Circle, DrawPolygon, hsq3} from "./utils";
-import React from "react";
+import React, {JSX} from "react";
 
 
 class PyCubeDrawerUtils {
@@ -83,7 +83,7 @@ class PyCubeDrawerUtils {
 }
 
 
-export const DrawPyCubeCanvas = (imageWidth: number, seq: string):HTMLCanvasElement => {
+export const DrawPyCubeCanvas = (imageWidth: number, seq: string): HTMLCanvasElement => {
     const imageSize = (imageWidth / 20)
     const canvasW = 7 * imageWidth
     const canvasH = 6.5 * hsq3 * imageWidth
@@ -106,4 +106,16 @@ export const DrawPyCubeImage = (id: string, imageWidth: number, seq: string) => 
     return (
         <img src={canvas.toDataURL()} alt={id + ".jpeg"} id={id} key={id}/>
     )
+}
+
+export const DrawPyCubeImages = (id: string, size: number, imageWidth: number, seq: string[]): JSX.Element[] => {
+    let items: JSX.Element[] = []
+    if (!seq) {
+        return items
+    }
+
+    for (let i = 0; i < seq.length; i++) {
+        items.push(DrawPyCubeImage(id + i, imageWidth, seq[i]))
+    }
+    return items
 }

@@ -1,5 +1,5 @@
 import {Circle, DrawPolygon, hsq3, Rotate, Transform} from "./utils";
-import {useEffect, useRef} from "react";
+import React, {JSX} from "react";
 
 
 type drawCache = {
@@ -146,23 +146,40 @@ export class SQ1CubeDrawerUtils {
     }
 }
 
-export const DrawSQ1Cube = (id: string, imageWidth: number, seq: string) => {
-    const canvasRef = useRef<HTMLCanvasElement>(null)
-
-    useEffect(() => {
-        const canvas = canvasRef.current as HTMLCanvasElement
-        let ctx = canvas.getContext('2d') as CanvasRenderingContext2D
-        const sq1CubeDrawerUtils = new SQ1CubeDrawerUtils()
-        sq1CubeDrawerUtils.draw(ctx, seq, imageWidth)
-    }, [seq, id, imageWidth]);
-
+export const DrawSQ1CubeCanvas = ( imageWidth: number, seq: string) => {
     const imageSize = (imageWidth / 20)
     const canvasW = 11 * imageWidth
     const canvasH = 6.3 * imageWidth
+
+    const canvas: HTMLCanvasElement = document.createElement("canvas")
+
+    canvas.width = canvasW
+    canvas.height = canvasH
+    canvas.style.width = 11 * imageSize / 1.3 + 'em'
+    canvas.style.height =  6.3 * imageSize / 1.3 + 'em'
+
+    let ctx = canvas.getContext('2d') as CanvasRenderingContext2D
+    const sq1CubeDrawerUtils = new SQ1CubeDrawerUtils()
+    sq1CubeDrawerUtils.draw(ctx, seq, imageWidth)
+
+    return canvas
+}
+export const DrawSQ1CubeImage = (id: string, imageWidth: number, seq: string) => {
+    const canvas = DrawSQ1CubeCanvas(imageWidth, seq)
     return (
-        <canvas id={id} key={id} ref={canvasRef} defaultValue={seq}
-                width={canvasW} height={canvasH}
-                style={{width: 11 * imageSize / 1.3 + 'em', height: 6.3 * imageSize / 1.3 + 'em'}}>
-        </canvas>
+        <img src={canvas.toDataURL()} alt={id + ".jpeg"} id={id} key={id}/>
     )
+}
+
+
+export const DrawSQ1CubeImages = (id: string, size: number, imageWidth: number, seq: string[]): JSX.Element[] => {
+    let items: JSX.Element[] = []
+    if (!seq) {
+        return items
+    }
+
+    for (let i = 0; i < seq.length; i++) {
+        items.push(DrawSQ1CubeImage(id + i, imageWidth, seq[i]))
+    }
+    return items
 }

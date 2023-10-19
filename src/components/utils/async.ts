@@ -41,7 +41,7 @@ export const Sleep = (ms: number) => {
     return new Promise(resolve => setTimeout(resolve, ms))
 }
 
-export function Once(fn: () => void) {
+export function Once(fn:  () => void) {
     let toggle = false
     return async () => {
         if (toggle) {
@@ -50,4 +50,8 @@ export function Once(fn: () => void) {
         toggle = true;
         fn()
     };
+}
+
+export function KeyOnce(key: string, fn: ()=>void){
+
 }

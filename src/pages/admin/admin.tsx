@@ -15,12 +15,37 @@ import {SetBackGround} from "../../components/utils/background";
 
 class Admin extends React.Component {
 
+    update: callback = () => {
+        this.setState({})
+    }
+
+    state = {
+        AdminScoreRenderCli: null,
+        AdminContestRenderCli: null,
+        AdminPlayerRenderCli: null,
+        AdminXLogRenderCli: null,
+        AdminApprovalScoreRenderCli: null,
+        AdminApprovalScoreVideoRenderCli: null,
+        AdminUserRenderCli: null,
+    }
+
+
     componentDidMount() {
         SetBackGround("")
         if (!AuthAPI.IsAuth()) {
             window.location.href = "/xauth"
             return
         }
+
+        this.setState({
+            AdminScoreRenderCli: new AdminScoreRender(this.update),
+            AdminContestRenderCli: new AdminContestRender(this.update),
+            AdminPlayerRenderCli: new AdminPlayerRender(this.update),
+            AdminXLogRenderCli: new AdminXLogRender(),
+            AdminApprovalScoreRenderCli: new AdminApprovalScoreRender(),
+            AdminApprovalScoreVideoRenderCli: new AdminApprovalScoreVideoRender(),
+            AdminUserRenderCli: new AdminUserRender(),
+        })
     }
 
     loginOut() {
@@ -29,12 +54,9 @@ class Admin extends React.Component {
         return
     }
 
-    update: callback = () => {
-        this.setState({})
-    }
 
     render() {
-        if (!AuthAPI.IsAuth()){
+        if (!AuthAPI.IsAuth()) {
             return <div>等待登录</div>
         }
 
@@ -83,43 +105,61 @@ class Admin extends React.Component {
             </div>)
     }
 
-    AdminScoreRenderCli = new AdminScoreRender()
-    AdminContestRenderCli = new AdminContestRender()
-    AdminPlayerRenderCli = new AdminPlayerRender()
-    AdminXLogRenderCli = new AdminXLogRender()
-    AdminApprovalScoreRenderCli = new AdminApprovalScoreRender()
-    AdminApprovalScoreVideoRenderCli = new AdminApprovalScoreVideoRender()
-    AdminAdminUserRenderCli = new AdminUserRender()
 
     ScoreRender = () => {
-        this.AdminScoreRenderCli.init(this.update)
-        return this.AdminScoreRenderCli.render()
+        if (this.state.AdminScoreRenderCli === null){
+            return <div></div>
+        }
+        const v = this.state.AdminScoreRenderCli as AdminScoreRender
+        return  v.render()
     }
 
     ContestRender = () => {
-        this.AdminContestRenderCli.init(this.update)
-        return this.AdminContestRenderCli.render()
+        if (this.state.AdminContestRenderCli === null){
+            return <div></div>
+        }
+        const v = this.state.AdminContestRenderCli as AdminContestRender
+        return  v.render()
     }
 
     PlayerRender = () => {
-        this.AdminPlayerRenderCli.init(this.update)
-        return this.AdminPlayerRenderCli.render()
+        if (this.state.AdminPlayerRenderCli === null){
+            return <div></div>
+        }
+        const v = this.state.AdminPlayerRenderCli as AdminPlayerRender
+        return  v.render()
     }
 
     XLogRender = () => {
-        return this.AdminXLogRenderCli.render()
+        if (this.state.AdminXLogRenderCli === null){
+            return <div></div>
+        }
+        const v = this.state.AdminXLogRenderCli as AdminXLogRender
+        return  v.render()
     }
 
     AdminApprovalScoreRender = () => {
-        return this.AdminApprovalScoreRenderCli.render()
+        if (this.state.AdminApprovalScoreRenderCli === null){
+            return <div></div>
+        }
+        const v = this.state.AdminApprovalScoreRenderCli as AdminApprovalScoreRender
+        return  v.render()
     }
 
     AdminApprovalScoreVideoRender = () => {
-        return this.AdminApprovalScoreVideoRenderCli.render()
+        if (this.state.AdminApprovalScoreVideoRenderCli === null){
+            return <div></div>
+        }
+        const v = this.state.AdminApprovalScoreVideoRenderCli as AdminApprovalScoreVideoRender
+        return  v.render()
     }
 
     AdminUserRender = () => {
-        return this.AdminAdminUserRenderCli.render()
+        if (this.state.AdminUserRenderCli === null){
+            return <div></div>
+        }
+        const v = this.state.AdminUserRenderCli as AdminUserRender
+        return  v.render()
     }
 
 }

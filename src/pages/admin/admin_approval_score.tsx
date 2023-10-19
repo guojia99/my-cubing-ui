@@ -6,7 +6,7 @@ import {GetCubeIcon} from "../../components/cube/icon/cube_icon";
 import {CubesCn} from "../../components/cube/cube";
 import React, {JSX} from "react";
 import {CubeScoreTds} from "../../components/cube/components/cube_score_tabels";
-import {Once, Sleep} from "../../components/utils/async";
+import {Sleep} from "../../components/utils/async";
 import {WaitToast} from "../../components/utils/alert";
 import {CreateModal, ModalButton} from "../../components/utils/modal";
 import {PageNav, PageNavValue} from "../../components/utils/page";
@@ -20,6 +20,10 @@ type AdminApprovalScoreCtx = {
 
 
 export class AdminApprovalScoreRender {
+    constructor() {
+        this.loadPreScoreData().then()
+    }
+
     ctx: AdminApprovalScoreCtx = {
         PreScores: null,
         DetailID: -1,
@@ -122,25 +126,20 @@ export class AdminApprovalScoreRender {
         )
     }
 
-    private once = Once(async () => {
-        await Sleep(100)
-        await this.loadPreScoreData()
-    })
-
 
     private neglectModal = () => {
         const bodyHandle = () => {
 
-            if (this.ctx.PreScores === null || this.ctx.PreScores.Scores.length === 0){
+            if (this.ctx.PreScores === null || this.ctx.PreScores.Scores.length === 0) {
                 return <div>是否取消该成绩</div>
             }
-            if (this.ctx.DetailID === -1){
+            if (this.ctx.DetailID === -1) {
                 return <div>是否取消该成绩</div>
             }
 
             let p = this.ctx.PreScores.Scores[0]
-            for (let i = 0; i < this.ctx.PreScores.Scores.length; i++){
-                if (this.ctx.PreScores.Scores[i].ID === this.ctx.DetailID){
+            for (let i = 0; i < this.ctx.PreScores.Scores.length; i++) {
+                if (this.ctx.PreScores.Scores[i].ID === this.ctx.DetailID) {
                     p = this.ctx.PreScores.Scores[i]
                     break
                 }
@@ -192,7 +191,6 @@ export class AdminApprovalScoreRender {
 
 
     render() {
-        this.once().then()
         return (
             <div style={{marginTop: "30px"}}>
                 {this.neglectModal()}

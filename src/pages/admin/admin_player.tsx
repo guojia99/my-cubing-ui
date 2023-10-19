@@ -4,7 +4,7 @@ import {CreateModal, EmptyHandle, ModalButton} from "../../components/utils/moda
 import {API, AuthAPI} from "../../components/api/api";
 import {GetLocationQueryParams} from "../../components/utils/utils";
 import {PageNav, PageNavValue} from "../../components/utils/page";
-import {Once, Sleep} from "../../components/utils/async";
+import {Sleep} from "../../components/utils/async";
 import {callback} from "./admin_score";
 import {WaitToast, WarnToast} from "../../components/utils/alert";
 
@@ -30,6 +30,11 @@ export class AdminPlayerRender {
         UpdateID: -1,
         UpdateHandle: () => {
         }
+    }
+
+    constructor(callback: callback) {
+        this.ctx.UpdateHandle = callback
+        this.loadPlayerData().then()
     }
 
     private renderPlayerTable = () => {
@@ -262,15 +267,6 @@ export class AdminPlayerRender {
         await API.GetPlayers(page, 50).then(value => {
             this.ctx.Players = value
         })
-    }
-
-    private once = Once(() => {
-        this.loadPlayerData().then()
-    })
-
-    init(callback: callback) {
-        this.ctx.UpdateHandle = callback
-        this.once().then()
     }
 
     render() {

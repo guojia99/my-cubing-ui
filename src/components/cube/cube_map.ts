@@ -1,3 +1,11 @@
+import {JSX} from "react";
+import {DrawNumberCubeImages} from "./draw/draw_cube";
+import {DrawSkCubeImages} from "./draw/draw_skewb";
+import {DrawPyCubeImages} from "./draw/draw_py";
+import {DrawSQ1CubeImages} from "./draw/draw_sq1";
+import {DrawEmptyImages} from "./draw/draw_empty";
+import {DrawClockCubeImages} from "./draw/draw_clock";
+
 export enum Cubes {
     JuBaoHaoHao = "jhh",
     OtherCola = "o_cola",
@@ -81,6 +89,7 @@ export enum SegmentationType {
     XCubeRelay = "趣味连拧",
     NotCube = "趣味非魔方"
 }
+
 export enum CubesRouteType {
     RouteType1rounds = "1_r",      // 单轮项目
     RouteType3roundsBest = "3_r_b", // 三轮取最佳
@@ -90,6 +99,7 @@ export enum CubesRouteType {
     RouteType5RoundsAvgHT = "5_r_a_ht",// 五轮去头尾取平均
     RouteTypeRepeatedly = "ry",    // 单轮多次还原项目, 成绩1:还原数; 成绩2:尝试数; 成绩3:时间;
 }
+
 export function CubesRouteTypeCn(typ: CubesRouteType): string {
     switch (typ) {
         case CubesRouteType.RouteType1rounds:
@@ -120,8 +130,9 @@ export function SegmentationTypeList(): SegmentationType[] {
         SegmentationType.NotCube,
     ]
 }
-export function CubesRouteTypeNumber(typ: CubesRouteType) : number{
-    switch (typ){
+
+export function CubesRouteTypeNumber(typ: CubesRouteType): number {
+    switch (typ) {
         case CubesRouteType.RouteType1rounds:
             return 1
         case CubesRouteType.RouteType5roundsBest:
@@ -140,7 +151,7 @@ export function CubesRouteTypeNumber(typ: CubesRouteType) : number{
 }
 
 
-
+type DrawCubeFn = (id: string, size: number, imageWidth: number, seq: string[]) => JSX.Element[]
 
 export type CubesAttributes = {
     Cubes: Cubes, // 项目
@@ -148,6 +159,11 @@ export type CubesAttributes = {
     RouteType: CubesRouteType, // 项目轮次形式
     IsWCA: boolean, // 是否WCA项目
     Segmentation: SegmentationType, // 细分类
+    DrawFn: DrawCubeFn, // 绘制打乱列表图像函数
+    DrawSeq: boolean, // 是否展示公式
+    DrawSize: number, // 绘制打乱列表图像阶数，目前只有正阶用到了
+    SeqNumber: number, // 打乱数
+    SpareSeqNumber: number, // 备打数
 }
 
 export const CubesAttributesList: CubesAttributes[] = [
@@ -158,6 +174,11 @@ export const CubesAttributesList: CubesAttributes[] = [
         RouteType: CubesRouteType.RouteType5RoundsAvgHT,
         IsWCA: true,
         Segmentation: SegmentationType.WCA,
+        DrawFn: DrawNumberCubeImages,
+        DrawSize: 3,
+        SeqNumber: 5,
+        SpareSeqNumber: 2,
+        DrawSeq: true,
     },
     {
         Cubes: Cubes.Cube222,
@@ -165,6 +186,11 @@ export const CubesAttributesList: CubesAttributes[] = [
         RouteType: CubesRouteType.RouteType5RoundsAvgHT,
         IsWCA: true,
         Segmentation: SegmentationType.WCA,
+        DrawFn: DrawNumberCubeImages,
+        DrawSize: 2,
+        SeqNumber: 5,
+        SpareSeqNumber: 2,
+        DrawSeq: true,
     },
     {
         Cubes: Cubes.Cube444,
@@ -172,6 +198,11 @@ export const CubesAttributesList: CubesAttributes[] = [
         RouteType: CubesRouteType.RouteType5RoundsAvgHT,
         IsWCA: true,
         Segmentation: SegmentationType.WCA,
+        DrawFn: DrawNumberCubeImages,
+        DrawSize: 4,
+        SeqNumber: 5,
+        SpareSeqNumber: 2,
+        DrawSeq: true,
     },
     {
         Cubes: Cubes.Cube555,
@@ -179,6 +210,11 @@ export const CubesAttributesList: CubesAttributes[] = [
         RouteType: CubesRouteType.RouteType5RoundsAvgHT,
         IsWCA: true,
         Segmentation: SegmentationType.WCA,
+        DrawFn: DrawNumberCubeImages,
+        DrawSize: 5,
+        SeqNumber: 5,
+        SpareSeqNumber: 2,
+        DrawSeq: true,
     },
     {
         Cubes: Cubes.Cube666,
@@ -186,6 +222,11 @@ export const CubesAttributesList: CubesAttributes[] = [
         RouteType: CubesRouteType.RouteType3roundsAvg,
         IsWCA: true,
         Segmentation: SegmentationType.WCA,
+        DrawFn: DrawNumberCubeImages,
+        DrawSize: 6,
+        SeqNumber: 3,
+        SpareSeqNumber: 2,
+        DrawSeq: true,
     },
     {
         Cubes: Cubes.Cube777,
@@ -193,6 +234,11 @@ export const CubesAttributesList: CubesAttributes[] = [
         RouteType: CubesRouteType.RouteType3roundsAvg,
         IsWCA: true,
         Segmentation: SegmentationType.WCA,
+        DrawFn: DrawNumberCubeImages,
+        DrawSize: 7,
+        SeqNumber: 3,
+        SpareSeqNumber: 2,
+        DrawSeq: true,
     },
     {
         Cubes: Cubes.CubeSk,
@@ -200,6 +246,11 @@ export const CubesAttributesList: CubesAttributes[] = [
         RouteType: CubesRouteType.RouteType5RoundsAvgHT,
         IsWCA: true,
         Segmentation: SegmentationType.WCA,
+        DrawFn: DrawSkCubeImages,
+        DrawSize: 0,
+        SeqNumber: 5,
+        SpareSeqNumber: 2,
+        DrawSeq: true,
     },
     {
         Cubes: Cubes.CubePy,
@@ -207,6 +258,11 @@ export const CubesAttributesList: CubesAttributes[] = [
         RouteType: CubesRouteType.RouteType5RoundsAvgHT,
         IsWCA: true,
         Segmentation: SegmentationType.WCA,
+        DrawFn: DrawPyCubeImages,
+        DrawSize: 0,
+        SeqNumber: 5,
+        SpareSeqNumber: 2,
+        DrawSeq: true,
     },
     {
         Cubes: Cubes.CubeSq1,
@@ -214,6 +270,11 @@ export const CubesAttributesList: CubesAttributes[] = [
         RouteType: CubesRouteType.RouteType5RoundsAvgHT,
         IsWCA: true,
         Segmentation: SegmentationType.WCA,
+        DrawFn: DrawSQ1CubeImages,
+        DrawSize: 0,
+        SeqNumber: 5,
+        SpareSeqNumber: 2,
+        DrawSeq: true,
     },
     {
         Cubes: Cubes.CubeMinx,
@@ -221,6 +282,11 @@ export const CubesAttributesList: CubesAttributes[] = [
         RouteType: CubesRouteType.RouteType5RoundsAvgHT,
         IsWCA: true,
         Segmentation: SegmentationType.WCA,
+        DrawFn: DrawEmptyImages,
+        DrawSize: 0,
+        SeqNumber: 5,
+        SpareSeqNumber: 2,
+        DrawSeq: true,
     },
     {
         Cubes: Cubes.CubeClock,
@@ -228,6 +294,11 @@ export const CubesAttributesList: CubesAttributes[] = [
         RouteType: CubesRouteType.RouteType5RoundsAvgHT,
         IsWCA: true,
         Segmentation: SegmentationType.WCA,
+        DrawFn: DrawClockCubeImages,
+        DrawSize: 0,
+        SeqNumber: 5,
+        SpareSeqNumber: 2,
+        DrawSeq: true,
     },
     {
         Cubes: Cubes.Cube333OH,
@@ -235,6 +306,11 @@ export const CubesAttributesList: CubesAttributes[] = [
         RouteType: CubesRouteType.RouteType5RoundsAvgHT,
         IsWCA: true,
         Segmentation: SegmentationType.WCA,
+        DrawFn: DrawNumberCubeImages,
+        DrawSize: 3,
+        SeqNumber: 5,
+        SpareSeqNumber: 2,
+        DrawSeq: true,
     },
     {
         Cubes: Cubes.Cube333FM,
@@ -242,6 +318,11 @@ export const CubesAttributesList: CubesAttributes[] = [
         RouteType: CubesRouteType.RouteType3roundsBest,
         IsWCA: true,
         Segmentation: SegmentationType.WCA,
+        DrawFn: DrawNumberCubeImages,
+        DrawSize: 3,
+        SeqNumber: 3,
+        SpareSeqNumber: 0,
+        DrawSeq: true,
     },
     {
         Cubes: Cubes.Cube333BF,
@@ -249,6 +330,11 @@ export const CubesAttributesList: CubesAttributes[] = [
         RouteType: CubesRouteType.RouteType3roundsBest,
         IsWCA: true,
         Segmentation: SegmentationType.WCA,
+        DrawFn: DrawNumberCubeImages,
+        DrawSize: 3,
+        SeqNumber: 3,
+        SpareSeqNumber: 2,
+        DrawSeq: true,
     },
     {
         Cubes: Cubes.Cube444BF,
@@ -256,6 +342,11 @@ export const CubesAttributesList: CubesAttributes[] = [
         RouteType: CubesRouteType.RouteType3roundsBest,
         IsWCA: true,
         Segmentation: SegmentationType.WCA,
+        DrawFn: DrawNumberCubeImages,
+        DrawSize: 4,
+        SeqNumber: 3,
+        SpareSeqNumber: 2,
+        DrawSeq: true,
     },
     {
         Cubes: Cubes.Cube555BF,
@@ -263,6 +354,11 @@ export const CubesAttributesList: CubesAttributes[] = [
         RouteType: CubesRouteType.RouteType3roundsBest,
         IsWCA: true,
         Segmentation: SegmentationType.WCA,
+        DrawFn: DrawNumberCubeImages,
+        DrawSize: 5,
+        SeqNumber: 3,
+        SpareSeqNumber: 2,
+        DrawSeq: true,
     },
     {
         Cubes: Cubes.Cube333MBF,
@@ -270,6 +366,11 @@ export const CubesAttributesList: CubesAttributes[] = [
         RouteType: CubesRouteType.RouteTypeRepeatedly,
         IsWCA: true,
         Segmentation: SegmentationType.WCA,
+        DrawFn: DrawNumberCubeImages,
+        DrawSize: 3,
+        SeqNumber: 0, // 0 代表没有上限
+        SpareSeqNumber: 0,
+        DrawSeq: true,
     },
     {
         Cubes: Cubes.Cube333Ft,
@@ -277,6 +378,11 @@ export const CubesAttributesList: CubesAttributes[] = [
         RouteType: CubesRouteType.RouteType5RoundsAvgHT,
         IsWCA: true,
         Segmentation: SegmentationType.WCA,
+        DrawFn: DrawNumberCubeImages,
+        DrawSize: 3,
+        SeqNumber: 5,
+        SpareSeqNumber: 2,
+        DrawSeq: true,
     },
 
 
@@ -287,6 +393,11 @@ export const CubesAttributesList: CubesAttributes[] = [
         RouteType: CubesRouteType.RouteType5roundsBest,
         IsWCA: false,
         Segmentation: SegmentationType.XCubeBF,
+        DrawFn: DrawNumberCubeImages,
+        DrawSize: 2,
+        SeqNumber: 5,
+        SpareSeqNumber: 2,
+        DrawSeq: true,
     },
     {
         Cubes: Cubes.XCube666BF,
@@ -294,6 +405,11 @@ export const CubesAttributesList: CubesAttributes[] = [
         RouteType: CubesRouteType.RouteType1rounds,
         IsWCA: false,
         Segmentation: SegmentationType.XCubeBF,
+        DrawFn: DrawNumberCubeImages,
+        DrawSize: 6,
+        SeqNumber: 1,
+        SpareSeqNumber: 1,
+        DrawSeq: true,
     },
     {
         Cubes: Cubes.XCube777BF,
@@ -301,6 +417,11 @@ export const CubesAttributesList: CubesAttributes[] = [
         RouteType: CubesRouteType.RouteType1rounds,
         IsWCA: false,
         Segmentation: SegmentationType.XCubeBF,
+        DrawFn: DrawNumberCubeImages,
+        DrawSize: 7,
+        SeqNumber: 1,
+        SpareSeqNumber: 1,
+        DrawSeq: true,
     },
     {
         Cubes: Cubes.XCubePyBF,
@@ -308,6 +429,11 @@ export const CubesAttributesList: CubesAttributes[] = [
         RouteType: CubesRouteType.RouteType3roundsBest,
         IsWCA: false,
         Segmentation: SegmentationType.XCubeBF,
+        DrawFn: DrawPyCubeImages,
+        DrawSize: 0,
+        SeqNumber: 3,
+        SpareSeqNumber: 2,
+        DrawSeq: true,
     },
     {
         Cubes: Cubes.XCubePyFm,
@@ -315,6 +441,11 @@ export const CubesAttributesList: CubesAttributes[] = [
         RouteType: CubesRouteType.RouteType3roundsAvg,
         IsWCA: false,
         Segmentation: SegmentationType.XCubeFm,
+        DrawFn: DrawPyCubeImages,
+        DrawSize: 0,
+        SeqNumber: 3,
+        SpareSeqNumber: 0,
+        DrawSeq: true,
     },
     {
         Cubes: Cubes.XcubeSkFm,
@@ -322,6 +453,11 @@ export const CubesAttributesList: CubesAttributes[] = [
         RouteType: CubesRouteType.RouteType3roundsAvg,
         IsWCA: false,
         Segmentation: SegmentationType.XCubeFm,
+        DrawFn: DrawSkCubeImages,
+        DrawSize: 0,
+        SeqNumber: 3,
+        SpareSeqNumber: 0,
+        DrawSeq: true,
     },
     {
         Cubes: Cubes.XCube333Mini,
@@ -329,6 +465,11 @@ export const CubesAttributesList: CubesAttributes[] = [
         RouteType: CubesRouteType.RouteType5RoundsAvgHT,
         IsWCA: false,
         Segmentation: SegmentationType.XCube,
+        DrawFn: DrawNumberCubeImages,
+        DrawSize: 3,
+        SeqNumber: 5,
+        SpareSeqNumber: 2,
+        DrawSeq: true,
     },
     {
         Cubes: Cubes.XCube333MiniOH,
@@ -336,6 +477,11 @@ export const CubesAttributesList: CubesAttributes[] = [
         RouteType: CubesRouteType.RouteType5RoundsAvgHT,
         IsWCA: false,
         Segmentation: SegmentationType.XCube,
+        DrawFn: DrawNumberCubeImages,
+        DrawSize: 3,
+        SeqNumber: 5,
+        SpareSeqNumber: 2,
+        DrawSeq: true,
     },
     {
         Cubes: Cubes.XCube222OH,
@@ -343,6 +489,11 @@ export const CubesAttributesList: CubesAttributes[] = [
         RouteType: CubesRouteType.RouteType5RoundsAvgHT,
         IsWCA: false,
         Segmentation: SegmentationType.XCubeOH,
+        DrawFn: DrawNumberCubeImages,
+        DrawSize: 2,
+        SeqNumber: 5,
+        SpareSeqNumber: 2,
+        DrawSeq: true,
     },
     {
         Cubes: Cubes.XCube444OH,
@@ -350,6 +501,11 @@ export const CubesAttributesList: CubesAttributes[] = [
         RouteType: CubesRouteType.RouteType5RoundsAvgHT,
         IsWCA: false,
         Segmentation: SegmentationType.XCubeOH,
+        DrawFn: DrawNumberCubeImages,
+        DrawSize: 4,
+        SeqNumber: 5,
+        SpareSeqNumber: 2,
+        DrawSeq: true,
     },
     {
         Cubes: Cubes.XCube555OH,
@@ -357,6 +513,11 @@ export const CubesAttributesList: CubesAttributes[] = [
         RouteType: CubesRouteType.RouteType3roundsAvg,
         IsWCA: false,
         Segmentation: SegmentationType.XCubeOH,
+        DrawFn: DrawNumberCubeImages,
+        DrawSize: 5,
+        SeqNumber: 3,
+        SpareSeqNumber: 2,
+        DrawSeq: true,
     },
     {
         Cubes: Cubes.XCube666OH,
@@ -364,6 +525,11 @@ export const CubesAttributesList: CubesAttributes[] = [
         RouteType: CubesRouteType.RouteType1rounds,
         IsWCA: false,
         Segmentation: SegmentationType.XCubeOH,
+        DrawFn: DrawNumberCubeImages,
+        DrawSize: 6,
+        SeqNumber: 1,
+        SpareSeqNumber: 1,
+        DrawSeq: true,
     },
     {
         Cubes: Cubes.XCube777OH,
@@ -371,6 +537,11 @@ export const CubesAttributesList: CubesAttributes[] = [
         RouteType: CubesRouteType.RouteType1rounds,
         IsWCA: false,
         Segmentation: SegmentationType.XCubeOH,
+        DrawFn: DrawNumberCubeImages,
+        DrawSize: 7,
+        SeqNumber: 1,
+        SpareSeqNumber: 1,
+        DrawSeq: true,
     },
     {
         Cubes: Cubes.XCubeSkOH,
@@ -378,6 +549,11 @@ export const CubesAttributesList: CubesAttributes[] = [
         RouteType: CubesRouteType.RouteType5RoundsAvgHT,
         IsWCA: false,
         Segmentation: SegmentationType.XCubeOH,
+        DrawFn: DrawSkCubeImages,
+        DrawSize: 0,
+        SeqNumber: 5,
+        SpareSeqNumber: 2,
+        DrawSeq: true,
     },
     {
         Cubes: Cubes.XCubePyOH,
@@ -385,6 +561,11 @@ export const CubesAttributesList: CubesAttributes[] = [
         RouteType: CubesRouteType.RouteType5RoundsAvgHT,
         IsWCA: false,
         Segmentation: SegmentationType.XCubeOH,
+        DrawFn: DrawPyCubeImages,
+        DrawSize: 0,
+        SeqNumber: 5,
+        SpareSeqNumber: 2,
+        DrawSeq: true,
     },
     {
         Cubes: Cubes.XCubeClockOH,
@@ -392,6 +573,11 @@ export const CubesAttributesList: CubesAttributes[] = [
         RouteType: CubesRouteType.RouteType5RoundsAvgHT,
         IsWCA: false,
         Segmentation: SegmentationType.XCubeOH,
+        DrawFn: DrawClockCubeImages,
+        DrawSize: 0,
+        SeqNumber: 5,
+        SpareSeqNumber: 2,
+        DrawSeq: true,
     },
     {
         Cubes: Cubes.XCubeSq1OH,
@@ -399,6 +585,11 @@ export const CubesAttributesList: CubesAttributes[] = [
         RouteType: CubesRouteType.RouteType5RoundsAvgHT,
         IsWCA: false,
         Segmentation: SegmentationType.XCubeOH,
+        DrawFn: DrawSQ1CubeImages,
+        DrawSize: 0,
+        SeqNumber: 5,
+        SpareSeqNumber: 2,
+        DrawSeq: true,
     },
     {
         Cubes: Cubes.XCubeMinxOH,
@@ -406,6 +597,11 @@ export const CubesAttributesList: CubesAttributes[] = [
         RouteType: CubesRouteType.RouteType3roundsAvg,
         IsWCA: false,
         Segmentation: SegmentationType.XCubeOH,
+        DrawFn: DrawEmptyImages,
+        DrawSize: 0,
+        SeqNumber: 3,
+        SpareSeqNumber: 2,
+        DrawSeq: true,
     },
     {
         Cubes: Cubes.XCube333Mirror,
@@ -413,6 +609,11 @@ export const CubesAttributesList: CubesAttributes[] = [
         RouteType: CubesRouteType.RouteType5RoundsAvgHT,
         IsWCA: false,
         Segmentation: SegmentationType.XCube,
+        DrawFn: DrawEmptyImages,
+        DrawSize: 0,
+        SeqNumber: 5,
+        SpareSeqNumber: 2,
+        DrawSeq: true,
     },
     {
         Cubes: Cubes.XCube333Mirroring,
@@ -420,6 +621,11 @@ export const CubesAttributesList: CubesAttributes[] = [
         RouteType: CubesRouteType.RouteType5RoundsAvgHT,
         IsWCA: false,
         Segmentation: SegmentationType.XCube,
+        DrawFn: DrawNumberCubeImages,
+        DrawSize: 3,
+        SeqNumber: 5,
+        SpareSeqNumber: 2,
+        DrawSeq: true,
     },
     {
         Cubes: Cubes.XCube333Multiple5,
@@ -427,6 +633,11 @@ export const CubesAttributesList: CubesAttributes[] = [
         RouteType: CubesRouteType.RouteType5roundsBest,
         IsWCA: false,
         Segmentation: SegmentationType.XCubeRelay,
+        DrawFn: DrawNumberCubeImages,
+        DrawSize: 3,
+        SeqNumber: 25,
+        SpareSeqNumber: 0,
+        DrawSeq: true,
     },
     {
         Cubes: Cubes.XCube333Multiple10,
@@ -434,6 +645,11 @@ export const CubesAttributesList: CubesAttributes[] = [
         RouteType: CubesRouteType.RouteType1rounds,
         IsWCA: false,
         Segmentation: SegmentationType.XCubeRelay,
+        DrawFn: DrawNumberCubeImages,
+        DrawSize: 3,
+        SeqNumber: 10,
+        SpareSeqNumber: 0,
+        DrawSeq: true,
     },
     {
         Cubes: Cubes.XCube333Multiple15,
@@ -441,6 +657,11 @@ export const CubesAttributesList: CubesAttributes[] = [
         RouteType: CubesRouteType.RouteType1rounds,
         IsWCA: false,
         Segmentation: SegmentationType.XCubeRelay,
+        DrawFn: DrawNumberCubeImages,
+        DrawSize: 3,
+        SeqNumber: 15,
+        SpareSeqNumber: 2,
+        DrawSeq: true,
     },
     {
         Cubes: Cubes.XCube333Multiple20,
@@ -448,34 +669,64 @@ export const CubesAttributesList: CubesAttributes[] = [
         RouteType: CubesRouteType.RouteType1rounds,
         IsWCA: false,
         Segmentation: SegmentationType.XCubeRelay,
+        DrawFn: DrawNumberCubeImages,
+        DrawSize: 3,
+        SeqNumber: 25,
+        SpareSeqNumber: 2,
+        DrawSeq: true,
     },
     {
+
         Cubes: Cubes.XCube27Relay,
         Cn: "正阶连拧",
         RouteType: CubesRouteType.RouteType1rounds,
         IsWCA: false,
         Segmentation: SegmentationType.XCubeRelay,
+        DrawFn: DrawEmptyImages,
+        DrawSize: 0,
+        SeqNumber: 6,
+        SpareSeqNumber: 6,
+        DrawSeq: true,
     },
     {
+        //
         Cubes: Cubes.XCube345RelayBF,
         Cn: "盲连拧",
         RouteType: CubesRouteType.RouteType1rounds,
         IsWCA: false,
         Segmentation: SegmentationType.XCubeRelay,
+        DrawFn: DrawNumberCubeImages,
+        DrawSize: 0,
+        SeqNumber: 3,
+        SpareSeqNumber: 3,
+        DrawSeq: true,
     },
     {
+
         Cubes: Cubes.XCubeAlienRelay,
         Cn: "异形连拧",
         RouteType: CubesRouteType.RouteType1rounds,
         IsWCA: false,
         Segmentation: SegmentationType.XCubeRelay,
+        DrawFn: DrawNumberCubeImages,
+        DrawSize: 0,
+        SeqNumber: 5, //  塔 斜 表 五 SQ1
+        SpareSeqNumber: 5,
+        DrawSeq: true,
     },
     {
+        // 除 最少步 / 盲 外的所有项目
+        // 按 234567 单 塔斜表五SQ1  排序
         Cubes: Cubes.XCube27AlienRelayAll,
         Cn: "全项目连拧",
         RouteType: CubesRouteType.RouteType1rounds,
         IsWCA: false,
         Segmentation: SegmentationType.XCubeRelay,
+        DrawFn: DrawNumberCubeImages,
+        DrawSize: 0,
+        SeqNumber: 12,
+        SpareSeqNumber: 12,
+        DrawSeq: true,
     },
     {
         Cubes: Cubes.XCube333Ghost,
@@ -483,6 +734,11 @@ export const CubesAttributesList: CubesAttributes[] = [
         RouteType: CubesRouteType.RouteType5RoundsAvgHT,
         IsWCA: false,
         Segmentation: SegmentationType.XCube,
+        DrawFn: DrawEmptyImages,
+        DrawSize: 0,
+        SeqNumber: 5,
+        SpareSeqNumber: 2,
+        DrawSeq: true,
     },
     {
         Cubes: Cubes.XCube333ZongZi,
@@ -490,6 +746,11 @@ export const CubesAttributesList: CubesAttributes[] = [
         RouteType: CubesRouteType.RouteType5RoundsAvgHT,
         IsWCA: false,
         Segmentation: SegmentationType.XCube,
+        DrawFn: DrawEmptyImages,
+        DrawSize: 0,
+        SeqNumber: 5,
+        SpareSeqNumber: 2,
+        DrawSeq: true,
     },
     {
         Cubes: Cubes.Xcube333Clone,
@@ -497,6 +758,11 @@ export const CubesAttributesList: CubesAttributes[] = [
         RouteType: CubesRouteType.RouteType5RoundsAvgHT,
         IsWCA: false,
         Segmentation: SegmentationType.XCube,
+        DrawFn: DrawEmptyImages, // todo  这个需要屏蔽公式
+        DrawSize: 3,
+        SeqNumber: 5,
+        SpareSeqNumber: 0,
+        DrawSeq: false,
     },
     {
         Cubes: Cubes.XCubeMapleLeaf,
@@ -504,6 +770,11 @@ export const CubesAttributesList: CubesAttributes[] = [
         RouteType: CubesRouteType.RouteType5RoundsAvgHT,
         IsWCA: false,
         Segmentation: SegmentationType.XCube,
+        DrawFn: DrawEmptyImages,
+        DrawSize: 0,
+        SeqNumber: 5,
+        SpareSeqNumber: 2,
+        DrawSeq: true,
     },
     {
         Cubes: Cubes.XCube222Minx,
@@ -511,6 +782,11 @@ export const CubesAttributesList: CubesAttributes[] = [
         RouteType: CubesRouteType.RouteType5RoundsAvgHT,
         IsWCA: false,
         Segmentation: SegmentationType.XCube,
+        DrawFn: DrawEmptyImages,
+        DrawSize: 0,
+        SeqNumber: 5,
+        SpareSeqNumber: 2,
+        DrawSeq: true,
     },
 
     // 非魔方
@@ -520,6 +796,11 @@ export const CubesAttributesList: CubesAttributes[] = [
         RouteType: CubesRouteType.RouteType5RoundsAvgHT,
         IsWCA: false,
         Segmentation: SegmentationType.NotCube,
+        DrawFn: DrawEmptyImages,
+        DrawSize: 0,
+        SeqNumber: 5,
+        SpareSeqNumber: 2,
+        DrawSeq: false,
     },
     {
         Cubes: Cubes.XCubeSuDuKuEasy,
@@ -527,6 +808,11 @@ export const CubesAttributesList: CubesAttributes[] = [
         RouteType: CubesRouteType.RouteType5RoundsAvgHT,
         IsWCA: false,
         Segmentation: SegmentationType.NotCube,
+        DrawFn: DrawEmptyImages,
+        DrawSize: 0,
+        SeqNumber: 5,
+        SpareSeqNumber: 2,
+        DrawSeq: false,
     },
     {
         Cubes: Cubes.XCubeSuDuKuModerate,
@@ -534,6 +820,11 @@ export const CubesAttributesList: CubesAttributes[] = [
         RouteType: CubesRouteType.RouteType5RoundsAvgHT,
         IsWCA: false,
         Segmentation: SegmentationType.NotCube,
+        DrawFn: DrawEmptyImages,
+        DrawSize: 0,
+        SeqNumber: 5,
+        SpareSeqNumber: 2,
+        DrawSeq: false,
     },
     {
         Cubes: Cubes.XCubeSuDuKuAdvanced,
@@ -541,6 +832,11 @@ export const CubesAttributesList: CubesAttributes[] = [
         RouteType: CubesRouteType.RouteType3roundsBest,
         IsWCA: false,
         Segmentation: SegmentationType.NotCube,
+        DrawFn: DrawEmptyImages,
+        DrawSize: 0,
+        SeqNumber: 5,
+        SpareSeqNumber: 2,
+        DrawSeq: false,
     },
     {
         Cubes: Cubes.XCubeSuDuKuHard,
@@ -548,6 +844,11 @@ export const CubesAttributesList: CubesAttributes[] = [
         RouteType: CubesRouteType.RouteType3roundsBest,
         IsWCA: false,
         Segmentation: SegmentationType.NotCube,
+        DrawFn: DrawEmptyImages,
+        DrawSize: 0,
+        SeqNumber: 5,
+        SpareSeqNumber: 2,
+        DrawSeq: false,
     },
     {
         Cubes: Cubes.XCubeSuDuKuMaster,
@@ -555,6 +856,11 @@ export const CubesAttributesList: CubesAttributes[] = [
         RouteType: CubesRouteType.RouteType3roundsBest,
         IsWCA: false,
         Segmentation: SegmentationType.NotCube,
+        DrawFn: DrawEmptyImages,
+        DrawSize: 0,
+        SeqNumber: 5,
+        SpareSeqNumber: 2,
+        DrawSeq: false,
     },
 
 
@@ -565,6 +871,11 @@ export const CubesAttributesList: CubesAttributes[] = [
         RouteType: CubesRouteType.RouteType5RoundsAvgHT,
         IsWCA: false,
         Segmentation: SegmentationType.NotCube,
+        DrawFn: DrawEmptyImages,
+        DrawSize: 0,
+        SeqNumber: 5,
+        SpareSeqNumber: 2,
+        DrawSeq: false,
     },
     {
         Cubes: Cubes.XCube15Puzzle,
@@ -572,6 +883,11 @@ export const CubesAttributesList: CubesAttributes[] = [
         RouteType: CubesRouteType.RouteType5RoundsAvgHT,
         IsWCA: false,
         Segmentation: SegmentationType.NotCube,
+        DrawFn: DrawEmptyImages,
+        DrawSize: 0,
+        SeqNumber: 5,
+        SpareSeqNumber: 2,
+        DrawSeq: false,
     },
     {
         Cubes: Cubes.XCube24Puzzle,
@@ -579,6 +895,11 @@ export const CubesAttributesList: CubesAttributes[] = [
         RouteType: CubesRouteType.RouteType5RoundsAvgHT,
         IsWCA: false,
         Segmentation: SegmentationType.NotCube,
+        DrawFn: DrawEmptyImages,
+        DrawSize: 0,
+        SeqNumber: 5,
+        SpareSeqNumber: 2,
+        DrawSeq: false,
     },
     {
         Cubes: Cubes.XCube35Puzzle,
@@ -586,6 +907,11 @@ export const CubesAttributesList: CubesAttributes[] = [
         RouteType: CubesRouteType.RouteType3roundsBest,
         IsWCA: false,
         Segmentation: SegmentationType.NotCube,
+        DrawFn: DrawEmptyImages,
+        DrawSize: 0,
+        SeqNumber: 5,
+        SpareSeqNumber: 2,
+        DrawSeq: false,
     },
     {
         Cubes: Cubes.XCube48Puzzle,
@@ -593,6 +919,11 @@ export const CubesAttributesList: CubesAttributes[] = [
         RouteType: CubesRouteType.RouteType3roundsBest,
         IsWCA: false,
         Segmentation: SegmentationType.NotCube,
+        DrawFn: DrawEmptyImages,
+        DrawSize: 0,
+        SeqNumber: 5,
+        SpareSeqNumber: 2,
+        DrawSeq: false,
     },
     {
         Cubes: Cubes.XCube63Puzzle,
@@ -600,6 +931,11 @@ export const CubesAttributesList: CubesAttributes[] = [
         RouteType: CubesRouteType.RouteType3roundsBest,
         IsWCA: false,
         Segmentation: SegmentationType.NotCube,
+        DrawFn: DrawEmptyImages,
+        DrawSize: 0,
+        SeqNumber: 5,
+        SpareSeqNumber: 2,
+        DrawSeq: false,
     },
     {
         Cubes: Cubes.XCube80Puzzle,
@@ -607,6 +943,11 @@ export const CubesAttributesList: CubesAttributes[] = [
         RouteType: CubesRouteType.RouteType3roundsBest,
         IsWCA: false,
         Segmentation: SegmentationType.NotCube,
+        DrawFn: DrawEmptyImages,
+        DrawSize: 0,
+        SeqNumber: 5,
+        SpareSeqNumber: 2,
+        DrawSeq: false,
     },
 
     // 其他
@@ -616,6 +957,11 @@ export const CubesAttributesList: CubesAttributes[] = [
         RouteType: CubesRouteType.RouteType1rounds,
         IsWCA: false,
         Segmentation: SegmentationType.NotCube,
+        DrawFn: DrawEmptyImages,
+        DrawSize: 0,
+        SeqNumber: 1,
+        SpareSeqNumber: 1,
+        DrawSeq: false,
     },
     {
         Cubes: Cubes.OtherCola,
@@ -623,7 +969,12 @@ export const CubesAttributesList: CubesAttributes[] = [
         RouteType: CubesRouteType.RouteType1rounds,
         IsWCA: false,
         Segmentation: SegmentationType.NotCube,
-    }
+        DrawFn: DrawEmptyImages,
+        DrawSize: 0,
+        SeqNumber: 5,
+        SpareSeqNumber: 2,
+        DrawSeq: false,
+    },
 ]
 
 const cubesAttributesMapFn = (): Map<Cubes, CubesAttributes> => {

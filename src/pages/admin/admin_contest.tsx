@@ -7,7 +7,7 @@ import {callback} from "./admin_score";
 import {API, AuthAPI} from "../../components/api/api";
 import {AllProjectList, CubesCn} from "../../components/cube/cube";
 import {GetCubeIcon} from "../../components/cube/icon/cube_icon";
-import {Once, Sleep} from "../../components/utils/async";
+import {Sleep} from "../../components/utils/async";
 import {GetLocationQueryParams} from "../../components/utils/utils";
 import {PageNav, PageNavValue} from "../../components/utils/page";
 import {WaitToast, WarnToast} from "../../components/utils/alert";
@@ -30,6 +30,11 @@ export class AdminContestRender {
         EndContestID: -1,
         UpdateHandle: () => {
         }
+    }
+
+    constructor(callback:callback) {
+        this.ctx.UpdateHandle = callback
+        this.loadContestData()
     }
 
     private renderContestList = () => {
@@ -351,14 +356,6 @@ export class AdminContestRender {
     }
 
 
-    private once = Once(() => {
-        this.loadContestData()
-    })
-
-    init(callback: callback) {
-        this.ctx.UpdateHandle = callback
-        this.once()
-    }
 
     render() {
         return (
