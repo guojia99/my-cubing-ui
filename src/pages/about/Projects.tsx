@@ -1,8 +1,13 @@
 import React, {JSX} from "react";
 import {CubesAttributes, CubesAttributesList, CubesRouteTypeCn, SegmentationType, SegmentationTypeList} from "../../components/cube/cube_map";
-import {GetCubeIcon} from "../../components/cube/icon/cube_icon";
+import {CubeIcon} from "../../components/cube/icon/cube_icon";
+import {SetBackGround} from "../../components/utils/background";
 
 class Projects extends React.Component {
+
+    componentDidMount() {
+        SetBackGround("")
+    }
 
     render() {
         let body: JSX.Element[] = []
@@ -21,7 +26,7 @@ class Projects extends React.Component {
                 body.push(
                     <tr key={typ + project.Cubes}>
                         <td>{index}</td>
-                        <td>{GetCubeIcon(project.Cubes)}{project.Cn}</td>
+                        <td>{CubeIcon(project.Cubes)}{project.Cn}</td>
                         <td>{project.Cubes}</td>
                         <td>{CubesRouteTypeCn(project.RouteType)}</td>
                     </tr>

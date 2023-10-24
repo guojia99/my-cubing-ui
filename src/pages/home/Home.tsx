@@ -12,7 +12,7 @@ import {API} from "../../components/api/api";
 import {GetContestsResponse, GetRecordsResponse, Player} from "../../components/api/api_model";
 import {FormatTime} from "../../components/cube/components/cube_timeformat";
 import {CubesCn} from "../../components/cube/cube";
-import {GetCubeIcon} from "../../components/cube/icon/cube_icon";
+import {CubeIcon} from "../../components/cube/icon/cube_icon";
 import {WaitGroup} from "../../components/utils/async";
 import {SetBackGround} from "../../components/utils/background";
 
@@ -129,7 +129,7 @@ class Home extends React.Component {
                     items.push(
                         <li key={"recordCard_item" + i}>
                             <Link to={"/player?id=" + rd.PlayerID}>
-                                {GetCubeIcon(rd.ScoreValue.Project)}
+                                {CubeIcon(rd.ScoreValue.Project)}
                                 {rd.PlayerName} 以成绩
                                 {rd.RType === 1 ? FormatTime(rd.ScoreValue.Avg, rd.ScoreValue.Project, true) : FormatTime(rd.ScoreValue.Best, rd.ScoreValue.Project, false)}
                                 刷新 {CubesCn(rd.ScoreValue.Project)}

@@ -3,7 +3,7 @@ import { CubesCn} from "../cube";
 import {Cubes} from "../cube_map";
 
 
-export const GetCubeIcon = (c: Cubes) => {
+export const CubeIcon = (c: Cubes) => {
     let name = "cubing-icon-" + c
     return (
         <i

@@ -3,7 +3,7 @@
     background-color: #b8b9c0;
 }
 
-.nav-item a:visited{
+a:visited{
     color: rgb(128, 128, 128);
 }
 .nav-link{

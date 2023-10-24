@@ -2,8 +2,8 @@ import './contest.css'
 
 import React, {JSX} from 'react';
 import {API} from "../../components/api/api";
-import {AllProjectList,  CubesCn} from "../../components/cube/cube";
-import {Cubes} from "../../components/cube/cube_map";
+import {AllProjectList, CubesCn} from "../../components/cube/cube";
+import {Cubes, CubesAttributes, CubesAttributesMap, CubesRouteType} from "../../components/cube/cube_map";
 import {GetLocationQueryParams, SetTitleName} from "../../components/utils/utils";
 import {
     Contest,
@@ -17,8 +17,13 @@ import {
 } from "../../components/api/api_model";
 import {Link} from "react-router-dom";
 import {TabNav, TabNavsPage} from "../../components/utils/tabs";
-import {GetCubeIcon} from "../../components/cube/icon/cube_icon";
-import {CubeScoresTable, CubeScoreTds, RecordsToMap, RecordType} from "../../components/cube/components/cube_score_tabels";
+import {CubeIcon} from "../../components/cube/icon/cube_icon";
+import {
+    CubeScoresTable,
+    CubeScoreTds,
+    RecordsToMap,
+    RecordType
+} from "../../components/cube/components/cube_score_tabels";
 import {RoundTables} from "../../components/cube/components/cube_rounds";
 import {SorKeys, SorTable} from "../../components/cube/components/cube_sor";
 import {SetBackGround} from "../../components/utils/background";
@@ -81,7 +86,6 @@ class ContestPage extends React.Component {
             })
         })
 
-
         return (<TabNav Id={"contest_sor_tabs"} SelectedKey={"contest_sor_tabs"} Pages={tabs} Center={true}/>)
     }
 
@@ -142,14 +146,13 @@ class ContestPage extends React.Component {
             }
             pages.push({
                 Id: "score_" + pj,
-                Name: GetCubeIcon(pj),
+                Name: CubeIcon(pj),
                 Page: drawRoutesScores(pj, score)
             })
         }
 
         return (<TabNav Id="constest_socre" SelectedKey="score_cubes" Pages={pages} Center={false}/>)
     }
-
 
     private readerScoreAll() {
         if (this.state.score === null) {
@@ -178,8 +181,8 @@ class ContestPage extends React.Component {
 
                 for (let j = 0; j < ss.Scores.length; j++) {
                     const score = ss.Scores[j]
-                    let sp =  <td rowSpan={ss.Scores.length}>{GetCubeIcon(score.Project)} {CubesCn(score.Project)}</td>
-                    if (j !== 0){
+                    let sp = <td rowSpan={ss.Scores.length}>{CubeIcon(score.Project)} {CubesCn(score.Project)}</td>
+                    if (j !== 0) {
                         sp = <></>
                     }
 
@@ -201,8 +204,9 @@ class ContestPage extends React.Component {
 
 
         return (
-            <div style={{marginTop:"20px", marginBottom:"20px", overflowX: "auto"}}>
-                <table className="table table-bordered table-striped table-hover text-center" style={{minWidth: "800px"}}>
+            <div style={{marginTop: "20px", marginBottom: "20px", overflowX: "auto"}}>
+                <table className="table table-bordered table-striped table-hover text-center"
+                       style={{minWidth: "800px"}}>
                     <thead>
                     <tr>
                         <th>项目</th>
@@ -305,7 +309,8 @@ class ContestPage extends React.Component {
                                 {rFirst.Name}
                             </button>
                         </h2>
-                        <div id={"drawRounds_accordion-item-body" + rFirst.ID} className="accordion-collapse collapse show">
+                        <div id={"drawRounds_accordion-item-body" + rFirst.ID}
+                             className="accordion-collapse collapse show">
                             <div className="accordion-body">
                                 {RoundTables(rs)}
                             </div>
@@ -330,12 +335,66 @@ class ContestPage extends React.Component {
 
             pages.push({
                 Id: "round_" + pj,
-                Name: GetCubeIcon(pj),
+                Name: CubeIcon(pj),
                 Page: drawRounds(pj, rounds),
             })
         }
         return (<><TabNav Id="constest_round" SelectedKey="round_cubes" Pages={pages} Center={false}/></>)
     }
+
+    private readerRecord() {
+        if (this.state.record === undefined || this.state.record === null) {
+            return <div>加载中...</div>
+        }
+
+        const record = this.state.record as ContestRecord[]
+        if (record === undefined || record === null || record.length === 0) {
+            return <div>比赛未结束或无记录</div>
+        }
+
+        let items: JSX.Element[] = []
+
+        for (let i = 0; i < record.length; i++) {
+            const r = record[i]
+            let name = "单次"
+            let score = FormatTime(r.Score.Best, r.Score.Project, false)
+            if (r.Record.RType === RecordType.RecordByAvg) {
+                score = FormatTime(r.Score.Avg, r.Score.Project, true)
+                name = "平均"
+            }
+            const attr = CubesAttributesMap.get(r.Score.Project) as CubesAttributes
+            if (attr.RouteType === CubesRouteType.RouteTypeRepeatedly) {
+                score = r.Score.R1 + "/" + r.Score.R2 + "(" + FormatTime(r.Score.R3, r.Score.Project, true) + ")"
+            }
+
+
+            items.push(
+                <tr key={"readerRecord" + r.Record.ID}>
+                    <td>{CubeIcon(r.Score.Project)}{CubesCn(r.Score.Project)}</td>
+                    <td>{r.Player.Name}</td>
+                    <td>{name}</td>
+                    <td>{score}</td>
+                </tr>
+            )
+        }
+
+        return (
+            <table className="table text-center table-striped table-hover">
+                <thead>
+                <tr>
+                    <th scope="col">项目</th>
+                    <th scope="col">选手</th>
+                    <th scope="col">类型</th>
+                    <th scope="col">成绩</th>
+                </tr>
+                </thead>
+                <tbody>
+                {items}
+                </tbody>
+            </table>
+        )
+    }
+
 
     render() {
         const contest = this.state.contest as Contest
@@ -354,6 +413,11 @@ class ContestPage extends React.Component {
                 Id: "tab_nav_all_score_table",
                 Name: (<p>汇总 <i className="bi bi-kanban-fill"></i></p>),
                 Page: this.readerScoreAll(),
+            },
+            {
+                Id: "tab_nav_record",
+                Name: (<p>记录<i className="bi bi-kanban"></i></p>),
+                Page: this.readerRecord(),
             },
             {
                 Id: "tab_nav_podium",

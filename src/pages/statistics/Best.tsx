@@ -1,9 +1,9 @@
 import React, {JSX} from 'react';
 import {API} from "../../components/api/api";
-import {GetBestByAllScoresResponse, GetBestScoreResponse, Score} from "../../components/api/api_model";
+import {GetBestByAllScoresResponse, Score} from "../../components/api/api_model";
 import {AllProjectList, CubesCn} from "../../components/cube/cube";
 import {Cubes} from "../../components/cube/cube_map";
-import {GetCubeIcon} from "../../components/cube/icon/cube_icon";
+import {CubeIcon} from "../../components/cube/icon/cube_icon";
 import {FormatTime} from "../../components/cube/components/cube_timeformat";
 import {Link} from "react-router-dom";
 import {TabNav, TabNavsPage} from "../../components/utils/tabs";
@@ -12,15 +12,11 @@ import {SetBackGround} from "../../components/utils/background";
 
 class Best extends React.Component {
     state = {
-        bestTop: null,
         bestAll: null,
     }
 
     componentDidMount() {
         SetBackGround("")
-        API.GetBestScore().then(value => {
-            this.setState({bestTop: value})
-        })
         API.GetBestByAllScores().then(value => {
             console.log(value)
             this.setState({bestAll: value})
@@ -50,7 +46,7 @@ class Best extends React.Component {
             <table className="table table-striped table-hover">
                 <thead>
                 <tr>
-                    <th colSpan={9} style={{fontSize: "30px"}}>{GetCubeIcon(pj)} {CubesCn(pj)} {IsBest ? "最佳成绩排行" : "平均成绩排行"}</th>
+                    <th colSpan={9} style={{fontSize: "30px"}}>{CubeIcon(pj)} {CubesCn(pj)} {IsBest ? "最佳成绩排行" : "平均成绩排行"}</th>
                 </tr>
                 <tr>
                     <th>排名</th>
@@ -90,7 +86,7 @@ class Best extends React.Component {
             try {
                 tabs.push({
                     Id: pj,
-                    Name: (<p>{GetCubeIcon(pj)}</p>),
+                    Name: (<p>{CubeIcon(pj)}</p>),
                     Page: (
                         <div>
                             {this.allRenderTables(pj, true, signal)}
@@ -119,77 +115,88 @@ class Best extends React.Component {
 
     topRender() {
         let items: JSX.Element[] = []
-        if (this.state.bestTop === null) {
+        if (this.state.bestAll === null) {
             return <div></div>
         }
 
-        const bestScore = this.state.bestTop as GetBestScoreResponse
+        // 1. 从所有项目按顺序排序下来
+
+        const all = this.state.bestAll as GetBestByAllScoresResponse
+        const bestSignals = all.BestSingle
+        const bestAvgs = all.BestAvg
         const pjs = AllProjectList()
 
         for (let i = 0; i < pjs.length; i++) {
             const pj = pjs[i]
-            if (bestScore.BestSingle[pj] === undefined && bestScore.BestAvg[pj] === undefined) {
+            const signal = bestSignals[pj] as Score[]
+            const avg = bestAvgs[pj] as Score[]
+            if (signal === undefined && avg === undefined) {
                 continue
             }
 
-            items.push(<tr key={"empty_" + i}>
-                <th colSpan={1}>{" ".replace(/ /g, "\u00a0")}</th>
-                <th colSpan={1}></th>
-                <th colSpan={1}></th>
-                <th colSpan={1}></th>
-                <th colSpan={1}></th>
-            </tr>)
+            let signalTds: JSX.Element[] = []
+            let avgTds: JSX.Element[] = []
+            if (signal !== undefined && signal.length !== 0) {
+                let last = signal[0]
+                signalTds.push(<>
+                    <th colSpan={1}>{CubeIcon(pj)} {CubesCn(pj)}</th>
+                    <td><Link to={"/player?id=" + last.PlayerID}>{last.PlayerName}</Link></td>
+                    <td>{FormatTime(last.Best, last.Project, false)}</td>
+                </>)
 
-            items.push(<tr key={"base_table_head_" + pj}>
-                <th colSpan={5}>{GetCubeIcon(pj)} {CubesCn(pj)}</th>
-            </tr>)
+                for (let i = 1; i < signal.length; i++) {
 
-            if (bestScore.BestSingle[pj] !== undefined) {
-                const s = bestScore.BestSingle[pj] as Score
-                if (s.Project === Cubes.Cube333MBF) {
-                    items.push(
-                        <tr key={"best_by_id" + s.ID}>
-                            <td colSpan={1}>单次</td>
-                            <td colSpan={1}><Link to={"/player?id=" + s.PlayerID}>{s.PlayerName}</Link></td>
-                            <td colSpan={1}>{s.R1} / {s.R2} ({FormatTime(s.R3, Cubes.Cube333, true)})</td>
-                            <td colSpan={1}></td>
-                            <td colSpan={1}></td>
-                        </tr>
-                    )
-                    continue
+                    if (signal[i].Best === last.Best) {
+                        signalTds.push(<>
+                            <td></td>
+                            <td><Link to={"/player?id=" + signal[i].PlayerID}>{signal[i].PlayerName}</Link></td>
+                            <td>{FormatTime(signal[i].Best, signal[i].Project, false)}</td>
+                        </>)
+                        continue
+                    }
+                    break
                 }
-
-                items.push(
-                    <tr key={"best_by_id" + s.ID}>
-                        <td colSpan={1}>单次</td>
-                        <td colSpan={1}><Link to={"/player?id=" + s.PlayerID}>{s.PlayerName}</Link></td>
-                        <td colSpan={1}>{FormatTime(s.Best, s.Project, false)}</td>
-                        <td colSpan={1}></td>
-                        <td colSpan={1}></td>
-                    </tr>
-                )
             }
 
-            if (bestScore.BestAvg[pj] !== undefined) {
-                const s = bestScore.BestAvg[pj] as Score
+            if (avg !== undefined && avg.length !== 0) {
+                let last = avg[0]
+                avgTds.push(<>
+                    <td>{FormatTime(last.Avg, last.Project, true)}</td>
+                    <td><Link to={"/player?id=" + last.PlayerID}>{last.PlayerName}</Link></td>
+                </>)
+
+                for (let i = 1; i < avgTds.length; i++) {
+                    if (avg[i].Avg === last.Avg) {
+                        avgTds.push(<>
+                            <td>{FormatTime(avg[i].Avg, avg[i].Project, true)}</td>
+                            <td><Link to={"/player?id=" + avg[i].PlayerID}>{avg[i].PlayerName}</Link></td>
+                        </>)
+                        continue
+                    }
+                    break
+                }
+            }
+
+            for (let i = 0; i < signalTds.length; i++) {
+                const s = signalTds[i]
+                const a = i < avgTds.length ? avgTds[i] : <td colSpan={2}></td>
                 items.push(
-                    <tr key={"avg_by_id" + s.ID}>
-                        <td>平均</td>
-                        <td><Link to={"/player?id=" + s.PlayerID}>{s.PlayerName}</Link></td>
-                        <td>{FormatTime(s.Avg, s.Project, true)}</td>
-                        <td colSpan={1}></td>
-                        <td colSpan={1}></td>
+                    <tr key={"empty_" + i}>
+                        {s}{a}
                     </tr>
                 )
             }
         }
-
-
         return (
-            <table className="table table-striped table-hover">
+            <table className="table table-striped table-hover text-center">
                 <thead>
                 <tr>
-                    <th colSpan={4}><h2>最佳排名</h2></th>
+                    <th colSpan={5}><h2>最佳排名</h2></th>
+                </tr>
+                <tr>
+                    <th colSpan={1}>{" ".replace(/ /g, "\u00a0")}</th>
+                    <th colSpan={2}>单次</th>
+                    <th colSpan={2}>平均</th>
                 </tr>
                 </thead>
                 <tbody>{items}</tbody>
@@ -207,7 +214,7 @@ class Best extends React.Component {
             },
             {
                 Id: "best_all",
-                Name: (<h4>全项目</h4>),
+                Name: (<h4>所有</h4>),
                 Page: this.allRender(),
             }
         ]

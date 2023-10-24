@@ -4,7 +4,7 @@ import {Cubes} from "../../components/cube/cube_map";
 import React, {JSX} from "react";
 import {AddScoreRequest, Contest, GetContestsResponse, Player, PlayersResponse, Score, ScorePenalty} from "../../components/api/api_model";
 import {GetLocationQueryParams, UpdateBrowserURL} from "../../components/utils/utils";
-import {GetCubeIcon} from "../../components/cube/icon/cube_icon";
+import {CubeIcon} from "../../components/cube/icon/cube_icon";
 import {FormatTime} from "../../components/cube/components/cube_timeformat";
 import {API, AuthAPI} from "../../components/api/api";
 import {parseTimeToSeconds} from "./admin_utils";
@@ -362,7 +362,7 @@ export class AdminScoreRender {
         for (let i = 0; i < contest.Rounds.length; i++) {
             const r = contest.Rounds[i]
             if (r.Project === data.project && r.Part === 1) {
-                items.push(<option value={r.ID} key={"_round_key" + r.ID}>{GetCubeIcon(r.Project)} {r.Name}</option>)
+                items.push(<option value={r.ID} key={"_round_key" + r.ID}>{CubeIcon(r.Project)} {r.Name}</option>)
             }
         }
         return (<select className="form-select" id={FormID_roundSelect}>{items}</select>)
@@ -726,7 +726,7 @@ export class AdminScoreRender {
             return (
                 <tr key={"_renderScoreList_tr_" + s.ID}>
                     {deleteButton}
-                    <td>{GetCubeIcon(s.Project)} {CubesCn(s.Project)}</td>
+                    <td>{CubeIcon(s.Project)} {CubesCn(s.Project)}</td>
                     <td>{s.RouteValue.Name}</td>
                     <td>-</td>
                     <td>-</td>
@@ -738,7 +738,7 @@ export class AdminScoreRender {
         return (
             <tr key={"_renderScoreList_tr" + s.ID}>
                 {deleteButton}
-                <td>{GetCubeIcon(s.Project)} {CubesCn(s.Project)}</td>
+                <td>{CubeIcon(s.Project)} {CubesCn(s.Project)}</td>
                 <td>{s.RouteValue.Name}</td>
                 <td>{FormatTime(s.Best, s.Project, false)}</td>
                 <td>{FormatTime(s.Avg, s.Project, true)}</td>

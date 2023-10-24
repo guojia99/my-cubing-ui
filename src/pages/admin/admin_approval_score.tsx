@@ -2,7 +2,7 @@ import {GetPreScores} from "../../components/api/api_model";
 import {callback} from "./admin_score";
 import {GetLocationQueryParams} from "../../components/utils/utils";
 import {AuthAPI} from "../../components/api/api";
-import {GetCubeIcon} from "../../components/cube/icon/cube_icon";
+import {CubeIcon} from "../../components/cube/icon/cube_icon";
 import {CubesCn} from "../../components/cube/cube";
 import React, {JSX} from "react";
 import {CubeScoreTds} from "../../components/cube/components/cube_score_tabels";
@@ -99,7 +99,7 @@ export class AdminApprovalScoreRender {
                     <td>{p.Source}</td>
                     <td>{p.ContestName}</td>
                     <td>{p.PlayerName}</td>
-                    <td>{GetCubeIcon(p.Project)} {CubesCn(p.Project)}</td>
+                    <td>{CubeIcon(p.Project)} {CubesCn(p.Project)}</td>
                     <td>{p.RoundName}</td>
                     {CubeScoreTds(p)}
                     <td>{buttons}</td>
@@ -165,7 +165,7 @@ export class AdminApprovalScoreRender {
                         <td>{p.Source}</td>
                         <td>{p.ContestName}</td>
                         <td>{p.PlayerName}</td>
-                        <td>{GetCubeIcon(p.Project)} {CubesCn(p.Project)}</td>
+                        <td>{CubeIcon(p.Project)} {CubesCn(p.Project)}</td>
                         <td>{p.RoundName}</td>
                         {CubeScoreTds(p)}
                     </tr>

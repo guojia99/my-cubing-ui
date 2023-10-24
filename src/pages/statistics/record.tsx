@@ -4,7 +4,7 @@ import {GetLocationQueryParams} from "../../components/utils/utils";
 import {GetRecordsResponse, Record as rc} from "../../components/api/api_model";
 import {Link} from "react-router-dom";
 import {PageNav, PageNavValue} from "../../components/utils/page";
-import {GetCubeIcon} from "../../components/cube/icon/cube_icon";
+import {CubeIcon} from "../../components/cube/icon/cube_icon";
 import {CubesCn} from "../../components/cube/cube";
 import {RecordType} from "../../components/cube/components/cube_score_tabels";
 import {FormatTime} from "../../components/cube/components/cube_timeformat";
@@ -53,7 +53,7 @@ class Record extends React.Component {
         return (
             <tr key={"contestTrBody_key" + c.ID}>
                 <td><Link to={"/player?id=" + c.ScoreValue.PlayerID}>{c.PlayerName}</Link></td>
-                <td>{GetCubeIcon(c.ScoreValue.Project)} {CubesCn(c.ScoreValue.Project)}</td>
+                <td>{CubeIcon(c.ScoreValue.Project)} {CubesCn(c.ScoreValue.Project)}</td>
                 <td>{name} {score}</td>
                 <td><Link to={"/contest?id=" + c.ContestID}>{c.ContestValue.Name}</Link></td>
             </tr>

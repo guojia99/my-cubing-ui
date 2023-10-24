@@ -21,7 +21,7 @@ import {
     ScoresByContest,
     SorScore
 } from "../../components/api/api_model";
-import {GetCubeIcon} from "../../components/cube/icon/cube_icon";
+import {CubeIcon} from "../../components/cube/icon/cube_icon";
 import {FormatRank, FormatTime} from "../../components/cube/components/cube_timeformat";
 import {TabNav, TabNavsPage} from "../../components/utils/tabs";
 import {Link} from "react-router-dom";
@@ -194,7 +194,7 @@ class PlayerPage extends React.Component {
             if (pj === Cubes.Cube333MBF) {
                 body.push(
                     <tr key={key}>
-                        <td>{GetCubeIcon(pj)} {CubesCn(pj)}</td>
+                        <td>{CubeIcon(pj)} {CubesCn(pj)}</td>
                         <td style={{color: best.Rank === 1 ? "red" : ""}}>{best.Rank}</td>
                         <td style={{fontWeight: 700, color: best.Rank === 1 ? "red" : ""}}>
                             {best.Score.R1 + "/" + best.Score.R2 + " " + FormatTime(best.Score.R3, best.Score.Project, true)}
@@ -219,7 +219,7 @@ class PlayerPage extends React.Component {
 
             body.push(
                 <tr key={key}>
-                    <td>{GetCubeIcon(pj)} {CubesCn(pj)}</td>
+                    <td>{CubeIcon(pj)} {CubesCn(pj)}</td>
                     <td style={{color: best.Rank === 1 ? "red" : ""}}>{best.Rank}</td>
                     <td style={{fontWeight: 700, color: best.Rank === 1 ? "red" : ""}}>{FormatTime(best.Score.Best, pj, false)}</td>
                     {avgTd}
@@ -397,7 +397,7 @@ class PlayerPage extends React.Component {
                 let items = []
 
                 items.push(<tr key={"score_key_first_111_" + pj}>
-                    <td colSpan={tdNum + 5}>{GetCubeIcon(pj)} {CubesCn(pj)}</td>
+                    <td colSpan={tdNum + 5}>{CubeIcon(pj)} {CubesCn(pj)}</td>
                 </tr>)
 
                 for (let i = 0; i < scores.length; i++) {
@@ -456,7 +456,7 @@ class PlayerPage extends React.Component {
             const drawScore333MBFTables = (scores: ScoresByContest[]) => {
                 let items = []
                 items.push(<tr key={"drawScore333MBFTables_score_key"}>
-                    <td colSpan={5}>{GetCubeIcon(Cubes.Cube333MBF)} {CubesCn(Cubes.Cube333MBF)}</td>
+                    <td colSpan={5}>{CubeIcon(Cubes.Cube333MBF)} {CubesCn(Cubes.Cube333MBF)}</td>
                 </tr>)
                 for (let i = 0; i < scores.length; i++) {
                     const contest = scores[i].Contest
@@ -518,14 +518,14 @@ class PlayerPage extends React.Component {
                 if (pj === Cubes.Cube333MBF) {
                     pages.push({
                         Id: "scores_" + pj,
-                        Name: GetCubeIcon(pj),
+                        Name: CubeIcon(pj),
                         Page: drawScore333MBFTables(scores)
                     })
                     continue
                 }
                 pages.push({
                     Id: "scores_" + pj,
-                    Name: GetCubeIcon(pj),
+                    Name: CubeIcon(pj),
                     Page: drawScoresBaseTablesAndChart(pj, scores)
                 })
             }
@@ -561,7 +561,7 @@ class PlayerPage extends React.Component {
                 }
                 items.push(
                     <tr key={"renderPageByRecord_" + value.Record.RType + "_" + value.Record.ID}>
-                        <td>{GetCubeIcon(value.Score.Project)} {CubesCn(value.Score.Project)}</td>
+                        <td>{CubeIcon(value.Score.Project)} {CubesCn(value.Score.Project)}</td>
                         <td><Link to={"/contest?id=" + value.Contest.ID}>{value.Contest.Name}</Link></td>
                         {score}
                     </tr>
@@ -609,7 +609,7 @@ class PlayerPage extends React.Component {
 
                     items.push(
                         <tr key={"renderPageByPodium_value" + p.Score.ID}>
-                            <td>{GetCubeIcon(p.Score.Project)} {CubesCn(p.Score.Project)}</td>
+                            <td>{CubeIcon(p.Score.Project)} {CubesCn(p.Score.Project)}</td>
                             <td>{p.Score.Rank}</td>
                             <td style={{fontWeight: 700}}>{FormatTime(p.Score.Best, p.Score.Project, false)}</td>
                             <td style={{fontWeight: 700}}>{FormatTime(p.Score.Avg, p.Score.Project, true)}</td>
@@ -662,7 +662,7 @@ class PlayerPage extends React.Component {
                     }
 
                     items.push(<tr>
-                        <td>{GetCubeIcon(allPj[i])} {CubesCn(allPj[i])}</td>
+                        <td>{CubeIcon(allPj[i])} {CubesCn(allPj[i])}</td>
                         <td>{FormatTime(best.Best, allPj[i], false)}</td>
                         <td>{avg !== undefined ? FormatTime(avg.Avg, allPj[i], false) : "-"}</td>
                     </tr>)

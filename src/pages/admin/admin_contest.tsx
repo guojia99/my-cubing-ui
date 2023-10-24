@@ -6,7 +6,7 @@ import {CreateModal, EmptyHandle, ModalButton} from "../../components/utils/moda
 import {callback} from "./admin_score";
 import {API, AuthAPI} from "../../components/api/api";
 import {AllProjectList, CubesCn} from "../../components/cube/cube";
-import {GetCubeIcon} from "../../components/cube/icon/cube_icon";
+import {CubeIcon} from "../../components/cube/icon/cube_icon";
 import {Sleep} from "../../components/utils/async";
 import {GetLocationQueryParams} from "../../components/utils/utils";
 import {PageNav, PageNavValue} from "../../components/utils/page";
@@ -127,7 +127,7 @@ export class AdminContestRender {
                         <td>
                             <div className="form-check form-switch">
                                 <input className="form-check-input" type="checkbox" role="switch" id={roundKeyRoundEnable + pj} defaultChecked={true}/>
-                                <label className="form-check-label" htmlFor={roundKeyRoundEnable + pj}>  {GetCubeIcon(pj)} {CubesCn(pj)}</label>
+                                <label className="form-check-label" htmlFor={roundKeyRoundEnable + pj}>  {CubeIcon(pj)} {CubesCn(pj)}</label>
                             </div>
                         </td>
                         <td>

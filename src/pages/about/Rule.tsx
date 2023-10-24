@@ -1,7 +1,8 @@
 import React, {JSX} from "react";
 import {CubesCn} from "../../components/cube/cube";
 import {Cubes} from "../../components/cube/cube_map";
-import {GetCubeIcon} from "../../components/cube/icon/cube_icon";
+import {CubeIcon} from "../../components/cube/icon/cube_icon";
+import {SetBackGround} from "../../components/utils/background";
 
 
 type RuleDetail = {
@@ -53,6 +54,7 @@ const RuleDetails: RuleDetail[] = [
 class Rule extends React.Component {
 
     componentDidMount() {
+        SetBackGround("")
     }
 
     render() {
@@ -71,7 +73,7 @@ class Rule extends React.Component {
             items.push(
                 <div className="d-flex position-relative" key={"rule_key_" + i} style={{margin: "20px 20px"}}>
                     <div>
-                        <h5 className="mt-0">{GetCubeIcon(r.Cube)}{CubesCn(r.Cube)} 规则规范</h5>
+                        <h5 className="mt-0">{CubeIcon(r.Cube)}{CubesCn(r.Cube)} 规则规范</h5>
                         {ps}
                     </div>
                 </div>
