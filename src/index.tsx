@@ -12,7 +12,6 @@ import ScrollToTopButton from "./components/utils/top_button";
 import {ToastContainer} from "react-toastify";
 
 
-
 // page
 const Home = React.lazy(() => import('./pages/home/Home'))
 const Debug = React.lazy(() => import('./pages/debug/debug'))
@@ -31,6 +30,8 @@ const Rule = React.lazy(() => import('./pages/about/Rule'))
 const RelativeSorPage = React.lazy(() => import('./pages/statistics/RelativeSor'))
 const Projects = React.lazy(() => import('./pages/about/Projects'))
 const Sudoku = React.lazy(() => import('./games/sudoku/Sudoku'))
+const Images = React.lazy(() => import("./pages/statistics/Images"))
+
 // main
 $(() => {
     setInterval(() => {
@@ -70,6 +71,7 @@ root.render(
                 <li className="nav-item dropdown">
                     <Link to="#" className="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false">统计</Link>
                     <ul className="dropdown-menu">
+                        <li><NavLink className="dropdown-item" to="/statistics/images">图表</NavLink></li>
                         <li><NavLink className="dropdown-item" to="/statistics/record">纪录</NavLink></li>
                         <li><NavLink className="dropdown-item" to="/statistics/sor">Sor排位</NavLink></li>
                         <li><NavLink className="dropdown-item" to="/statistics/relative_sor">排位分数(兔兔版)</NavLink></li>
@@ -106,6 +108,7 @@ root.render(
                     <Route path="/players" Component={Players}/>{/*玩家列表*/}
 
                     {/*统计*/}
+                    <Route path="/statistics/images" Component={Images}/>
                     <Route path="/statistics/best" Component={Best}/> {/*最佳成绩汇总*/}
                     <Route path="/statistics/sor" Component={Sor}/> {/*最佳成绩汇总*/}
                     <Route path="/statistics/relative_sor" Component={RelativeSorPage}/> {/*兔兔版本成绩*/}

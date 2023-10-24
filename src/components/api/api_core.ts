@@ -21,7 +21,7 @@ import {
     GetRelativeSor,
     GetPlayerRelativeSor,
     GetAvgRelativeSor,
-    GetPlayerNemesisResponse,
+    GetPlayerNemesisResponse, GetContestStaticsResponse,
 } from './api_model';
 import {Request} from "./api_error";
 import {API} from "./api";
@@ -252,6 +252,12 @@ export class apiCore {
             playerMap.set(players.Players[i].ID, players.Players[i])
         }
         return [playerMap, players]
+    }
+
+    async GetContestStatics(): Promise<GetContestStaticsResponse> {
+        let uri = this.uri + "/report/contests/statics"
+        const result = await Request.get(uri, {headers: {Accept: 'application/json'}})
+        return result.data
     }
 }
 

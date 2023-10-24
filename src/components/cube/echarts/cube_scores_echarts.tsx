@@ -5,8 +5,8 @@ import {FormatTime} from "../components/cube_timeformat";
 import {Contest, Score} from "../../api/api_model";
 import {Cubes} from "../cube_map";
 
-type Format = echarts.EChartOption.Tooltip.Format;
-type EChartsOption = echarts.EChartOption;
+export type Format = echarts.EChartOption.Tooltip.Format;
+export type EChartsOption = echarts.EChartOption;
 
 
 export type ScoreChatValue = {
@@ -75,6 +75,7 @@ export const ScoreChat = (v: ScoreChatValue) => {
     }
 
     const option: EChartsOption = {
+        animationDuration: 5000,
         title: {
             text: CubesCn(v.Project)
         },

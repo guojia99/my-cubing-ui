@@ -1,4 +1,5 @@
 import {Cubes} from "../cube/cube_map";
+import Contests from "../../pages/contests/Contests";
 
 
 export type Contest = {
@@ -303,3 +304,10 @@ export type RecordPreScoresRequest = {
     ID: number,
     Processor: string
 }
+
+export type GetContestStatic = Contest & {
+    PlayerNum: number,
+    ProjectNum: number,
+}
+
+export type GetContestStaticsResponse = GetContestStatic[]
