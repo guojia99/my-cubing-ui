@@ -1,11 +1,11 @@
-.dropdown-item.active, .dropdown-item:active{
+.dropdown-item.active, .dropdown-item:active {
     color: #ffffff;
     background-color: #b8b9c0;
 }
-
-a:visited{
-    color: rgb(128, 128, 128);
+a {
+    text-decoration: none !important;
+    color: rgb(128, 128, 128) !important;
 }
-.nav-link{
+.nav-link {
     color: rgb(128, 128, 128);
 }

@@ -1,17 +1,16 @@
 // 获取当前所有选择框的数据
 import {CubeRouteNumber, CubesCn} from "../../components/cube/cube";
-import {Cubes} from "../../components/cube/cube_map";
+import {Cubes, CubesAttributes, CubesAttributesList, SegmentationType, SegmentationTypeList} from "../../components/cube/cube_map";
 import React, {JSX} from "react";
 import {AddScoreRequest, Contest, GetContestsResponse, Player, PlayersResponse, Score, ScorePenalty} from "../../components/api/api_model";
 import {GetLocationQueryParams, UpdateBrowserURL} from "../../components/utils/utils";
-import {CubeIcon} from "../../components/cube/icon/cube_icon";
 import {FormatTime} from "../../components/cube/components/cube_timeformat";
 import {API, AuthAPI} from "../../components/api/api";
 import {parseTimeToSeconds} from "./admin_utils";
 import {CreateModal, ModalButton} from "../../components/utils/modal";
 import {CubeScoreTds} from "../../components/cube/components/cube_score_tabels";
 import {WaitToast, WarnToast} from "../../components/utils/alert";
-import {CubesAttributes, CubesAttributesList, SegmentationType, SegmentationTypeList} from "../../components/cube/cube_map";
+import {CubeIcon} from "../../components/icon/cube_icon";
 
 export const _playerSelectKey = "_player"
 export const _contestSelectKey = "_contest"

@@ -5,6 +5,7 @@ import {Link} from "react-router-dom";
 import {SetBackGround} from "../../components/utils/background";
 import {GetLocationQueryParams} from "../../components/utils/utils";
 import {PageNav, PageNavValue} from "../../components/utils/page";
+import TableLoader from "../../components/loading/DashboardLoader";
 
 
 class Players extends React.Component {
@@ -40,12 +41,12 @@ class Players extends React.Component {
 
     renderTable() {
         if (this.state.data === null) {
-            return (<div></div>)
+            return <TableLoader/>
         }
 
         let data = this.state.data as PlayersResponse
         if (data.Players === undefined) {
-            return (<div></div>)
+            return <TableLoader/>
         }
         let body = []
 

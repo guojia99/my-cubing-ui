@@ -1,6 +1,5 @@
 import {SetBackGround} from "../../components/utils/background";
-import {DrawNumberCubeImages} from "../../components/cube/draw/draw_cube";
-import {RoundTable, RoundTables} from "../../components/cube/components/cube_rounds";
+import {RoundTables} from "../../components/cube/components/cube_rounds";
 import {Cubes} from "../../components/cube/cube_map";
 
 const Debug = () => {

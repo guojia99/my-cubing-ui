@@ -6,6 +6,7 @@ import {GetLocationQueryParam, GetLocationQueryParams, UpdateBrowserURL} from ".
 import {PageNav, PageNavValue} from "../../components/utils/page";
 import Select from 'react-select'
 import {SetBackGround} from "../../components/utils/background";
+import TableLoader from "../../components/loading/DashboardLoader";
 
 
 export function convertDateString(input: string): string {
@@ -150,7 +151,7 @@ class Contests extends React.Component {
 
     private renderPage() {
         if (this.state.data === null) {
-            return (<div></div>)
+            return <TableLoader/>
         }
 
         let data = this.state.data as GetContestsResponse

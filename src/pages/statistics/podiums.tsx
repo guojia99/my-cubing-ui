@@ -3,6 +3,7 @@ import {API} from "../../components/api/api";
 import {Podiums} from "../../components/api/api_model";
 import {Link} from "react-router-dom";
 import {SetBackGround} from "../../components/utils/background";
+import TableLoader from "../../components/loading/DashboardLoader";
 
 class PodiumsPage extends React.Component {
 
@@ -19,12 +20,12 @@ class PodiumsPage extends React.Component {
 
     render() {
         if (this.state.data === null) {
-            return <div></div>
+            return <TableLoader/>
         }
 
         const pds: Podiums[] = this.state.data as Podiums[]
         if (pds === undefined) {
-            return <div></div>
+            return <TableLoader/>
         }
 
         let items: JSX.Element[] = []

@@ -1,8 +1,8 @@
 import React, {JSX} from "react";
 import {CubesCn} from "../../components/cube/cube";
 import {Cubes} from "../../components/cube/cube_map";
-import {CubeIcon} from "../../components/cube/icon/cube_icon";
 import {SetBackGround} from "../../components/utils/background";
+import {CubeIcon} from "../../components/icon/cube_icon";
 
 
 type RuleDetail = {

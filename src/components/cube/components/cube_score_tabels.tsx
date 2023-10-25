@@ -4,7 +4,7 @@ import {ContestRecord, Score} from "../../api/api_model";
 import {Link} from "react-router-dom";
 import {CubeRouteNumber} from "../cube";
 import {FormatTime} from "./cube_timeformat";
-import {PR_And_GR_Record} from "./cube_record";
+import {RecordSpan} from "./cube_record";
 import React, {JSX} from "react";
 import {Cubes} from "../cube_map";
 
@@ -60,8 +60,8 @@ const NumberDefaultResultCubeScoresTable = (tdNum: number, pj: Cubes, Scores: Sc
                 <tr className={i < 3 ? "table-success" : ""}>
                     <td className="idxTd">{i + 1}</td>
                     <td><Link to={"/player?id=" + score.PlayerID}>{score.PlayerName}</Link></td>
-                    <td>{PR_And_GR_Record(score.IsBestSingle, isSingleBestRecord)}{FormatTime(score.Best, pj, false)}</td>
-                    <td>{PR_And_GR_Record(score.IsBestAvg, isAvgBestRecord)}{FormatTime(score.Avg, pj,  true)}</td>
+                    <td>{RecordSpan(score.IsBestSingle, isSingleBestRecord)}{FormatTime(score.Best, pj, false)}</td>
+                    <td>{RecordSpan(score.IsBestAvg, isAvgBestRecord)}{FormatTime(score.Avg, pj,  true)}</td>
                     <td>{FormatTime(score.R1, pj, false)}</td>
                     {cube3Td}
                     {cube5Td}
@@ -116,7 +116,7 @@ const MBFCube333ScoreTable = (pj: Cubes, Scores: Score[], records: Map<string, C
                 <tr>
                     <td>{i + 1}</td>
                     <td><Link to={"/player?id=" + score.PlayerID}>{score.PlayerName}</Link></td>
-                    <td>({score.R1} / {score.R2}){PR_And_GR_Record(score.IsBestSingle, isSingleBestRecord)}</td>
+                    <td>({score.R1} / {score.R2}){RecordSpan(score.IsBestSingle, isSingleBestRecord)}</td>
                     <td>{FormatTime(score.R1, pj, false)}</td>
                     <td>{FormatTime(score.R2, pj, false)}</td>
                     <td>{FormatTime(score.R3, pj, true)}</td>

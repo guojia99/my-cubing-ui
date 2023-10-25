@@ -1,5 +1,4 @@
 import React, {JSX} from "react";
-
 import './tabs.css'
 import {GetLocationQueryParams, UpdateBrowserURL} from "./utils";
 
@@ -27,7 +26,7 @@ export const TabNav = (tb: TabNavsValue) => {
         }
     }
 
-    if (tb.Pages === undefined || tb.Pages.length === 0 ){
+    if (tb.Pages === undefined || tb.Pages.length === 0) {
         return <div></div>
     }
 

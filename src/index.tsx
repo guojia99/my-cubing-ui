@@ -1,6 +1,5 @@
 // css
-import 'bootstrap/dist/css/bootstrap.min.css'
-import './css/best.css'
+// import 'bootstrap/dist/css/bootstrap.min.css'
 import './index.css'
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -8,8 +7,8 @@ import 'react-toastify/dist/ReactToastify.css';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import {BrowserRouter, Link, NavLink, Route, Routes} from "react-router-dom";
-import ScrollToTopButton from "./components/utils/top_button";
 import {ToastContainer} from "react-toastify";
+import ThreeDotsLoader from "./components/loading/ThreeDotsLoader";
 
 
 // page
@@ -89,7 +88,7 @@ root.render(
                 </li>
             </ul>
 
-            <React.Suspense fallback={<div>Loading...</div>}>
+            <React.Suspense fallback={<ThreeDotsLoader/>}>
                 <Routes>
                     <Route path="/" Component={Home}/>
                     <Route path="/about" Component={About}/> {/*关于*/}
@@ -125,7 +124,7 @@ root.render(
                 </Routes>
             </React.Suspense>
         </BrowserRouter>
-        <ScrollToTopButton/>
+        {/*<ScrollToTopButton/>*/}
 
     </div>
 );

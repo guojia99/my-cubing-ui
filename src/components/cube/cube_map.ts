@@ -1,10 +1,11 @@
 import {JSX} from "react";
-import {DrawNumberCubeImages} from "./draw/draw_cube";
-import {DrawSkCubeImages} from "./draw/draw_skewb";
-import {DrawPyCubeImages} from "./draw/draw_py";
-import {DrawSQ1CubeImages} from "./draw/draw_sq1";
-import {DrawEmptyImages} from "./draw/draw_empty";
-import {DrawClockCubeImages} from "./draw/draw_clock";
+import { DrawNumberCubeImages } from "../draw/draw_cube";
+import {DrawPyCubeImages} from "../draw/draw_py";
+import {DrawSkCubeImages} from "../draw/draw_skewb";
+import {DrawEmptyImages} from "../draw/draw_empty";
+import {DrawSQ1CubeImages} from "../draw/draw_sq1";
+import {DrawClockCubeImages} from "../draw/draw_clock";
+
 
 export enum Cubes {
     JuBaoHaoHao = "jhh",

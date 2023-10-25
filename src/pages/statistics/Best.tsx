@@ -3,12 +3,13 @@ import {API} from "../../components/api/api";
 import {GetBestByAllScoresResponse, Score} from "../../components/api/api_model";
 import {AllProjectList, CubesCn} from "../../components/cube/cube";
 import {Cubes} from "../../components/cube/cube_map";
-import {CubeIcon} from "../../components/cube/icon/cube_icon";
 import {FormatTime} from "../../components/cube/components/cube_timeformat";
 import {Link} from "react-router-dom";
 import {TabNav, TabNavsPage} from "../../components/utils/tabs";
 import {CubeScoreTds} from "../../components/cube/components/cube_score_tabels";
 import {SetBackGround} from "../../components/utils/background";
+import {CubeIcon} from "../../components/icon/cube_icon";
+import TableLoader from "../../components/loading/DashboardLoader";
 
 class Best extends React.Component {
     state = {
@@ -26,7 +27,7 @@ class Best extends React.Component {
 
     allRenderTables = (pj: Cubes, IsBest: boolean, scores: Score[]) => {
         if (scores === undefined || scores.length === 0) {
-            return (<div></div>)
+            return  <TableLoader/>
         }
 
         const items: JSX.Element[] = []
@@ -64,7 +65,7 @@ class Best extends React.Component {
 
     allRender() {
         if (this.state.bestAll === null) {
-            return (<div></div>)
+            return  <TableLoader/>
         }
 
         const tabs: TabNavsPage[] = []
@@ -102,7 +103,7 @@ class Best extends React.Component {
 
 
         if (tabs.length === null) {
-            return <div></div>
+            return  <TableLoader/>
         }
 
 
@@ -116,7 +117,7 @@ class Best extends React.Component {
     topRender() {
         let items: JSX.Element[] = []
         if (this.state.bestAll === null) {
-            return <div></div>
+            return  <TableLoader/>
         }
 
         // 1. 从所有项目按顺序排序下来

@@ -1,9 +1,9 @@
 import * as echarts from "echarts";
 import ReactEcharts from "echarts-for-react";
-import {CubesCn} from "../cube";
-import {FormatTime} from "../components/cube_timeformat";
-import {Contest, Score} from "../../api/api_model";
-import {Cubes} from "../cube_map";
+import {Cubes} from "../cube/cube_map";
+import {Contest, Score} from "../api/api_model";
+import {FormatTime} from "../cube/components/cube_timeformat";
+import {CubesCn} from "../cube/cube";
 
 export type Format = echarts.EChartOption.Tooltip.Format;
 export type EChartsOption = echarts.EChartOption;

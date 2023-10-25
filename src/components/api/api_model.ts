@@ -1,5 +1,4 @@
 import {Cubes} from "../cube/cube_map";
-import Contests from "../../pages/contests/Contests";
 
 
 export type Contest = {

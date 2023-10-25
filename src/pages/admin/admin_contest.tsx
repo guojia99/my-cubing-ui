@@ -6,12 +6,12 @@ import {CreateModal, EmptyHandle, ModalButton} from "../../components/utils/moda
 import {callback} from "./admin_score";
 import {API, AuthAPI} from "../../components/api/api";
 import {AllProjectList, CubesCn} from "../../components/cube/cube";
-import {CubeIcon} from "../../components/cube/icon/cube_icon";
 import {Sleep} from "../../components/utils/async";
 import {GetLocationQueryParams} from "../../components/utils/utils";
 import {PageNav, PageNavValue} from "../../components/utils/page";
 import {WaitToast, WarnToast} from "../../components/utils/alert";
 import {CubesAttributesList, SegmentationType, SegmentationTypeList} from "../../components/cube/cube_map";
+import {CubeIcon} from "../../components/icon/cube_icon";
 
 type AdminContestDataCtx = {
     Contests: GetContestsResponse | null,

@@ -7,31 +7,38 @@ import {AllProjectList, CubesCn} from "../../components/cube/cube";
 import {Cubes} from "../../components/cube/cube_map";
 import {GetLocationQueryParams, SetTitleName} from "../../components/utils/utils";
 import {
-    Contest, GetAvgRelativeSor,
-    GetPlayerAllScoreResponse, GetPlayerNemesisResponse,
-    GetPlayerRecord, GetPlayerRelativeSor,
+    Contest,
+    GetAvgRelativeSor,
+    GetPlayerAllScoreResponse,
+    GetPlayerNemesisResponse,
+    GetPlayerRecord,
+    GetPlayerRelativeSor,
     Player,
     PlayerBestScoreResponse,
     PlayerSorResponse,
     Podiums,
     RankScore,
-    RecordMessage, RelativeSor,
+    RecordMessage,
+    RelativeSor,
     Round,
     Score,
     ScoresByContest,
     SorScore
 } from "../../components/api/api_model";
-import {CubeIcon} from "../../components/cube/icon/cube_icon";
 import {FormatRank, FormatTime} from "../../components/cube/components/cube_timeformat";
 import {TabNav, TabNavsPage} from "../../components/utils/tabs";
 import {Link} from "react-router-dom";
-import {PR_And_GR_Record} from "../../components/cube/components/cube_record";
+import {RecordSpan} from "../../components/cube/components/cube_record";
 import {CubeScoreTds, RecordType} from "../../components/cube/components/cube_score_tabels";
 import {SorKeys} from "../../components/cube/components/cube_sor";
 import {SetBackGround} from "../../components/utils/background";
 import {Avatar} from "../../components/utils/avatar";
-import {ScoreChat} from "../../components/cube/echarts/cube_scores_echarts";
-import {SorChat, SorChatItem, SorChatValue, SorChatValueKeyMap} from "../../components/cube/echarts/cube_scores_sor_echarts";
+import {CubeIcon} from "../../components/icon/cube_icon";
+import {ScoreChat} from "../../components/echarts/cube_scores_echarts";
+import {SorChat, SorChatItem, SorChatValue, SorChatValueKeyMap} from "../../components/echarts/cube_scores_sor_echarts";
+import TableLoader from "../../components/loading/DashboardLoader";
+import ThreeDotsLoader from "../../components/loading/ThreeDotsLoader";
+import PieChartLoader from "../../components/loading/PieChartLoader";
 
 class PlayerPage extends React.Component {
     state = {
@@ -124,8 +131,10 @@ class PlayerPage extends React.Component {
 
     renderHeader() {
         if (this.state.player === null) {
-            return <div></div>
+            return <ThreeDotsLoader/>
         }
+
+
         const player = this.state.player as Player
         let name = player.Name
         if (player.ActualName !== null && player.ActualName !== undefined && player.ActualName !== "") {
@@ -170,12 +179,18 @@ class PlayerPage extends React.Component {
 
     renderBestTable() {
         if (this.state.best === null) {
-            return (<div></div>)
+            return <div>
+                <h4 style={{textAlign: "center", fontWeight: 700}}>个人纪录</h4>
+                <TableLoader/>
+            </div>
         }
 
         const data = this.state.best as PlayerBestScoreResponse
         if (data === undefined) {
-            return <div></div>
+            return <div>
+                <h4 style={{textAlign: "center", fontWeight: 700}}>个人纪录</h4>
+                <TableLoader/>
+            </div>
         }
 
         const pjList = AllProjectList()
@@ -248,7 +263,10 @@ class PlayerPage extends React.Component {
 
     renderPodiumsTable() {
         if (this.state.podium === null) {
-            return <div></div>
+            return (<div>
+                <h4 style={{textAlign: "center", fontWeight: 700}}>领奖台</h4>
+                <TableLoader/>
+            </div>)
         }
 
         const podium = this.state.podium as Podiums
@@ -341,12 +359,12 @@ class PlayerPage extends React.Component {
     renderAllScore() {
         const renderPageByScore = () => {
             if (this.state.allScore === null) {
-                return <div></div>
+                return <TableLoader/>
             }
 
             const allScore = this.state.allScore as GetPlayerAllScoreResponse
             if (allScore === null || allScore === undefined || allScore.Scores === null) {
-                return <div></div>
+                return <TableLoader/>
             }
 
 
@@ -415,8 +433,8 @@ class PlayerPage extends React.Component {
                                 {/*<td>{ss[j].Rank}</td>*/}
                                 <td>{ss[j].RouteValue.Name}</td>
                                 <td>{FormatRank(ss[j].Rank)}</td>
-                                <td style={{fontWeight: 700}}>{PR_And_GR_Record(ss[j].IsBestSingle, IsBestGr)}{FormatTime(ss[j].Best, pj, false)}</td>
-                                <td style={{fontWeight: 700}}>{PR_And_GR_Record(ss[j].IsBestAvg, IsAvgGr)}{FormatTime(ss[j].Avg, pj, true)}</td>
+                                <td style={{fontWeight: 700}}>{RecordSpan(ss[j].IsBestSingle, IsBestGr)}{FormatTime(ss[j].Best, pj, false)}</td>
+                                <td style={{fontWeight: 700}}>{RecordSpan(ss[j].IsBestAvg, IsAvgGr)}{FormatTime(ss[j].Avg, pj, true)}</td>
                                 {CubeScoreTds(ss[j])}
                             </tr>
                         )
@@ -476,7 +494,7 @@ class PlayerPage extends React.Component {
                                 <td>{ss[j].RouteValue.Name}</td>
                                 <td>{FormatRank(ss[j].Rank)}</td>
                                 <td>{FormatTime(ss[j].Best, Cubes.Cube333MBF, false)}</td>
-                                <td>{PR_And_GR_Record(ss[j].IsBestSingle, IsBestGr)} <i style={{fontWeight: 700}}> {score} </i> {FormatTime(ss[j].R3, ss[j].Project, true)}
+                                <td>{RecordSpan(ss[j].IsBestSingle, IsBestGr)} <i style={{fontWeight: 700}}> {score} </i> {FormatTime(ss[j].R3, ss[j].Project, true)}
                                 </td>
                             </tr>
                         )
@@ -587,7 +605,7 @@ class PlayerPage extends React.Component {
 
         const renderPageByPodium = () => {
             if (this.state.podium === null) {
-                return <div></div>
+                return  <TableLoader/>
             }
 
             const podium = this.state.podium as Podiums
@@ -655,11 +673,11 @@ class PlayerPage extends React.Component {
             const scoreTable = (allSingle: any, allAvg: any) => {
                 let items: JSX.Element[] = []
                 for (let i = 0; i < allPj.length; i++) {
-                    const avg = allAvg[allPj[i]] as Score
-                    const best = allSingle[allPj[i]] as Score
-                    if (avg === undefined && best === undefined) {
+                    if ((allAvg === undefined && allSingle === undefined) || allSingle[allPj[i]] === undefined) {
                         continue
                     }
+                    const best = allSingle[allPj[i]] as Score
+                    const avg = allAvg ? allAvg[allPj[i]] as Score : undefined
 
                     items.push(<tr>
                         <td>{CubeIcon(allPj[i])} {CubesCn(allPj[i])}</td>
@@ -744,14 +762,14 @@ class PlayerPage extends React.Component {
 
     renderRelativeSor() {
         if (this.state.player === null) {
-            return <div></div>
+            return <PieChartLoader/>
         }
         if (this.state.relativeSor === null || this.state.avgRelativeSor === null) {
-            return <div></div>
+            return <PieChartLoader/>
         }
         const player = this.state.player as Player
         if (player === undefined) {
-            return <div></div>
+            return <PieChartLoader/>
         }
 
         const sor = this.state.relativeSor as GetPlayerRelativeSor
@@ -799,7 +817,7 @@ class PlayerPage extends React.Component {
 
         return (
             <div>
-                <h4 style={{textAlign: "center", fontWeight: 700, marginTop: "20px", marginBottom: "20px"}}>能力芒星图</h4>
+                <h4 style={{textAlign: "center", fontWeight: 700, marginTop: "20px", marginBottom: "20px"}}>能力图</h4>
                 {SorChat(v)}
             </div>
         )

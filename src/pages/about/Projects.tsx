@@ -1,7 +1,7 @@
 import React, {JSX} from "react";
 import {CubesAttributes, CubesAttributesList, CubesRouteTypeCn, SegmentationType, SegmentationTypeList} from "../../components/cube/cube_map";
-import {CubeIcon} from "../../components/cube/icon/cube_icon";
 import {SetBackGround} from "../../components/utils/background";
+import {CubeIcon} from "../../components/icon/cube_icon";
 
 class Projects extends React.Component {
 

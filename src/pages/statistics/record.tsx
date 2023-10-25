@@ -4,12 +4,13 @@ import {GetLocationQueryParams} from "../../components/utils/utils";
 import {GetRecordsResponse, Record as rc} from "../../components/api/api_model";
 import {Link} from "react-router-dom";
 import {PageNav, PageNavValue} from "../../components/utils/page";
-import {CubeIcon} from "../../components/cube/icon/cube_icon";
+import {CubeIcon} from "../../components/icon/cube_icon";
 import {CubesCn} from "../../components/cube/cube";
 import {RecordType} from "../../components/cube/components/cube_score_tabels";
 import {FormatTime} from "../../components/cube/components/cube_timeformat";
 import {SetBackGround} from "../../components/utils/background";
 import {Cubes} from "../../components/cube/cube_map";
+import TableLoader from "../../components/loading/DashboardLoader";
 
 class Record extends React.Component {
     state = {
@@ -89,7 +90,7 @@ class Record extends React.Component {
 
     private readerPageNav() {
         if (this.state.data === null) {
-            return (<div></div>)
+            return  <TableLoader/>
         }
         const query = GetLocationQueryParams()
         const page = isNaN(Number(query['page'])) ? 1 : Number(query['page'])

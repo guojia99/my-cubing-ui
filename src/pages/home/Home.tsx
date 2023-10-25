@@ -12,9 +12,10 @@ import {API} from "../../components/api/api";
 import {GetContestsResponse, GetRecordsResponse, Player} from "../../components/api/api_model";
 import {FormatTime} from "../../components/cube/components/cube_timeformat";
 import {CubesCn} from "../../components/cube/cube";
-import {CubeIcon} from "../../components/cube/icon/cube_icon";
 import {WaitGroup} from "../../components/utils/async";
 import {SetBackGround} from "../../components/utils/background";
+import {CubeIcon} from "../../components/icon/cube_icon";
+import ThreeDotsLoader from "../../components/loading/ThreeDotsLoader";
 
 
 class Home extends React.Component {
@@ -113,6 +114,8 @@ class Home extends React.Component {
                     </li>
                 )
             }
+        } else {
+            items.push(<ThreeDotsLoader/>)
         }
 
         return this.newCard(items, "最近比赛", "/contests")
@@ -139,6 +142,8 @@ class Home extends React.Component {
                     )
                 }
             }
+        } else {
+            items.push(<ThreeDotsLoader/>)
         }
 
         return this.newCard(items, "最近纪录", "/statistics/record")
@@ -158,6 +163,8 @@ class Home extends React.Component {
                     <li key={"playerCard_item" + i}><Link to={"/player?id=" + p.ID}> {p.ID}. {p.Name} </Link></li>
                 )
             }
+        } else {
+            items.push(<ThreeDotsLoader/>)
         }
         return this.newCard(items, "新成员", "/players")
     }

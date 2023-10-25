@@ -4,6 +4,7 @@ import {BestSorReportResponse, SorScore} from "../../components/api/api_model";
 import {TabNav, TabNavsPage} from "../../components/utils/tabs";
 import {SorKeys, SorTable} from "../../components/cube/components/cube_sor";
 import {SetBackGround} from "../../components/utils/background";
+import TableLoader from "../../components/loading/DashboardLoader";
 
 class Sor extends React.Component {
     state = {
@@ -19,11 +20,11 @@ class Sor extends React.Component {
 
     render() {
         if (this.state.data === null) {
-            return <div></div>
+            return <TableLoader/>
         }
         const data = this.state.data as BestSorReportResponse
         if (data.BestSingle === undefined && data.BestAvg === undefined) {
-            return <div></div>
+            return <TableLoader/>
         }
         let tabs: TabNavsPage[] = []
         SorKeys.forEach((value, key) => {

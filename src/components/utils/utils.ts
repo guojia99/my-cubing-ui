@@ -38,5 +38,5 @@ export function IsSubPath(p: string) : boolean{
 }
 
 export function SetTitleName(name: string) {
-    document.title = name + "| 魔缘赛事系统"
+    document.title = name + "| 广州魔缘魔方"
 }

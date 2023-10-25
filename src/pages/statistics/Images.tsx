@@ -4,6 +4,7 @@ import {API} from "../../components/api/api";
 import {LineRace, LineRaceChatValue, Format} from "../../components/echarts/lineRace";
 import {GetContestStaticsResponse} from "../../components/api/api_model";
 import echarts from "echarts";
+import BarChartLoader from "../../components/loading/BarChartLoader";
 
 class Images extends React.Component {
 
@@ -22,12 +23,12 @@ class Images extends React.Component {
 
     renderContestStatics(): JSX.Element {
         if (this.state.statics === null) {
-            return <div></div>
+            return <BarChartLoader/>
         }
         const data = this.state.statics as GetContestStaticsResponse
 
-        function fm(d: GetContestStaticsResponse):echarts.EChartOption.Tooltip.Formatter {
-            return function (params: Format | Format[], ticket: string, callback: (ticket: string, html: string) => void): string{
+        function fm(d: GetContestStaticsResponse): echarts.EChartOption.Tooltip.Formatter {
+            return function (params: Format | Format[], ticket: string, callback: (ticket: string, html: string) => void): string {
                 const param = params as Format[]
                 const p0 = param[0]
                 const idx = p0.dataIndex as number

@@ -4,6 +4,7 @@ import {API} from "../../components/api/api";
 import {GetRelativeSor, RelativeSor} from "../../components/api/api_model";
 import {TabNav, TabNavsPage} from "../../components/utils/tabs";
 import {RelativeSorTable, SorKeys} from "../../components/cube/components/cube_sor";
+import TableLoader from "../../components/loading/DashboardLoader";
 
 
 class RelativeSorPage extends React.Component {
@@ -20,7 +21,7 @@ class RelativeSorPage extends React.Component {
 
     render() {
         if (this.state.data === null) {
-            return <div></div>
+            return  <TableLoader/>
         }
         const data = this.state.data as GetRelativeSor
         let tabs: TabNavsPage[] = []

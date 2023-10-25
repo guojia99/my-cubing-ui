@@ -2,7 +2,6 @@ import {GetPreScores} from "../../components/api/api_model";
 import {callback} from "./admin_score";
 import {GetLocationQueryParams} from "../../components/utils/utils";
 import {AuthAPI} from "../../components/api/api";
-import {CubeIcon} from "../../components/cube/icon/cube_icon";
 import {CubesCn} from "../../components/cube/cube";
 import React, {JSX} from "react";
 import {CubeScoreTds} from "../../components/cube/components/cube_score_tabels";
@@ -10,6 +9,7 @@ import {Sleep} from "../../components/utils/async";
 import {WaitToast} from "../../components/utils/alert";
 import {CreateModal, ModalButton} from "../../components/utils/modal";
 import {PageNav, PageNavValue} from "../../components/utils/page";
+import {CubeIcon} from "../../components/icon/cube_icon";
 
 
 type AdminApprovalScoreCtx = {

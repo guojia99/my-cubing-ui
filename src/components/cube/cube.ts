@@ -1,7 +1,5 @@
 import {Cubes, CubesAttributes, CubesAttributesList, CubesAttributesMap, CubesRouteTypeNumber} from "./cube_map";
 
-
-
 export function CubeRouteNumber(cube: Cubes) :number{
     if (cube === undefined){
         return 0

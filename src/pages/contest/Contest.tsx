@@ -5,30 +5,18 @@ import {API} from "../../components/api/api";
 import {AllProjectList, CubesCn} from "../../components/cube/cube";
 import {Cubes, CubesAttributes, CubesAttributesMap, CubesRouteType} from "../../components/cube/cube_map";
 import {GetLocationQueryParams, SetTitleName} from "../../components/utils/utils";
-import {
-    Contest,
-    ContestPodiums,
-    ContestRecord,
-    GetContestScoreResponse,
-    GetContestSorResponse,
-    Round,
-    RoutesScores,
-    SorScore
-} from "../../components/api/api_model";
+import {Contest, ContestPodiums, ContestRecord, GetContestScoreResponse, GetContestSorResponse, Round, RoutesScores, SorScore} from "../../components/api/api_model";
 import {Link} from "react-router-dom";
 import {TabNav, TabNavsPage} from "../../components/utils/tabs";
-import {CubeIcon} from "../../components/cube/icon/cube_icon";
-import {
-    CubeScoresTable,
-    CubeScoreTds,
-    RecordsToMap,
-    RecordType
-} from "../../components/cube/components/cube_score_tabels";
+import {CubeScoresTable, CubeScoreTds, RecordsToMap, RecordType} from "../../components/cube/components/cube_score_tabels";
 import {RoundTables} from "../../components/cube/components/cube_rounds";
 import {SorKeys, SorTable} from "../../components/cube/components/cube_sor";
 import {SetBackGround} from "../../components/utils/background";
 import {FormatTime} from "../../components/cube/components/cube_timeformat";
-import {PR_And_GR_Record} from "../../components/cube/components/cube_record";
+import {RecordSpan} from "../../components/cube/components/cube_record";
+import {CubeIcon} from "../../components/icon/cube_icon";
+import TableLoader from "../../components/loading/DashboardLoader";
+import CustomerTestimonialLoader from "../../components/loading/CustomerTestimonialLoader";
 
 class ContestPage extends React.Component {
     state = {
@@ -68,7 +56,7 @@ class ContestPage extends React.Component {
     private readerSorTable() {
         const sor = this.state.sor as GetContestSorResponse
         if (sor === undefined || (sor.Single === undefined && sor.Avg === undefined)) {
-            return <div></div>
+            return <TableLoader/>
         }
 
         let tabs: TabNavsPage[] = []
@@ -91,11 +79,11 @@ class ContestPage extends React.Component {
 
     private readerScore() {
         if (this.state.score === null) {
-            return (<div></div>)
+            return <TableLoader/>
         }
         const s = this.state.score as GetContestScoreResponse
         if (s.Scores === undefined) {
-            return (<div></div>)
+            return <TableLoader/>
         }
 
 
@@ -156,12 +144,12 @@ class ContestPage extends React.Component {
 
     private readerScoreAll() {
         if (this.state.score === null) {
-            return (<div></div>)
+            return <TableLoader/>
         }
 
         const s = this.state.score as GetContestScoreResponse
         if (s.Scores === undefined) {
-            return (<div></div>)
+            return <TableLoader/>
         }
 
 
@@ -192,8 +180,8 @@ class ContestPage extends React.Component {
                             <td>{j + 1}</td>
                             {/*<td>{score.RouteValue.Name}</td>*/}
                             <td><Link to={"/player?id=" + score.PlayerID}>{score.PlayerName}</Link></td>
-                            <td>{PR_And_GR_Record(score.IsBestSingle, this.state.recordMap.get(score.ID.toString() + RecordType.RecordBySingle.toString()) !== undefined)}{FormatTime(score.Best, score.Project, false)}</td>
-                            <td>{PR_And_GR_Record(score.IsBestAvg, this.state.recordMap.get(score.ID.toString() + RecordType.RecordByAvg.toString()) !== undefined)}{FormatTime(score.Avg, score.Project, true)}</td>
+                            <td>{RecordSpan(score.IsBestSingle, this.state.recordMap.get(score.ID.toString() + RecordType.RecordBySingle.toString()) !== undefined)}{FormatTime(score.Best, score.Project, false)}</td>
+                            <td>{RecordSpan(score.IsBestAvg, this.state.recordMap.get(score.ID.toString() + RecordType.RecordByAvg.toString()) !== undefined)}{FormatTime(score.Avg, score.Project, true)}</td>
                             <>{CubeScoreTds(score)}</>
                         </tr>
                     )
@@ -227,7 +215,7 @@ class ContestPage extends React.Component {
     private readerPodiums() {
         const podiums = this.state.podium as ContestPodiums[]
         if (podiums === null || podiums === undefined || podiums.length === 0) {
-            return (<div></div>)
+            return <TableLoader/>
         }
 
         const getItems = () => {
@@ -265,7 +253,7 @@ class ContestPage extends React.Component {
     private readerRound() {
         const contest = this.state.contest as Contest
         if (contest === null || contest === undefined || contest.Rounds === null || contest.Rounds === undefined || contest.Rounds.length === 0) {
-            return (<div></div>)
+            return <TableLoader/>
         }
 
         // cache
@@ -344,12 +332,12 @@ class ContestPage extends React.Component {
 
     private readerRecord() {
         if (this.state.record === undefined || this.state.record === null) {
-            return <div>加载中...</div>
+            return <TableLoader/>
         }
 
         const record = this.state.record as ContestRecord[]
         if (record === undefined || record === null || record.length === 0) {
-            return <div>比赛未结束或无记录</div>
+            return <TableLoader/>
         }
 
         let items: JSX.Element[] = []
@@ -399,7 +387,7 @@ class ContestPage extends React.Component {
     render() {
         const contest = this.state.contest as Contest
         if (contest === undefined) {
-            return <div></div>
+            return <CustomerTestimonialLoader/>
         }
         SetTitleName(contest.Name)
 
