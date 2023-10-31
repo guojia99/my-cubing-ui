@@ -109,7 +109,7 @@ class Record extends React.Component {
 
     private renderPage() {
         if (this.state.data === null) {
-            return (<div></div>)
+            return <TableLoader/>
         }
         return (
             <div>

@@ -1,5 +1,5 @@
-import {ParseScramble} from "./scramble";
-import {Circle, DrawPolygon, hsq3} from "./utils";
+
+import {Circle, DrawPolygon, hsq3, ParseScramble} from "./utils";
 import React, {JSX} from "react";
 
 // import {Circle}  from  './utils_js'

@@ -1,5 +1,4 @@
-import {ParseScramble} from "./scramble";
-import {DrawPolygon} from "./utils";
+import {DrawPolygon, ParseScramble} from "./utils";
 import React, {JSX} from "react";
 
 class NumberCubeDrawerUtils {

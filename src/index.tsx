@@ -30,6 +30,8 @@ const RelativeSorPage = React.lazy(() => import('./pages/statistics/RelativeSor'
 const Projects = React.lazy(() => import('./pages/about/Projects'))
 const Sudoku = React.lazy(() => import('./games/sudoku/Sudoku'))
 const Images = React.lazy(() => import("./pages/statistics/Images"))
+const Digit = React.lazy(() => import("./games/digit/Digit"))
+
 
 // main
 $(() => {
@@ -84,6 +86,7 @@ root.render(
                     <Link to="#" className="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false">游戏</Link>
                     <ul className="dropdown-menu">
                         <li><NavLink className="dropdown-item" to="/game/sudoku">数独</NavLink></li>
+                        <li><NavLink className="dropdown-item" to="/game/digit">记字</NavLink></li>
                     </ul>
                 </li>
             </ul>
@@ -121,6 +124,7 @@ root.render(
 
                     {/*游戏*/}
                     <Route path="/game/sudoku" Component={Sudoku}/> {/*数独*/}
+                    <Route path="/game/digit" Component={Digit}/> {/*记字*/}
                 </Routes>
             </React.Suspense>
         </BrowserRouter>

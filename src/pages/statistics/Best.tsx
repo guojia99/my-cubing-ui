@@ -81,7 +81,7 @@ class Best extends React.Component {
             const signal = bestSignals[pj] as Score[]
             const avg = bestAvgs[pj] as Score[]
 
-            if (signal === undefined && avg === undefined) {
+            if ((signal === undefined && avg === undefined) || (signal.length === 0 && avg.length === 0) )  {
                 continue
             }
             try {
