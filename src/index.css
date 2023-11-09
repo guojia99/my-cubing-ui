@@ -9,3 +9,32 @@ a {
 .nav-link {
     color: rgb(128, 128, 128);
 }
+
+
+.main{
+    min-height: 100vh;
+}
+
+footer {
+    border-top: 1px solid #ddd;
+    padding: 15px 0;
+    color: #333;
+    font-size: 14px;
+    background: #fff;
+    box-shadow: 0 0 10px #ccc;
+    font-weight: lighter;
+    display: block;
+    margin-top: 5vh;
+}
+
+footer .footer_content {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    color: #666;
+}
+
+footer p {
+    min-width: 400px;
+    margin: 0 !important;
+}

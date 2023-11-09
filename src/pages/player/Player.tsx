@@ -3,7 +3,7 @@ import './Player.css'
 
 import React, {JSX} from 'react';
 import {API} from "../../components/api/api";
-import {AllProjectList, CubesCn} from "../../components/cube/cube";
+import {AllProjectList, CubesCn, WCAProjectList} from "../../components/cube/cube";
 import {Cubes} from "../../components/cube/cube_map";
 import {GetLocationQueryParams, SetTitleName} from "../../components/utils/utils";
 import {
@@ -148,6 +148,25 @@ class PlayerPage extends React.Component {
             }
         }
 
+        // 大满贯
+        if (this.state.best !== null) {
+            const best = this.state.best as PlayerBestScoreResponse
+            const allPj = WCAProjectList()
+            let isWcaAll = true
+            if (best !== undefined) {
+                for (let i = 0; i < allPj.length; i++) {
+                    const pj = allPj[i]
+                    const b = best.Best[pj] as RankScore
+                    if (b === undefined){
+                        isWcaAll = false
+                    }
+                }
+            }
+            if (isWcaAll){
+                titles.push(<span className="badge text-bg-danger" style={{margin: "0 10px"}}>大满贯</span>)
+            }
+        }
+
 
         return (
             <div>
@@ -166,7 +185,9 @@ class PlayerPage extends React.Component {
                     </thead>
                     <tbody>
                     <tr>
-                        <td><Link to={"https://www.worldcubeassociation.org/persons/" + player.WcaID}>{player.WcaID ? player.WcaID : "-"}</Link></td>
+                        <td><Link
+                            to={"https://www.worldcubeassociation.org/persons/" + player.WcaID}>{player.WcaID ? player.WcaID : "-"}</Link>
+                        </td>
                         <td>{player.ActualName ? player.ActualName : player.Name}</td>
                         <td>{player.ContestNumber}</td>
                         <td>{player.RecoveryNumber - (player.ValidRecoveryNumber ? player.ValidRecoveryNumber : 0)} / {player.RecoveryNumber}</td>
@@ -451,7 +472,8 @@ class PlayerPage extends React.Component {
                 return (
                     <div style={{overflowX: "auto"}}>
                         <ScoreChat Project={pj} ContestMap={ContestMap} scores={ss} key={"scores_chat_by_pj_" + pj}/>
-                        <table className="table table-striped table-hover" style={{minWidth: "600px", marginTop: "20px", marginBottom: "30px"}}>
+                        <table className="table table-striped table-hover"
+                               style={{minWidth: "600px", marginTop: "20px", marginBottom: "30px"}}>
                             <thead>
                             <tr key={"renderPageByScore_thead"}>
                                 <th>比赛</th>
@@ -494,7 +516,8 @@ class PlayerPage extends React.Component {
                                 <td>{ss[j].RouteValue.Name}</td>
                                 <td>{FormatRank(ss[j].Rank)}</td>
                                 <td>{FormatTime(ss[j].Best, Cubes.Cube333MBF, false)}</td>
-                                <td>{RecordSpan(ss[j].IsBestSingle, IsBestGr)} <i style={{fontWeight: 700}}> {score} </i> {FormatTime(ss[j].R3, ss[j].Project, true)}
+                                <td>{RecordSpan(ss[j].IsBestSingle, IsBestGr)} <i
+                                    style={{fontWeight: 700}}> {score} </i> {FormatTime(ss[j].R3, ss[j].Project, true)}
                                 </td>
                             </tr>
                         )
@@ -503,7 +526,8 @@ class PlayerPage extends React.Component {
 
                 return (
                     <div style={{overflowX: "auto"}}>
-                        <table className="table table-striped table-hover" style={{minWidth: "600px", marginTop: "20px", marginBottom: "30px"}}>
+                        <table className="table table-striped table-hover"
+                               style={{minWidth: "600px", marginTop: "20px", marginBottom: "30px"}}>
                             <thead>
                             <tr key={"renderPageByScore_thead"}>
                                 <th>比赛</th>
@@ -588,7 +612,8 @@ class PlayerPage extends React.Component {
             })
             return (
                 <div style={{overflowX: "auto"}}>
-                    <table className="table table-striped table-hover" style={{minWidth: "600px", marginTop: "20px", marginBottom: "30px"}}>
+                    <table className="table table-striped table-hover"
+                           style={{minWidth: "600px", marginTop: "20px", marginBottom: "30px"}}>
                         <thead>
                         <tr key={"renderPageByRecord_thead"}>
                             <th>项目</th>
@@ -605,7 +630,7 @@ class PlayerPage extends React.Component {
 
         const renderPageByPodium = () => {
             if (this.state.podium === null) {
-                return  <TableLoader/>
+                return <TableLoader/>
             }
 
             const podium = this.state.podium as Podiums
@@ -639,7 +664,8 @@ class PlayerPage extends React.Component {
 
             return (
                 <div style={{overflowX: "auto"}}>
-                    <table className="table table-striped table-hover" style={{minWidth: "600px", marginTop: "20px", marginBottom: "30px"}}>
+                    <table className="table table-striped table-hover"
+                           style={{minWidth: "600px", marginTop: "20px", marginBottom: "30px"}}>
                         <thead>
                         <tr key={"renderPageByRecord_thead"}>
                             <th>项目</th>
@@ -663,7 +689,8 @@ class PlayerPage extends React.Component {
             const player = this.state.player as Player
             const nemesis = this.state.nemesis as GetPlayerNemesisResponse
             if (nemesis === undefined || nemesis.length === 0) {
-                return <h2 style={{margin: "30px 30px", textAlign: "center"}}><p style={{color: "red"}}>{player.Name}</p> 无任何宿敌!</h2>
+                return <h2 style={{margin: "30px 30px", textAlign: "center"}}><p
+                    style={{color: "red"}}>{player.Name}</p> 无任何宿敌!</h2>
             }
 
             let items: JSX.Element[] = []
@@ -687,7 +714,8 @@ class PlayerPage extends React.Component {
                 }
                 return (
                     <div style={{overflowX: "auto"}}>
-                        <table className="table table-striped table-hover" style={{minWidth: "600px", marginTop: "20px", marginBottom: "30px"}}>
+                        <table className="table table-striped table-hover"
+                               style={{minWidth: "600px", marginTop: "20px", marginBottom: "30px"}}>
                             <thead>
                             <tr>
                                 <th>项目</th>
@@ -713,7 +741,8 @@ class PlayerPage extends React.Component {
 
             return (
                 <div style={{overflowX: "auto"}}>
-                    <table className="table table-striped table-hover" style={{minWidth: "600px", marginTop: "20px", marginBottom: "30px"}}>
+                    <table className="table table-striped table-hover"
+                           style={{minWidth: "600px", marginTop: "20px", marginBottom: "30px"}}>
                         <thead>
                         <tr key={"renderPageByNemesis_thead1"}>
                             <th colSpan={2}><h4>宿敌列表</h4></th>
