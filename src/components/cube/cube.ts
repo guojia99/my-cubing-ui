@@ -13,6 +13,9 @@ export function CubeRouteNumber(cube: Cubes) :number{
 
 export const CubesCn = (c: Cubes) => {
     const att = CubesAttributesMap.get(c) as CubesAttributes
+    if (att === undefined || att === null){
+        return c + ""
+    }
     return att.Cn
 }
 
