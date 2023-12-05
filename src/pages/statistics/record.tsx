@@ -66,26 +66,6 @@ class RecordPage extends React.Component {
         return this.renderPage()
     }
 
-    private contestTrBody(c: rc) {
-        let name = "单次"
-        let score = FormatTime(c.ScoreValue.Best, c.ScoreValue.Project, false)
-        if (c.RType === RecordType.RecordByAvg) {
-            score = FormatTime(c.ScoreValue.Avg, c.ScoreValue.Project, true)
-            name = "平均"
-        }
-        if (c.ScoreValue.Project === Cubes.Cube333MBF) {
-            score = c.ScoreValue.R1 + "/" + c.ScoreValue.R2 + "(" + FormatTime(c.ScoreValue.R3, c.ScoreValue.Project, true) + ")"
-        }
-
-        return (
-            <tr key={"contestTrBody_key" + c.ID}>
-                <td><Link to={"/player?id=" + c.ScoreValue.PlayerID}>{c.PlayerName}</Link></td>
-                <td>{CubeIcon(c.ScoreValue.Project)} {CubesCn(c.ScoreValue.Project)}</td>
-                <td>{name} {score}</td>
-                <td><Link to={"/contest?id=" + c.ContestID}>{c.ContestValue.Name}</Link></td>
-            </tr>
-        )
-    }
 
     private renderTable() {
         let items: JSX.Element[] = []
