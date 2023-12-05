@@ -40,7 +40,7 @@ function sorTableBody(single: SorScore[], avg: SorScore[]) {
         }
 
         return (
-            <tr className={idx <= 3 ? "table-success" : ""}>
+            <tr className={idx <= 3 ? "table-success" : ""} key={"sorTrs" + idx + single?single?.Player.ID:""}>
                 <SingleTds/>
                 <AvgTds/>
             </tr>

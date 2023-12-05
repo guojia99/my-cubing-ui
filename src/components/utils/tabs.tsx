@@ -35,6 +35,7 @@ export const TabNav = (tb: TabNavsValue) => {
     const selected = p[tb.SelectedKey] === undefined ? tb.Pages[0].Id : p[tb.SelectedKey]
 
     const center = tb.Center ? " justify-content-center" : ""
+    // GoToSh()
     return (
         <div key={tb.Id}>
             <ul className={"nav nav-tabs" + center} role="tablist" key={"tab_tabs_base_ul" + tb.Id}>

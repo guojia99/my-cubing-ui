@@ -207,5 +207,11 @@ export class authApiCore {
         }
         return await this.checkResp("put", uri, req)
     }
+
+    async ResetRecords() :Promise<any>{
+        let uri = this.apiCore.uri + "/score/reset_records"
+        const req = {}
+        return await this.checkResp("post", uri, req)
+    }
 }
 

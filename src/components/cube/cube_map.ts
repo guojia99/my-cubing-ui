@@ -138,19 +138,14 @@ export enum Cubes {
     NotCube80Puzzle = "80puzzle",
 
 // 记字
-    NotCubeDigitVeryEasy = "digit_very_easy",   // 20个
-    NotCubeDigitEasy = "digit_easy",   // 40个
-    NotCubeDigitModerate = "digit_moderate",     // 80个
-    NotCubeDigitAdvanced = "digit_advanced",     // 120个
-    NotCubeDigitHard = "digit_hard",    // 200个
-    NotCubeDigitMaster = "digit_master",     // 300个
-    NotCubeDigitOnlyNumberVeryEasy = "digit_num_very_easy", // 纯数字20个
-    NotCubeDigitOnlyNumberEasy = "digit_num_easy",    // 纯数字40个
-    NotCubeDigitOnlyNumberModerate = "digit_num_moderate",  // 纯数字80个
-    NotCubeDigitOnlyNumberAdvanced = "digit_num_advanced", // 纯数字120个
-    NotCubeDigitOnlyNumberHard = "digit_num_hard",    // 纯数字200个
-    NotCubeDigitOnlyNumberMaster = "digit_num_master",   // 纯数字300个
+
+    NotCubeDigit = "digit",     // 任意字符： 数字 + 大小写字母 + 其他字符
+    NotCubeDigitOnlyNumber = "digit_num",     // 纯数字
+    NotCubeDigitOnlyUppercase = "digit_uppercase",   // 大写字母
+    NotCubeDigitNumberAndUppercase = "digit_num_uppercase", // 数字 + 大写字母
+    NotCubePuke = "puke",         // 扑克记忆
 }
+
 // Cubes Map End
 
 export enum SegmentationType {
@@ -1518,9 +1513,9 @@ export const CubesAttributesList: CubesAttributes[] = [
     // 非魔方
 
     {
-        Cubes: Cubes.NotCubeDigitVeryEasy,
-        Cn: "记字入门",
-        RouteType: CubesRouteType.RouteType5RoundsAvgHT,
+        Cubes: Cubes.NotCubeDigit,
+        Cn: "记字",
+        RouteType: CubesRouteType.RouteTypeRepeatedly,
         IsWCA: false,
         Segmentation: SegmentationType.Digit,
         DrawFn: DrawEmptyImages,
@@ -1531,9 +1526,9 @@ export const CubesAttributesList: CubesAttributes[] = [
         Icon: "",
     },
     {
-        Cubes: Cubes.NotCubeDigitEasy,
-        Cn: "记字初级",
-        RouteType: CubesRouteType.RouteType5RoundsAvgHT,
+        Cubes: Cubes.NotCubeDigitOnlyNumber,
+        Cn: "记数字",
+        RouteType: CubesRouteType.RouteTypeRepeatedly,
         IsWCA: false,
         Segmentation: SegmentationType.Digit,
         DrawFn: DrawEmptyImages,
@@ -1544,9 +1539,9 @@ export const CubesAttributesList: CubesAttributes[] = [
         Icon: "",
     },
     {
-        Cubes: Cubes.NotCubeDigitModerate,
-        Cn: "记字中级",
-        RouteType: CubesRouteType.RouteType5RoundsAvgHT,
+        Cubes: Cubes.NotCubeDigitOnlyUppercase,
+        Cn: "记字母",
+        RouteType: CubesRouteType.RouteTypeRepeatedly,
         IsWCA: false,
         Segmentation: SegmentationType.Digit,
         DrawFn: DrawEmptyImages,
@@ -1557,9 +1552,9 @@ export const CubesAttributesList: CubesAttributes[] = [
         Icon: "",
     },
     {
-        Cubes: Cubes.NotCubeDigitAdvanced,
-        Cn: "记字高级",
-        RouteType: CubesRouteType.RouteType3roundsBest,
+        Cubes: Cubes.NotCubeDigitNumberAndUppercase,
+        Cn: "记数字字母",
+        RouteType: CubesRouteType.RouteTypeRepeatedly,
         IsWCA: false,
         Segmentation: SegmentationType.Digit,
         DrawFn: DrawEmptyImages,
@@ -1570,9 +1565,9 @@ export const CubesAttributesList: CubesAttributes[] = [
         Icon: "",
     },
     {
-        Cubes: Cubes.NotCubeDigitHard,
-        Cn: "记字困难",
-        RouteType: CubesRouteType.RouteType3roundsBest,
+        Cubes: Cubes.NotCubePuke,
+        Cn: "扑克记忆",
+        RouteType: CubesRouteType.RouteTypeRepeatedly,
         IsWCA: false,
         Segmentation: SegmentationType.Digit,
         DrawFn: DrawEmptyImages,
@@ -1582,99 +1577,6 @@ export const CubesAttributesList: CubesAttributes[] = [
         DrawSeq: false,
         Icon: "",
     },
-    {
-        Cubes: Cubes.NotCubeDigitMaster,
-        Cn: "记字大师",
-        RouteType: CubesRouteType.RouteType3roundsBest,
-        IsWCA: false,
-        Segmentation: SegmentationType.Digit,
-        DrawFn: DrawEmptyImages,
-        DrawSize: 0,
-        SeqNumber: 5,
-        SpareSeqNumber: 2,
-        DrawSeq: false,
-        Icon: "",
-    },
-
-    {
-        Cubes: Cubes.NotCubeDigitOnlyNumberVeryEasy,
-        Cn: "记数字入门",
-        RouteType: CubesRouteType.RouteType5RoundsAvgHT,
-        IsWCA: false,
-        Segmentation: SegmentationType.Digit,
-        DrawFn: DrawEmptyImages,
-        DrawSize: 0,
-        SeqNumber: 5,
-        SpareSeqNumber: 2,
-        DrawSeq: false,
-        Icon: "",
-    },
-    {
-        Cubes: Cubes.NotCubeDigitOnlyNumberEasy,
-        Cn: "记数字初级",
-        RouteType: CubesRouteType.RouteType5RoundsAvgHT,
-        IsWCA: false,
-        Segmentation: SegmentationType.Digit,
-        DrawFn: DrawEmptyImages,
-        DrawSize: 0,
-        SeqNumber: 5,
-        SpareSeqNumber: 2,
-        DrawSeq: false,
-        Icon: "",
-    },
-    {
-        Cubes: Cubes.NotCubeDigitOnlyNumberModerate,
-        Cn: "记数字中级",
-        RouteType: CubesRouteType.RouteType5RoundsAvgHT,
-        IsWCA: false,
-        Segmentation: SegmentationType.Digit,
-        DrawFn: DrawEmptyImages,
-        DrawSize: 0,
-        SeqNumber: 5,
-        SpareSeqNumber: 2,
-        DrawSeq: false,
-        Icon: "",
-    },
-    {
-        Cubes: Cubes.NotCubeDigitOnlyNumberAdvanced,
-        Cn: "记数字高级",
-        RouteType: CubesRouteType.RouteType3roundsBest,
-        IsWCA: false,
-        Segmentation: SegmentationType.Digit,
-        DrawFn: DrawEmptyImages,
-        DrawSize: 0,
-        SeqNumber: 5,
-        SpareSeqNumber: 2,
-        DrawSeq: false,
-        Icon: "",
-    },
-    {
-        Cubes: Cubes.NotCubeDigitOnlyNumberHard,
-        Cn: "记数字困难",
-        RouteType: CubesRouteType.RouteType3roundsBest,
-        IsWCA: false,
-        Segmentation: SegmentationType.Digit,
-        DrawFn: DrawEmptyImages,
-        DrawSize: 0,
-        SeqNumber: 5,
-        SpareSeqNumber: 2,
-        DrawSeq: false,
-        Icon: "",
-    },
-    {
-        Cubes: Cubes.NotCubeDigitOnlyNumberMaster,
-        Cn: "记数字大师",
-        RouteType: CubesRouteType.RouteType3roundsBest,
-        IsWCA: false,
-        Segmentation: SegmentationType.Digit,
-        DrawFn: DrawEmptyImages,
-        DrawSize: 0,
-        SeqNumber: 5,
-        SpareSeqNumber: 2,
-        DrawSeq: false,
-        Icon: "",
-    },
-
 
     {
         Cubes: Cubes.NotCubeSuDoKuVeryEasy,

@@ -57,11 +57,11 @@ const NumberDefaultResultCubeScoresTable = (tdNum: number, pj: Cubes, Scores: Sc
                 cube5Td = <></>
             }
             items.push(
-                <tr className={i < 3 ? "table-success" : ""}>
+                <tr className={i < 3 ? "table-success" : ""} key={"NumberDefaultResultCubeScoresTable" + score.ID}>
                     <td className="idxTd">{i + 1}</td>
                     <td><Link to={"/player?id=" + score.PlayerID}>{score.PlayerName}</Link></td>
                     <td>{RecordSpan(score.IsBestSingle, isSingleBestRecord)}{FormatTime(score.Best, pj, false)}</td>
-                    <td>{RecordSpan(score.IsBestAvg, isAvgBestRecord)}{FormatTime(score.Avg, pj,  true)}</td>
+                    <td>{RecordSpan(score.IsBestAvg, isAvgBestRecord)}{FormatTime(score.Avg, pj, true)}</td>
                     <td>{FormatTime(score.R1, pj, false)}</td>
                     {cube3Td}
                     {cube5Td}
@@ -113,7 +113,7 @@ const MBFCube333ScoreTable = (pj: Cubes, Scores: Score[], records: Map<string, C
             const score = Scores[i]
             const isSingleBestRecord = records !== undefined && records.get(score.ID.toString() + RecordType.RecordBySingle.toString()) !== undefined
             items.push(
-                <tr>
+                <tr key={"MBFCube333ScoreTable" + pj + score.ID}>
                     <td>{i + 1}</td>
                     <td><Link to={"/player?id=" + score.PlayerID}>{score.PlayerName}</Link></td>
                     <td>({score.R1} / {score.R2}){RecordSpan(score.IsBestSingle, isSingleBestRecord)}</td>

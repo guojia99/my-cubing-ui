@@ -44,6 +44,57 @@ $(() => {
 const root = ReactDOM.createRoot(
     document.getElementById('root') as HTMLElement
 );
+
+type Url = {
+    Uri: string,
+    Comp: React.ComponentType | null,
+}
+
+const url: Url[] = [
+    // 基础
+    {Uri: "/", Comp: Home},
+    {Uri: "/about", Comp: About},
+    {Uri: "/rule", Comp: Rule},
+
+    // 管理员
+    {Uri: "/xadmin", Comp: Admin},
+    {Uri: "/xauth", Comp: Auth},
+    {Uri: "/debug", Comp: Debug},
+
+    // 比赛
+    {Uri: "/contest", Comp: ContestPage},
+    {Uri: "/contests", Comp: Contests},
+    {Uri: "/player", Comp: PlayerPage},
+    {Uri: "/players", Comp: Players},
+
+
+    // 统计
+    {Uri: "/statistics/images", Comp: Images},
+    {Uri: "/statistics/best", Comp: Best},
+    {Uri: "/statistics/sor", Comp: Sor},
+    {Uri: "/statistics/relative_sor", Comp: RelativeSorPage},
+    {Uri: "/statistics/record", Comp: Record},
+    {Uri: "/statistics/podiums", Comp: PodiumsPage},
+    {
+        Uri: "/statistics/interest", Comp: () => {
+            return (<div>没开发</div>)
+        }
+    },
+    {Uri: "/projects", Comp: Projects},
+
+
+    {Uri: "/game/sudoku", Comp: Sudoku},
+    {Uri: "/game/digit", Comp: Digit},
+]
+
+const urlRoutes: any[] = []
+
+url.forEach((value, index, array) => {
+    urlRoutes.push(<><Route path={value.Uri} Component={value.Comp}/></>)
+    urlRoutes.push(<><Route path={"/x" + value.Uri} Component={value.Comp}/></>)
+})
+
+
 root.render(
     <div>
         <div>
@@ -94,40 +145,7 @@ root.render(
                 </ul>
 
                 <React.Suspense fallback={<ThreeDotsLoader/>}>
-                    <Routes>
-                        <Route path="/" Component={Home}/>
-                        <Route path="/about" Component={About}/> {/*关于*/}
-                        <Route path="/rule" Component={Rule}/> {/*规则*/}
-
-                        {/*管理员*/}
-                        <Route path="/xadmin" Component={Admin}/>
-                        <Route path="/xauth" Component={Auth}/>
-                        <Route path="/debug" Component={Debug}/>
-
-
-                        {/*比赛*/}
-                        <Route path="/contest" Component={ContestPage}/> {/*比赛*/}
-                        <Route path="/contests" Component={Contests}/>{/*比赛列表*/}
-                        <Route path="/player" Component={PlayerPage}/>{/*玩家*/}
-                        <Route path="/players" Component={Players}/>{/*玩家列表*/}
-
-                        {/*统计*/}
-                        <Route path="/statistics/images" Component={Images}/>
-                        <Route path="/statistics/best" Component={Best}/> {/*最佳成绩汇总*/}
-                        <Route path="/statistics/sor" Component={Sor}/> {/*最佳成绩汇总*/}
-                        <Route path="/statistics/relative_sor" Component={RelativeSorPage}/> {/*兔兔版本成绩*/}
-                        <Route path="/statistics/record" Component={Record}/> {/*纪录*/}
-                        <Route path="/statistics/podiums" Component={PodiumsPage}/> {/*奖牌榜单*/}
-                        <Route path="/statistics/interest" Component={() => {
-                            return (<div>没开发</div>)
-                        }}></Route> {/*趣味玩法*/}
-                        <Route path="/projects" Component={Projects}></Route>
-
-
-                        {/*游戏*/}
-                        <Route path="/game/sudoku" Component={Sudoku}/> {/*数独*/}
-                        <Route path="/game/digit" Component={Digit}/> {/*记字*/}
-                    </Routes>
+                    <Routes>{urlRoutes}</Routes>
                 </React.Suspense>
             </BrowserRouter>
         </div>

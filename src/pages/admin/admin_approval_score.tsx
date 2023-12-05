@@ -7,11 +7,11 @@ import React, {JSX} from "react";
 import {CubeScoreTds} from "../../components/cube/components/cube_score_tabels";
 import {Sleep} from "../../components/utils/async";
 import {WaitToast} from "../../components/utils/alert";
-import {CreateModal, ModalButton} from "../../components/utils/modal";
+import {CreateModal, EmptyHandle, ModalButton} from "../../components/utils/modal";
 import {PageNav, PageNavValue} from "../../components/utils/page";
 import {CubeIcon} from "../../components/icon/cube_icon";
 
-
+const resetRecordTarget = "reset_records"
 type AdminApprovalScoreCtx = {
     UpdateHandle: callback,
     DetailID: number,
@@ -79,12 +79,7 @@ export class AdminApprovalScoreRender {
                         this.ctx.DetailID = p.ID
                     }, "btn-warning btn-sm col-md")}
                     <button style={{marginLeft: "20px"}} type="button" className={"btn btn-success btn-sm col-md"} onClick={async () => {
-                        await WaitToast(
-                            AuthAPI.RecordPreScores(p.ID),
-                            "正在写入预录入成绩",
-                            "写入预录入成绩成功",
-                            "写入预录入成绩失败",
-                        )
+                        await WaitToast(AuthAPI.RecordPreScores(p.ID), "正在写入预录入成绩", "写入预录入成绩成功", "写入预录入成绩失败")
                         await Sleep(500).then(() => {
                             window.location.reload()
                         })
@@ -190,10 +185,38 @@ export class AdminApprovalScoreRender {
     }
 
 
+    private resetRecordsModal = () => {
+        const bodyHandle = () => {
+            return <div>
+                <h3>是否重新计算所有记录?</h3>
+                <p>所有记录将重头开始计算</p>
+            </div>
+        }
+
+        const resetRecordsHandle = async () => {
+            await WaitToast(
+                AuthAPI.ResetRecords(),
+                (<p>等待重置记录</p>),
+                (<p>重置记录成功</p>),
+                (<p>重置记录失败</p>),
+            )
+            await Sleep(1000).then(() => {
+                window.location.reload()
+            })
+        }
+
+        return CreateModal("重置记录", bodyHandle, resetRecordTarget, resetRecordsHandle)
+    }
+
     render() {
         return (
             <div style={{marginTop: "30px"}}>
                 {this.neglectModal()}
+                {this.resetRecordsModal()}
+                <p style={{marginTop: "20px", float: "right"}}>
+                    {ModalButton("重置记录", resetRecordTarget, EmptyHandle, "btn-primary")}
+                </p>
+                <p style={{marginTop: "30px"}}></p>
                 {this.scoresBody()}
                 {this.scoresPage()}
             </div>
