@@ -1,4 +1,4 @@
-import {Cubes} from "../cube_map";
+import {Cubes, CubesAttributes, CubesAttributesMap, CubesRouteType} from "../cube_map";
 
 
 export function FormatTime(result: number, pj: Cubes, isAvg: boolean) {
@@ -14,7 +14,9 @@ export function FormatTime(result: number, pj: Cubes, isAvg: boolean) {
         return "DNF"
     }
 
-    if ((pj === Cubes.Cube333FM || pj === Cubes.Cube333MBF) && !isAvg) {
+    const att = CubesAttributesMap.get(pj) as CubesAttributes
+    const ry = att.RouteType === CubesRouteType.RouteTypeRepeatedly
+    if (ry && !isAvg) {
         return result.toFixed(0)
     }
 

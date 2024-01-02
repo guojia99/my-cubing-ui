@@ -1,7 +1,7 @@
 import React, {JSX} from 'react';
 import {API} from "../../components/api/api";
 import {GetLocationQueryParams} from "../../components/utils/utils";
-import {GetRecordsResponse, Record, Record as rc} from "../../components/api/api_model";
+import {GetRecordsResponse, Record} from "../../components/api/api_model";
 import {Link} from "react-router-dom";
 import {PageNav, PageNavValue} from "../../components/utils/page";
 import {CubeIcon} from "../../components/icon/cube_icon";

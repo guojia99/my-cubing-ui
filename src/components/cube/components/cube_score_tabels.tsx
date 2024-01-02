@@ -6,7 +6,7 @@ import {CubeRouteNumber} from "../cube";
 import {FormatTime} from "./cube_timeformat";
 import {RecordSpan} from "./cube_record";
 import React, {JSX} from "react";
-import {Cubes} from "../cube_map";
+import {Cubes, CubesAttributes, CubesAttributesMap, CubesRouteType} from "../cube_map";
 
 
 export function RecordsToMap(records: ContestRecord[]) {
@@ -155,8 +155,8 @@ export const CubeScoresTable = (pj: Cubes, Scores: Score[], records: ContestReco
             handler = ThreeResultCubeScoreTableFn
             break
     }
-
-    if (pj === Cubes.Cube333MBF) {
+    const att = CubesAttributesMap.get(pj) as CubesAttributes
+    if (att.RouteType === CubesRouteType.RouteTypeRepeatedly) {
         handler = MBFCube333ScoreTable
     }
 
@@ -168,7 +168,8 @@ export const CubeScoresTable = (pj: Cubes, Scores: Score[], records: ContestReco
 
 
 export const CubeScoreTds = (s: Score) => {
-    if (s.Project === Cubes.Cube333MBF) {
+    const att = CubesAttributesMap.get(s.Project) as CubesAttributes
+    if (att.RouteType === CubesRouteType.RouteTypeRepeatedly) {
         return (<td colSpan={5}>{FormatTime(s.R1, s.Project, false)} / {FormatTime(s.R2, s.Project, false)} ({FormatTime(s.R3, Cubes.Cube333, true)})</td>)
     }
     const round = CubeRouteNumber(s.Project)

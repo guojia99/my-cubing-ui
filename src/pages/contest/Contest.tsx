@@ -26,7 +26,7 @@ class ContestPage extends React.Component {
         record: {},
         recordMap: new Map<string, ContestRecord>(),
         podium: {},
-        scoreByPlayer: new Map<string, Map<Cubes, Score[]>>()
+        scoreByPlayer: new Map<string, Score[]>()
     }
 
     componentDidMount() {
@@ -51,7 +51,6 @@ class ContestPage extends React.Component {
                 return
             }
 
-
             const pjList = AllProjectList()
             for (let i = 0; i < pjList.length; i++) {
                 const pj = pjList[i]
@@ -65,24 +64,14 @@ class ContestPage extends React.Component {
                     if (ss === undefined || ss.length === 0) {
                         continue
                     }
-                    for (let j = 0; j < ss.length; j++) {
-                        let mp = this.state.scoreByPlayer.get(ss[j].PlayerName)
-                        if (mp === undefined) {
-                            mp = new Map<Cubes, Score[]>()
-                        }
 
-                        let pjL = mp.get(ss[i].Project)
-                        if (pjL === undefined) {
-                            pjL = [ss[i]]
-                        } else {
-                            pjL.push(ss[i])
-                        }
-                        mp.set(ss[i].Project, pjL)
+                    for (let j = 0; j < ss.length; j++) {
+                        const mp = this.state.scoreByPlayer.get(ss[j].PlayerName) ? this.state.scoreByPlayer.get(ss[j].PlayerName) as Score[] : []
+                        mp.push(ss[j])
                         this.state.scoreByPlayer.set(ss[j].PlayerName, mp)
                     }
                 }
             }
-
         })
         API.GetContestSor(id).then(value => {
             this.setState({sor: value})
@@ -230,7 +219,6 @@ class ContestPage extends React.Component {
         })
 
 
-
         return (
             <div style={{marginTop: "20px", marginBottom: "20px", overflowX: "auto"}}>
                 <table className="table table-bordered text-center"
@@ -375,9 +363,6 @@ class ContestPage extends React.Component {
         if (contest === undefined) {
             return <CustomerTestimonialLoader/>
         }
-        if (contest.IsEnd) {
-            return <div>本比赛未结束</div>
-        }
         if (this.state.record === undefined) {
             return <div></div>
         }
@@ -436,32 +421,30 @@ class ContestPage extends React.Component {
         this.state.scoreByPlayer.forEach((value, playerName, map) => {
             items.push(<tr key={"readerPlayer" + playerName} style={{textAlign: "left"}}>
                     <td colSpan={8}>
-                        <a href={"#"+playerName}><h5>{playerName}</h5></a>
+                        <a href={"#" + playerName}><h5>{playerName}</h5></a>
                     </td>
                 </tr>
             )
-            AllProjectList().forEach((pj: Cubes) => {
-                const ss = value.get(pj)
-                if (ss === undefined || ss.length === 0) {
-                    return
-                }
-                for (let i = 0; i < ss.length; i++) {
-                    const score = ss[i]
-                    const grB = this.state.recordMap.get(score.ID.toString() + RecordType.RecordBySingle.toString()) !== undefined
-                    const grA = this.state.recordMap.get(score.ID.toString() + RecordType.RecordByAvg.toString()) !== undefined
 
-                    let sp = <td rowSpan={ss.length}>{CubeIcon(ss[i].Project)} {CubesCn(ss[i].Project)}</td>
-                    items.push(
-                        <tr>
-                            {sp}
-                            <td>{RecordSpanValue(score.IsBestSingle, grB, FormatTime(score.Best, score.Project, false))}</td>
-                            <td>{RecordSpanValue(score.IsBestAvg, grA, FormatTime(score.Avg, score.Project, true))}</td>
-                            <>{CubeScoreTds(score)}</>
-                        </tr>
-                    )
-                }
-            })
-            items.push(<tr><td  colSpan={8} style={{color:"#ffffff00"}}>1</td></tr>)
+            for (let i = 0; i < value.length; i++) {
+
+                const score = value[i]
+                const grB = this.state.recordMap.get(score.ID.toString() + RecordType.RecordBySingle.toString()) !== undefined
+                const grA = this.state.recordMap.get(score.ID.toString() + RecordType.RecordByAvg.toString()) !== undefined
+
+                let sp = <td rowSpan={1}>{CubeIcon(score.Project)} {CubesCn(score.Project)}</td>
+                items.push(
+                    <tr>
+                        {sp}
+                        <td>{RecordSpanValue(score.IsBestSingle, grB, FormatTime(score.Best, score.Project, false))}</td>
+                        <td>{RecordSpanValue(score.IsBestAvg, grA, FormatTime(score.Avg, score.Project, true))}</td>
+                        <>{CubeScoreTds(score)}</>
+                    </tr>
+                )
+            }
+            items.push(<tr>
+                <td colSpan={8} style={{color: "#ffffff00"}}>1</td>
+            </tr>)
         })
 
         return (

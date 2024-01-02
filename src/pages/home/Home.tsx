@@ -169,6 +169,22 @@ class Home extends React.Component {
         return this.newCard(items, "新成员", "/players")
     }
 
+    groupCard = () => {
+        let items :JSX.Element[] = [
+            (<li>QQ群：532463339 </li>),
+            (<li>网站管理：3164838686</li>),
+            (<li>QQ群主：415230487 </li>),
+        ]
+        return this.newCard(items, "群", "/")
+    }
+
+    guojiaCard = () => {
+        let items :JSX.Element[] = [
+            (<li>开发者`guojia` 立下Flag</li>),
+            (<li>2024将做到全面宿敌魔缘群主浩浩</li>),
+        ]
+        return this.newCard(items, "宿敌", "/")
+    }
 
     advertiseCard = (p: number) => {
         let items: JSX.Element[] = [
@@ -186,12 +202,16 @@ class Home extends React.Component {
             <section className="cards">
                 <div className="common-layout">
                     <ul className="row">
+                        {this.groupCard()}
                         {this.contestCard()}
                         {this.recordCard()}
                         {this.playerCard()}
+                        {this.guojiaCard()}
                         {this.advertiseCard(1)}
                         {this.advertiseCard(2)}
                         {this.advertiseCard(3)}
+                        {this.advertiseCard(4)}
+                        {this.advertiseCard(5)}
                     </ul>
                 </div>
             </section>

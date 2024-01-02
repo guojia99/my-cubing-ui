@@ -1,6 +1,6 @@
 // 获取当前所有选择框的数据
 import {CubeRouteNumber, CubesCn} from "../../components/cube/cube";
-import {Cubes, CubesAttributes, CubesAttributesList, SegmentationType, SegmentationTypeList} from "../../components/cube/cube_map";
+import {Cubes, CubesAttributes, CubesAttributesList, CubesAttributesMap, CubesRouteType, SegmentationType, SegmentationTypeList} from "../../components/cube/cube_map";
 import React, {JSX} from "react";
 import {AddScoreRequest, Contest, GetContestsResponse, Player, PlayersResponse, Score, ScorePenalty} from "../../components/api/api_model";
 import {GetLocationQueryParams, UpdateBrowserURL} from "../../components/utils/utils";
@@ -721,7 +721,9 @@ export class AdminScoreRender {
         if (!useDelete) {
             deleteButton = (<></>)
         }
-        if (s.Project === Cubes.Cube333MBF) {
+
+        const att = CubesAttributesMap.get(s.Project) as CubesAttributes
+        if (att.RouteType === CubesRouteType.RouteTypeRepeatedly) {
             return (
                 <tr key={"_renderScoreList_tr_" + s.ID}>
                     {deleteButton}

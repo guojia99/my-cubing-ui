@@ -4,7 +4,7 @@ import './Player.css'
 import React, {JSX} from 'react';
 import {API} from "../../components/api/api";
 import {AllProjectList, CubesCn, WCAProjectList} from "../../components/cube/cube";
-import {Cubes} from "../../components/cube/cube_map";
+import {Cubes, CubesAttributes, CubesAttributesMap, CubesRouteType} from "../../components/cube/cube_map";
 import {GetLocationQueryParams, SetTitleName} from "../../components/utils/utils";
 import {
     Contest,
@@ -226,8 +226,8 @@ class PlayerPage extends React.Component {
             }
 
             const key = "renderBestTable" + pj + best.Score.ID
-
-            if (pj === Cubes.Cube333MBF) {
+            const att = CubesAttributesMap.get(pj) as CubesAttributes
+            if (att.RouteType === CubesRouteType.RouteTypeRepeatedly) {
                 body.push(
                     <tr key={key}>
                         <td>{CubeIcon(pj)} {CubesCn(pj)}</td>
@@ -493,10 +493,10 @@ class PlayerPage extends React.Component {
             }
 
 
-            const drawScore333MBFTables = (scores: ScoresByContest[]) => {
+            const drawScore333MBFTables = (pj: Cubes, scores: ScoresByContest[]) => {
                 let items = []
                 items.push(<tr key={"drawScore333MBFTables_score_key"}>
-                    <td colSpan={5}>{CubeIcon(Cubes.Cube333MBF)} {CubesCn(Cubes.Cube333MBF)}</td>
+                    <td colSpan={5}>{CubeIcon(pj)} {CubesCn(pj)}</td>
                 </tr>)
                 for (let i = 0; i < scores.length; i++) {
                     const contest = scores[i].Contest
@@ -515,7 +515,7 @@ class PlayerPage extends React.Component {
                                 <td><Link to={"/contest?id=" + contest.ID}>{j === 0 ? contest.Name : ""}</Link></td>
                                 <td>{ss[j].RouteValue.Name}</td>
                                 <td>{FormatRank(ss[j].Rank)}</td>
-                                <td>{FormatTime(ss[j].Best, Cubes.Cube333MBF, false)}</td>
+                                <td>{FormatTime(ss[j].Best, pj, false)}</td>
                                 <td>{RecordSpan(ss[j].IsBestSingle, IsBestGr)} <i
                                     style={{fontWeight: 700}}> {score} </i> {FormatTime(ss[j].R3, ss[j].Project, true)}
                                 </td>
@@ -556,12 +556,12 @@ class PlayerPage extends React.Component {
                 if (scores === undefined) {
                     continue
                 }
-
-                if (pj === Cubes.Cube333MBF) {
+                const att = CubesAttributesMap.get(pj) as CubesAttributes
+                if (att.RouteType === CubesRouteType.RouteTypeRepeatedly) {
                     pages.push({
                         Id: "scores_" + pj,
                         Name: CubeIcon(pj),
-                        Page: drawScore333MBFTables(scores)
+                        Page: drawScore333MBFTables(att.Cubes, scores)
                     })
                     continue
                 }
