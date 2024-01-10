@@ -32,6 +32,7 @@ const Sudoku = React.lazy(() => import('./games/sudoku/Sudoku'))
 const Images = React.lazy(() => import("./pages/statistics/Images"))
 const Digit = React.lazy(() => import("./games/digit/Digit"))
 
+const Random = React.lazy(() => import("./pages/tools/Random"))
 
 // main
 $(() => {
@@ -85,6 +86,8 @@ const url: Url[] = [
 
     {Uri: "/game/sudoku", Comp: Sudoku},
     {Uri: "/game/digit", Comp: Digit},
+
+    {Uri:"/tools/random", Comp: Random}
 ]
 
 const urlRoutes: any[] = []
@@ -134,6 +137,15 @@ root.render(
                             <li><NavLink className="dropdown-item" to="/statistics/interest">趣味玩法</NavLink></li>
                         </ul>
                     </li>
+
+
+                    <li className="nav-item dropdown">
+                        <Link to="#" className="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false">工具</Link>
+                        <ul className="dropdown-menu">
+                            <li><NavLink className="dropdown-item" to="/tools/random">抽奖</NavLink></li>
+                        </ul>
+                    </li>
+
 
                     <li className="nav-item dropdown">
                         <Link to="#" className="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false">游戏</Link>
