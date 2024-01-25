@@ -51,13 +51,7 @@ const Debug = () => {
                 Name: "sk",
                 Final: true,
                 UpsetsVal: [
-                    "U' B' R' L' U R' B' U'",
-                    "U' L U' R' L B L R'",
-                    "U' B L B' U R' U' B",
-                    "B U R' L B' U L' U B'",
-                    "R U' L R' L R L U' R",
-                    "R' U R U' L' B' U R",
-                    "U' R' U L' B' L R L'",
+                    "R' B' R' B U B L R B",
                 ]
             },
             {
@@ -70,12 +64,6 @@ const Debug = () => {
                 Final: true,
                 UpsetsVal: [
                     "U' R' B R U' B R U L' l r b' u",
-                    "U R L' B' R' L R' L' U' b' u'",
-                    "L' B U' R' U L' U' L l r' b' u'",
-                    "B U' L' B' U B' L' U' r u",
-                    "U R B' L' U L' U' L' l'",
-                    "L' B R' B' R U L' B L' l' b'",
-                    "U B U B' R L B' U' R' l r' b u",
                 ]
             },
             {
@@ -87,7 +75,20 @@ const Debug = () => {
                 Name: "sq1",
                 Final: true,
                 UpsetsVal: [
-                    "(-5,0)/ (-3,0)/ (2,-1)/ (-5,-2)/ (-3,0)/ (3,0)/ (6,-4)/ (0,-3)/ (-3,-2)/ (-4,-2)/ (-2,0)/ (6,-4)",
+                    // "(-5,-3)/ (-4,-4)/ (0,-3)/ (0,-3)/ (1,-5)/ (-3,0)/ (-4,0)/ (-3,-3)/ (3,0)/ (-1,-1)/ (0,-4)/ (2,-4)/",
+                    " (-2,0)/ (0,3)/ (0,-3)/ (0,-3)/ (-1,-1)/ (3,0)/ (1,-3)/ (-3,0)/ (-1,0)/ (-4,-2)/ (5,-4)/ (1,-4)/ (-4,0)"
+                ]
+            },
+            {
+                ID: 12312313131,
+                ContestID: 21311,
+                Project: Cubes.CubeClock,
+                Number: 1,
+                Part: 1,
+                Name: "clock",
+                Final: true,
+                UpsetsVal: [
+                    "UR1- DR1- DL2+ UL1- U1+ R4- D5+ L3+ ALL4- y2 U1- R3+ D2- L3+ ALL3- UR DR DL"
                 ]
             }
 

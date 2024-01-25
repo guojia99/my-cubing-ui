@@ -33,7 +33,7 @@ const Images = React.lazy(() => import("./pages/statistics/Images"))
 const Digit = React.lazy(() => import("./games/digit/Digit"))
 
 const Random = React.lazy(() => import("./pages/tools/Random"))
-
+const SQ1CSPTree = React.lazy(() => import("./pages/tools/SQ1_CSP_tree"))
 // main
 $(() => {
     setInterval(() => {
@@ -87,7 +87,8 @@ const url: Url[] = [
     {Uri: "/game/sudoku", Comp: Sudoku},
     {Uri: "/game/digit", Comp: Digit},
 
-    {Uri:"/tools/random", Comp: Random}
+    {Uri: "/tools/random", Comp: Random},
+    {Uri: "/tools/sq1_csp_tree", Comp: SQ1CSPTree}
 ]
 
 const urlRoutes: any[] = []
@@ -142,18 +143,19 @@ root.render(
                     <li className="nav-item dropdown">
                         <Link to="#" className="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false">工具</Link>
                         <ul className="dropdown-menu">
+                            <li><NavLink className="dropdown-item" to="/tools/sq1_csp_tree">SQ1-CSP</NavLink></li>
                             <li><NavLink className="dropdown-item" to="/tools/random">抽奖</NavLink></li>
                         </ul>
                     </li>
 
+                    {/*<li className="nav-item dropdown">*/}
+                    {/*    <Link to="#" className="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false">游戏</Link>*/}
+                    {/*    <ul className="dropdown-menu">*/}
+                    {/*<li><NavLink className="dropdown-item" to="/game/sudoku">数独</NavLink></li>*/}
+                    {/*<li><NavLink className="dropdown-item" to="/game/digit">记字</NavLink></li>*/}
 
-                    <li className="nav-item dropdown">
-                        <Link to="#" className="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false">游戏</Link>
-                        <ul className="dropdown-menu">
-                            <li><NavLink className="dropdown-item" to="/game/sudoku">数独</NavLink></li>
-                            <li><NavLink className="dropdown-item" to="/game/digit">记字</NavLink></li>
-                        </ul>
-                    </li>
+                    {/*</ul>*/}
+                    {/*</li>*/}
                 </ul>
 
                 <React.Suspense fallback={<ThreeDotsLoader/>}>

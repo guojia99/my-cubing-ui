@@ -4,14 +4,18 @@ export const hsq3 = Math.sqrt(3) / 2
 // Transform
 // 对2D坐标进行线性变换
 export function Transform(arr: number[][], trans: number[]): number[][] {
-    if ((trans.length !== 3 && trans.length !== 6) || (arr.length !== 2)) {
-        return arr
-    }
+    // if ((trans.length !== 3 && trans.length !== 6)) {
+    //     return arr
+    // }
 
-    let out1: number[] = [], out2: number[] = []
+    // if (arr.length !== 2){
+    //     return arr
+    // }
+
     if (trans.length === 3) {
         trans = [trans[0], 0, trans[1] * trans[0], 0, trans[0], trans[2] * trans[0]]
     }
+    let out1: number[] = [], out2: number[] = []
     for (let i = 0; i < arr[0].length; i++) {
         out1[i] = arr[0][i] * trans[0] + arr[1][i] * trans[1] + trans[2]
         out2[i] = arr[0][i] * trans[3] + arr[1][i] * trans[4] + trans[5]

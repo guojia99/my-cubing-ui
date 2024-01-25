@@ -35,6 +35,9 @@ export class SQ1CubeDrawerUtils {
         '#0000ff', // B 5
         '', // None 6
     ]
+    // var ecol = '-B-R-F-L-B-R-F-L';
+    // var ccol = 'LBBRRFFLBLRBFRLF';
+
     private eCol: number[] = [
         6, 5, 6, 1, 6, 2, 6, 4, // -B-R -F-L
         6, 5, 6, 1, 6, 2, 6, 4, // -B-R -F-L
@@ -60,7 +63,7 @@ export class SQ1CubeDrawerUtils {
         }
 
         if (move[2]) {
-            mid  = 1 - mid
+            mid = 1 - mid
             for (let i = 0; i < 6; i++) {
                 newPosit = Circle(newPosit, i + 6, 23 - i)
             }
@@ -78,27 +81,37 @@ export class SQ1CubeDrawerUtils {
                 continue
             }
             const ms = RegExpExecArrayToNumberArray(this.movesRe.exec(moves[i]));
-            [posit, mid] = this.doSlice(posit, mid, [~~ms[1] + 12, ~~ms[2] + 12, 1]);
+            [posit, mid] = this.doSlice(posit, mid, [~~ms[0] + 12, ~~ms[1] + 12, 1]);
+
         }
         [posit, mid] = this.doSlice(posit, mid, [0, 0, 1]);
+        // (-5,-3)/ (-4,-4)/ (0,-3)/ (0,-3)/ (1,-5)/ (-3,0)/ (-4,0)/ (-3,-3)/ (3,0)/ (-1,-1)/ (0,-4)/ (2,-4)/
+        // [0, 1, 8, 9, 16, 17, 14, 10, 26, 6, 12, 13, 25, 24, 5, 4, 21, 20, 29, 28, 18, 22, 2, 30]
         return [posit, mid]
     }
 
-    initDrawFaceCache(): drawCache {
-        let drawCache: drawCache = {
-            ep: [[0, -0.5, 0.5], [0, -hsq3 - 1, -hsq3 - 1]],
-            cp: [[0, -0.5, -hsq3 - 1, -hsq3 - 1], [0, -hsq3 - 1, -hsq3 - 1, -0.5]],
-            cpR: [[0, -0.5, -hsq3 - 1], [0, -hsq3 - 1, -hsq3 - 1]],
-            cpL: [[0, -hsq3 - 1, -hsq3 - 1], [0, -hsq3 - 1, -0.5]],
-            eps: [],
-            cps: [],
-        }
-        drawCache.eps = Transform(drawCache.ep, [0.66, 0, 0])
-        drawCache.cps = Transform(drawCache.cp, [0.66, 0, 0])
-        return drawCache
-    }
 
-    drawFace(ctx: CanvasRenderingContext2D, posit: number[], width: number, fNum: number, cache: drawCache): drawCache {
+    private ep = [
+        [0, -0.5, 0.5],
+        [0, -hsq3 - 1, -hsq3 - 1]
+    ];
+    private cp = [
+        [0, -0.5, -hsq3 - 1, -hsq3 - 1],
+        [0, -hsq3 - 1, -hsq3 - 1, -0.5]
+    ];
+    private cpr = [
+        [0, -0.5, -hsq3 - 1],
+        [0, -hsq3 - 1, -hsq3 - 1]
+    ];
+    private cpl = [
+        [0, -hsq3 - 1, -hsq3 - 1],
+        [0, -hsq3 - 1, -0.5]
+    ];
+
+    private eps = Transform(this.ep, [0.66, 0, 0]);
+    private cps = Transform(this.cp, [0.66, 0, 0]);
+
+    drawFace(ctx: CanvasRenderingContext2D, posit: number[], width: number, fNum: number) {
         let cRot = (fNum < 12 ? (fNum - 3) : (-fNum)) * Math.PI / 6
         let eRot = (fNum < 12 ? (fNum - 5) : (-1 - fNum)) * Math.PI / 6
         let trans = fNum < 12 ? [width, 2.7, 2.7] : [width, 2.7 + 5.4, 2.7]
@@ -110,20 +123,15 @@ export class SQ1CubeDrawerUtils {
 
         if (val % 2 === 0) {
             if (val === (posit[j] >> 1)) {
-                cache.cpL = Rotate(cache.cpL, cRot)
-                DrawPolygon(ctx, this.colors[this.cCol[val]], cache.cpL, trans);
-                cache.cpR = Rotate(cache.cpR, cRot)
-                DrawPolygon(ctx, this.colors[this.cCol[val + 1]], cache.cpR, trans);
-                cache.cps = Rotate(cache.cps, cRot)
-                DrawPolygon(ctx, colorUD, cache.cps, trans);
+                DrawPolygon(ctx, this.colors[this.cCol[val]], Rotate(this.cpl, cRot), trans);
+                DrawPolygon(ctx, this.colors[this.cCol[val + 1]], Rotate(this.cpr, cRot), trans);
+                DrawPolygon(ctx, colorUD, Rotate(this.cps, cRot), trans);
             }
-            return cache
+            return
         }
-        cache.ep = Rotate(cache.ep, eRot)
-        DrawPolygon(ctx, this.colors[this.eCol[val]], cache.ep, trans);
-        cache.eps = Rotate(cache.eps, eRot)
-        DrawPolygon(ctx, colorUD, cache.eps, trans);
-        return cache
+        DrawPolygon(ctx, this.colors[this.eCol[val]], Rotate(this.ep, eRot), trans);
+        DrawPolygon(ctx, colorUD, Rotate(this.eps, eRot), trans);
+        return
     }
 
     drawMid(ctx: CanvasRenderingContext2D, width: number, mid: number) {
@@ -138,15 +146,14 @@ export class SQ1CubeDrawerUtils {
 
     draw(ctx: CanvasRenderingContext2D, seq: string, width: number) {
         const [posit, mid] = this.genPositAndMid(seq)
-        let drawCache = this.initDrawFaceCache()
         for (let i = 0; i < 24; i++) {
-            drawCache = this.drawFace(ctx, posit, width, i, drawCache)
+            this.drawFace(ctx, posit, width, i)
         }
         this.drawMid(ctx, width, mid)
     }
 }
 
-export const DrawSQ1CubeCanvas = ( imageWidth: number, seq: string) => {
+export const DrawSQ1CubeCanvas = (imageWidth: number, seq: string) => {
     const imageSize = (imageWidth / 20)
     const canvasW = 11 * imageWidth
     const canvasH = 6.3 * imageWidth
@@ -156,7 +163,7 @@ export const DrawSQ1CubeCanvas = ( imageWidth: number, seq: string) => {
     canvas.width = canvasW
     canvas.height = canvasH
     canvas.style.width = 11 * imageSize / 1.3 + 'em'
-    canvas.style.height =  6.3 * imageSize / 1.3 + 'em'
+    canvas.style.height = 6.3 * imageSize / 1.3 + 'em'
 
     let ctx = canvas.getContext('2d') as CanvasRenderingContext2D
     const sq1CubeDrawerUtils = new SQ1CubeDrawerUtils()
