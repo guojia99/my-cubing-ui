@@ -35,6 +35,16 @@ export class SQ1CubeDrawerUtils {
         '#0000ff', // B 5
         '', // None 6
     ]
+    private csp_color = [
+        '#f6f6e4', // U 0
+        '#f6f6e4', // R 1
+        '#f6f6e4', // F 2
+        '#f6f6e4', // D 3
+        '#f6f6e4', // L 4
+        '#f6f6e4', // B 5
+        '#f6f6e4', // None 6
+    ]
+
     // var ecol = '-B-R-F-L-B-R-F-L';
     // var ccol = 'LBBRRFFLBLRBFRLF';
 
@@ -111,10 +121,9 @@ export class SQ1CubeDrawerUtils {
     private eps = Transform(this.ep, [0.66, 0, 0]);
     private cps = Transform(this.cp, [0.66, 0, 0]);
 
-    drawFace(ctx: CanvasRenderingContext2D, posit: number[], width: number, fNum: number) {
+    drawFace(ctx: CanvasRenderingContext2D, posit: number[], fNum: number, trans: number[]) {
         let cRot = (fNum < 12 ? (fNum - 3) : (-fNum)) * Math.PI / 6
         let eRot = (fNum < 12 ? (fNum - 5) : (-1 - fNum)) * Math.PI / 6
-        let trans = fNum < 12 ? [width, 2.7, 2.7] : [width, 2.7 + 5.4, 2.7]
         let j = (fNum + 1) % 12 + (fNum < 12 ? 0 : 12)
 
         let val = posit[fNum] >> 1
@@ -147,16 +156,26 @@ export class SQ1CubeDrawerUtils {
     draw(ctx: CanvasRenderingContext2D, seq: string, width: number) {
         const [posit, mid] = this.genPositAndMid(seq)
         for (let i = 0; i < 24; i++) {
-            this.drawFace(ctx, posit, width, i)
+            let trans = i < 12 ? [width, 2.7, 2.7] : [width, 2.7 + 5.4, 2.7]
+            this.drawFace(ctx, posit, i, trans)
         }
         this.drawMid(ctx, width, mid)
     }
+
+    drawWithCSP(ctx: CanvasRenderingContext2D, seq: string, width: number){
+        this.colors = this.csp_color
+        const [posit, mid] = this.genPositAndMid(seq)
+        for (let i = 0; i < 24; i++) {
+            let trans = i < 12 ? [width, 2.7, 2.7] : [width, 2.7, 2.7 + 5.4]
+            this.drawFace(ctx, posit, i, trans)
+        }
+    }
 }
 
-export const DrawSQ1CubeCanvas = (imageWidth: number, seq: string) => {
+const baseSQ1Ctx = (imageWidth: number, imageHeight: number) => {
     const imageSize = (imageWidth / 20)
-    const canvasW = 11 * imageWidth
-    const canvasH = 6.3 * imageWidth
+    const canvasW = imageWidth
+    const canvasH = imageHeight
 
     const canvas: HTMLCanvasElement = document.createElement("canvas")
 
@@ -165,12 +184,35 @@ export const DrawSQ1CubeCanvas = (imageWidth: number, seq: string) => {
     canvas.style.width = 11 * imageSize / 1.3 + 'em'
     canvas.style.height = 6.3 * imageSize / 1.3 + 'em'
 
+    return canvas
+}
+
+export const DrawSQ1CubeCanvas = (imageWidth: number, seq: string) => {
+    let canvas = baseSQ1Ctx(11 * imageWidth, 6.3 * imageWidth)
     let ctx = canvas.getContext('2d') as CanvasRenderingContext2D
     const sq1CubeDrawerUtils = new SQ1CubeDrawerUtils()
     sq1CubeDrawerUtils.draw(ctx, seq, imageWidth)
 
     return canvas
 }
+
+export const DrawSQ1WithCSPCanvas = (imageWidth: number, seq: string) => {
+    let canvas = baseSQ1Ctx(6.3 * imageWidth, 11 * imageWidth)
+    let ctx = canvas.getContext('2d') as CanvasRenderingContext2D
+    const sq1CubeDrawerUtils = new SQ1CubeDrawerUtils()
+    sq1CubeDrawerUtils.drawWithCSP(ctx, seq, imageWidth)
+    return canvas
+}
+
+export const DrawSQ1CSPCubeImage = (id: string, imageWidth: number, seq: string) => {
+    const canvas: HTMLCanvasElement = DrawSQ1WithCSPCanvas(imageWidth, seq)
+
+    return (
+        // <div>{canvas}</div>
+        <img src={canvas.toDataURL()} alt={id + ".svg"} id={id} key={id}/>
+    )
+}
+
 export const DrawSQ1CubeImage = (id: string, imageWidth: number, seq: string) => {
     const canvas = DrawSQ1CubeCanvas(imageWidth, seq)
     return (

@@ -1,6 +1,7 @@
 import {SetBackGround} from "../../components/utils/background";
 import {RoundTables} from "../../components/cube/components/cube_rounds";
 import {Cubes} from "../../components/cube/cube_map";
+import {DrawSQ1CSPCubeImage} from "../../components/draw/draw_sq1";
 
 const Debug = () => {
     SetBackGround("")
@@ -98,6 +99,7 @@ const Debug = () => {
 
     return (
         <div>
+            <div>{DrawSQ1CSPCubeImage("123131", 45, "/ (-3,-3)/ (2,0)/")}</div>
             <div style={{fontSize: "30px"}}>{items}</div>
         </div>
 

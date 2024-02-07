@@ -1,9 +1,9 @@
-// css
-// import 'bootstrap/dist/css/bootstrap.min.css'
+//css
+//import 'bootstrap/dist/css/bootstrap.min.css'
 import './index.css'
 import 'react-toastify/dist/ReactToastify.css';
 
-// index
+//index
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import {BrowserRouter, Link, NavLink, Route, Routes} from "react-router-dom";
@@ -11,7 +11,7 @@ import {ToastContainer} from "react-toastify";
 import ThreeDotsLoader from "./components/loading/ThreeDotsLoader";
 
 
-// page
+//page
 const Home = React.lazy(() => import('./pages/home/Home'))
 const Debug = React.lazy(() => import('./pages/debug/debug'))
 const Auth = React.lazy(() => import('./pages/admin/auth'))
@@ -34,7 +34,8 @@ const Digit = React.lazy(() => import("./games/digit/Digit"))
 
 const Random = React.lazy(() => import("./pages/tools/Random"))
 const SQ1CSPTree = React.lazy(() => import("./pages/tools/SQ1_CSP_tree"))
-// main
+const BLDTools = React.lazy(() => import("./pages/tools/bld_tools"))
+//main
 $(() => {
     setInterval(() => {
         $('i').tooltip().show()
@@ -52,24 +53,24 @@ type Url = {
 }
 
 const url: Url[] = [
-    // 基础
+    //基础
     {Uri: "/", Comp: Home},
     {Uri: "/about", Comp: About},
     {Uri: "/rule", Comp: Rule},
 
-    // 管理员
+    //管理员
     {Uri: "/xadmin", Comp: Admin},
     {Uri: "/xauth", Comp: Auth},
     {Uri: "/debug", Comp: Debug},
 
-    // 比赛
+    //比赛
     {Uri: "/contest", Comp: ContestPage},
     {Uri: "/contests", Comp: Contests},
     {Uri: "/player", Comp: PlayerPage},
     {Uri: "/players", Comp: Players},
 
 
-    // 统计
+    //统计
     {Uri: "/statistics/images", Comp: Images},
     {Uri: "/statistics/best", Comp: Best},
     {Uri: "/statistics/sor", Comp: Sor},
@@ -88,7 +89,8 @@ const url: Url[] = [
     {Uri: "/game/digit", Comp: Digit},
 
     {Uri: "/tools/random", Comp: Random},
-    {Uri: "/tools/sq1_csp_tree", Comp: SQ1CSPTree}
+    {Uri: "/tools/sq1_csp_tree", Comp: SQ1CSPTree},
+    {Uri:"/tools/bld_tools", Comp: BLDTools},
 ]
 
 const urlRoutes: any[] = []
@@ -144,7 +146,8 @@ root.render(
                         <Link to="#" className="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false">工具</Link>
                         <ul className="dropdown-menu">
                             <li><NavLink className="dropdown-item" to="/tools/sq1_csp_tree">SQ1-CSP</NavLink></li>
-                            <li><NavLink className="dropdown-item" to="/tools/random">抽奖</NavLink></li>
+                            <li><NavLink className="dropdown-item" to="/tools/random">随机</NavLink></li>
+                            <li><NavLink className="dropdown-item" to="/tools/bld_tools">盲拧练习</NavLink></li>
                         </ul>
                     </li>
 
@@ -174,3 +177,4 @@ root.render(
         </footer>
     </div>
 );
+

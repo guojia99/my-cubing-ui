@@ -119,11 +119,12 @@ class ContestPage extends React.Component {
             const records = this.state.record as ContestRecord[]
             for (let i = 0; i < scores.length; i++) {
                 const routes = scores[i]
-                if (routes === undefined) {
+                if (routes === undefined || routes === null || routes.Scores === undefined || routes.Scores.length === 0) {
                     continue
                 }
 
                 const id = routes.Round[0].ID
+
                 items.push(
                     <div className="accordion-item" key={"drawRoutesScores_" + id + "_item"}>
                         <h2 className="accordion-header">
@@ -158,6 +159,12 @@ class ContestPage extends React.Component {
             if (score === undefined || score.length === 0) {
                 continue
             }
+
+            const routes: RoutesScores = score[0]
+            if (routes === undefined || routes === null || routes.Scores === undefined || routes.Scores.length === 0) {
+                continue
+            }
+
             pages.push({
                 Id: "score_" + pj,
                 Name: CubeIcon(pj),
