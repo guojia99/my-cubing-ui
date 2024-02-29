@@ -20,7 +20,7 @@ class BLDTools extends React.Component {
     // }
     random_text_id = ""
     random_text() {
-        let randomEntries = Object.keys(entries)[Math.floor(Math.random() * entries.length)];
+        // let randomEntries = Object.keys(entries)[Math.floor(Math.random() * entries.length)];
 
         return (
             <div></div>

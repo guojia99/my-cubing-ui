@@ -1,4 +1,4 @@
-import {Cubes, CubesAttributes, CubesAttributesMap, CubesRouteType} from "../cube_map";
+import {Cubes, CubesAttributes, CubesAttributesMap, CubesRouteType, SegmentationType} from "../cube_map";
 
 
 export function FormatTime(result: number, pj: Cubes, isAvg: boolean) {
@@ -20,8 +20,12 @@ export function FormatTime(result: number, pj: Cubes, isAvg: boolean) {
         return result.toFixed(0)
     }
 
-    if (pj === Cubes.Cube333FM && isAvg){
-        return result.toFixed(2)
+    let attr = CubesAttributesMap.get(pj) as CubesAttributes
+    if (pj === Cubes.Cube333FM || attr.Segmentation == SegmentationType.XCubeFm) {
+        if (isAvg) {
+            return result.toFixed(2)
+        }
+        return result.toFixed(0)
     }
 
     if (result < 60) {

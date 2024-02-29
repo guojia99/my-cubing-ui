@@ -146,7 +146,7 @@ root.render(
                         <Link to="#" className="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false">工具</Link>
                         <ul className="dropdown-menu">
                             <li><NavLink className="dropdown-item" to="/tools/sq1_csp_tree">SQ1-CSP</NavLink></li>
-                            <li><NavLink className="dropdown-item" to="/tools/random">随机</NavLink></li>
+                            <li><NavLink className="dropdown-item" to="/tools/random">随机字母生成器</NavLink></li>
                             <li><NavLink className="dropdown-item" to="/tools/bld_tools">盲拧练习</NavLink></li>
                         </ul>
                     </li>

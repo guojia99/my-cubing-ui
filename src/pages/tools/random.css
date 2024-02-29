@@ -1,0 +1,14 @@
+.random_value {
+}
+
+.random_value::before {
+    font-size: 150px;
+    content: attr(data-text1);
+    color: #de427d; /* 设置空格之前的字母为蓝色 */
+}
+
+.random_value::after {
+    font-size: 150px;
+    content: attr(data-text2);
+    color: #00ffea; /* 设置空格之后的字母为红色 */
+}
