@@ -86,43 +86,45 @@ export const TabNavsHorizontal = (tb: TabNavsValue) => {
     const p = GetLocationQueryParams()
     const selected = p[tb.SelectedKey] === undefined ? tb.Pages[0].Id : p[tb.SelectedKey]
 
-    return (<div className="d-flex" key={tb.Id}>
-        <div className="nav nav-tabs flex-column nav-pills col-3 col-lg-1" role="tablist" aria-orientation="vertical" key={"tab_tabs" + tb.Id}>
-            {Array.from(Array(tb.Pages.length), (e, i) => {
-                const active = tb.Pages[i].Id === selected ? "active" : ""
-                const id = tb.Pages[i].Id + "-tab"
-                return (
-                    <button className={"nav-link alert-secondary " + active}
-                            id={id}
-                            key={"tab_key_" + id}
-                            data-bs-toggle="pill"
-                            data-bs-target={"#" + tb.Pages[i].Id}
-                            type="button"
-                            role="tab"
-                            aria-controls={tb.Pages[i].Id}
-                            aria-selected={tb.Pages[i].Id === selected}
-                            onClick={selectedFn(tb.Pages[i].Id)}
-                    >
-                        {tb.Pages[i].Name}
-                    </button>
-                )
-            })}
-        </div>
-        <div className="tab-content flex-column col-9 col-lg-11" style={{paddingLeft: "10px"}}>
-            {Array.from(Array(tb.Pages.length), (e, i) => {
-                const active = tb.Pages[i].Id === selected ? "active" : ""
-                return (
-                    <div className={"tab-pane fade show " + active}
-                         id={tb.Pages[i].Id}
-                         key={"tab_content_" + tb.Pages[i].Id}
-                         role="tabpanel"
-                         aria-labelledby={tb.Pages[i].Id + "-tab"}
-                         tabIndex={i}
-                    >
-                        {tb.Pages[i].Page}
-                    </div>
-                )
-            })}
-        </div>
-    </div>)
+    return (
+        <div className="d-flex" key={tb.Id}>
+            <div className="nav nav-tabs flex-column nav-pills col-3 col-lg-1" role="tablist"
+                 aria-orientation="vertical" key={"tab_tabs" + tb.Id}>
+                {Array.from(Array(tb.Pages.length), (e, i) => {
+                    const active = tb.Pages[i].Id === selected ? "active" : ""
+                    const id = tb.Pages[i].Id + "-tab"
+                    return (
+                        <button className={"nav-link alert-secondary " + active}
+                                id={id}
+                                key={"tab_key_" + id}
+                                data-bs-toggle="pill"
+                                data-bs-target={"#" + tb.Pages[i].Id}
+                                type="button"
+                                role="tab"
+                                aria-controls={tb.Pages[i].Id}
+                                aria-selected={tb.Pages[i].Id === selected}
+                                onClick={selectedFn(tb.Pages[i].Id)}
+                        >
+                            {tb.Pages[i].Name}
+                        </button>
+                    )
+                })}
+            </div>
+            <div className="tab-content flex-column col-9 col-lg-11" style={{paddingLeft: "10px"}}>
+                {Array.from(Array(tb.Pages.length), (e, i) => {
+                    const active = tb.Pages[i].Id === selected ? "active" : ""
+                    return (
+                        <div className={"tab-pane fade show " + active}
+                             id={tb.Pages[i].Id}
+                             key={"tab_content_" + tb.Pages[i].Id}
+                             role="tabpanel"
+                             aria-labelledby={tb.Pages[i].Id + "-tab"}
+                             tabIndex={i}
+                        >
+                            {tb.Pages[i].Page}
+                        </div>
+                    )
+                })}
+            </div>
+        </div>)
 }

@@ -33,7 +33,7 @@ const Images = React.lazy(() => import("./pages/statistics/Images"))
 const Digit = React.lazy(() => import("./games/digit/Digit"))
 
 const Random = React.lazy(() => import("./pages/tools/Random"))
-const SQ1CSPTree = React.lazy(() => import("./pages/tools/SQ1_CSP_tree"))
+const SQ1Drawer = React.lazy(() => import("./pages/tools/SQ1_drawer"))
 const BLDTools = React.lazy(() => import("./pages/tools/bld_tools"))
 //main
 $(() => {
@@ -89,7 +89,7 @@ const url: Url[] = [
     {Uri: "/game/digit", Comp: Digit},
 
     {Uri: "/tools/random", Comp: Random},
-    {Uri: "/tools/sq1_csp_tree", Comp: SQ1CSPTree},
+    {Uri: "/tools/sq1_image_drawer", Comp: SQ1Drawer},
     {Uri:"/tools/bld_tools", Comp: BLDTools},
 ]
 
@@ -145,7 +145,7 @@ root.render(
                     <li className="nav-item dropdown">
                         <Link to="#" className="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false">工具</Link>
                         <ul className="dropdown-menu">
-                            <li><NavLink className="dropdown-item" to="/tools/sq1_csp_tree">SQ1-CSP</NavLink></li>
+                            <li><NavLink className="dropdown-item" to="/tools/sq1_image_drawer">SQ1绘制工具</NavLink></li>
                             <li><NavLink className="dropdown-item" to="/tools/random">随机字母生成器</NavLink></li>
                             <li><NavLink className="dropdown-item" to="/tools/bld_tools">盲拧练习</NavLink></li>
                         </ul>

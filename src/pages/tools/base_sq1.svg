@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0,0,1000,1000">
+
+<!--    <path d="M500.0 500.0 l76.5571 -285.7142 h209.1571 v209.1571 L500.0 500.0" stroke-linejoin="round"/>-->
+<!--    <path d="M500.0 500.0 l76.5571 -285.7142 h-153.1142 L500.0 500.0" stroke-width="2" stroke-linejoin="round"/>-->
+
+
+    <defs>
+        <!--角块-->
+        <symbol id="cornerPolygon">
+            <polygon points="500,500 576.5571,214.2858 785.7142,214.2858 785.7142,423.4429"/>
+        </symbol>
+        <symbol id="corner">
+            <line x1="500" y1="500" x2="576.5571" y2="214.2858" stroke="black" stroke-width="10"/>
+            <line x1="785.7142" y1="423.4429" x2="500" y2="500" stroke="black" stroke-width="10"/>
+        </symbol>
+        <symbol id="cornerLine1">
+            <line x1="576.5571" y1="214.2858" x2="785.7142" y2="214.2858" stroke-width="17"/>
+        </symbol>
+        <symbol id="cornerLine2">
+            <line x1="785.7142" y1="214.2858" x2="785.7142" y2="424.4429" stroke-width="17"/>
+        </symbol>
+
+        <!--        棱块-->
+        <symbol id="edgePolygon">
+            <polygon points="500,500 576.5571,214.2858 423.4429,214.2858"/>
+        </symbol>
+        <symbol id="edge">
+            <line x1="500" y1="500" x2="576.5571" y2="214.2858" stroke="black" stroke-width="10"/>
+            <line x1="423.4429" y1="214.2858" x2="500" y2="500" stroke="black" stroke-width="10"/>
+        </symbol>
+        <symbol id="edgeLine">
+            <line x1="576.5571" y1="214.2858" x2="423.4429" y2="214.2858" stroke-width="17"/>
+        </symbol>
+
+        <!--        中轴线-->
+        <symbol id="slice">
+            <path d="M500.0 500.0 l114.8357 -428.5714 M500.0 500.0 l-114.8357 428.5714"/>
+        </symbol>
+
+        <!--默认棱块-->
+        <symbol id="edge_white_red">
+            <use href="#edge"/>
+            <use href="#edgePolygon" fill="white"/>
+            <use href="#edgeLine" stroke="red"/>
+        </symbol>
+        <symbol id="edge_white_yellow">
+            <use href="#edge"/>
+            <use href="#edgePolygon" fill="white"/>
+            <use href="#edgeLine" stroke="black"/>
+        </symbol>
+        <symbol id="edge_white_blue">
+            <use href="#edge"/>
+            <use href="#edgePolygon" fill="white"/>
+            <use href="#edgeLine" stroke="blue"/>
+        </symbol>
+
+<!--        默认角块-->
+        <symbol id="corner_black_red">
+            <use href="#corner" />
+            <use href="#cornerPolygon" fill="#2f2b2b"/>
+            <use href="#cornerLine1" stroke="blue"/>
+            <use href="#cornerLine2" stroke="red"/>
+        </symbol>
+</defs>
+
+    <use href="#slice" stroke="grey" stroke-width="10"/>
+    <use href="#edge_white_red"/>
+    <use href="#edge_white_yellow" transform="rotate(30, 500,500)"/>
+    <use href="#edge_white_blue" transform="rotate(60,500,500)"/>
+    <use href="#corner_black_red" transform="rotate(60,500,500)"/>
+</svg>

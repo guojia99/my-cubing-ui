@@ -12,6 +12,7 @@ import {PageNav, PageNavValue} from "../../components/utils/page";
 import {WaitToast, WarnToast} from "../../components/utils/alert";
 import {CubesAttributesList, SegmentationType, SegmentationTypeList} from "../../components/cube/cube_map";
 import {CubeIcon} from "../../components/icon/cube_icon";
+import * as wasi from "wasi";
 
 type AdminContestDataCtx = {
     Contests: GetContestsResponse | null,
@@ -111,6 +112,7 @@ export class AdminContestRender {
 
         const inputNameID = "create_contest_inputNameID"
         const inputDescriptionID = "create_contest_inputDescriptionID"
+        const inputGroupIDID = "create_contest_input_groupID_ID"
         const inputTypeID = "create_contest_inputTypeID"
 
         const roundKeyRoundNumber = "round_number_"
@@ -200,6 +202,10 @@ export class AdminContestRender {
                     <div className="mb-3">
                         <label htmlFor={inputDescriptionID} className="form-label">备注</label>
                         <input type="text" className="form-control" id={inputDescriptionID}/>
+                    </div>
+                    <div className="mb-3">
+                        <label htmlFor={inputGroupIDID} className="form-label">群ID</label>
+                        <input type="text" className="form-control" id={inputGroupIDID}/>
                     </div>
                     <div className="mb-3">
                         <label htmlFor={inputTypeID} className="form-label">比赛形式</label>
@@ -295,6 +301,7 @@ export class AdminContestRender {
             const name = document.getElementById(inputNameID) as HTMLInputElement
             const desc = document.getElementById(inputDescriptionID) as HTMLInputElement
             const typ = document.getElementById(inputTypeID) as HTMLSelectElement
+            const groupID = document.getElementById(inputGroupIDID) as HTMLInputElement
 
             if (!name.value) {
                 WarnToast("比赛名称不能为空")
@@ -304,11 +311,15 @@ export class AdminContestRender {
                 WarnToast("备注不能为空")
                 return;
             }
-
+            if (!groupID.value) {
+                WarnToast("群ID不能为空, 请访问QQ机器人后继续")
+                return;
+            }
 
             const req: CreateContestRequest = {
                 Name: name.value,
                 Description: desc.value,
+                GroupID: groupID.value,
                 Rounds: rounds,
                 Type: typ.value,
                 StartTime: 0,

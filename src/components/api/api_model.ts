@@ -241,6 +241,7 @@ export type CreateContestRequestRound = {
 export type CreateContestRequest = {
     Name: string,
     Description: string,
+    GroupID: string,
     Rounds: CreateContestRequestRound[],
     Type: string,
     StartTime: number,
