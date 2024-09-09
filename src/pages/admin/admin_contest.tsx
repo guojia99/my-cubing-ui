@@ -10,7 +10,7 @@ import {Sleep} from "../../components/utils/async";
 import {GetLocationQueryParams} from "../../components/utils/utils";
 import {PageNav, PageNavValue} from "../../components/utils/page";
 import {WaitToast, WarnToast} from "../../components/utils/alert";
-import {CubesAttributesList, SegmentationType, SegmentationTypeList} from "../../components/cube/cube_map";
+import {Cubes, CubesAttributesList, SegmentationType, SegmentationTypeList} from "../../components/cube/cube_map";
 import {CubeIcon} from "../../components/icon/cube_icon";
 import * as wasi from "wasi";
 
@@ -33,7 +33,7 @@ export class AdminContestRender {
         }
     }
 
-    constructor(callback:callback) {
+    constructor(callback: callback) {
         this.ctx.UpdateHandle = callback
         this.loadContestData()
     }
@@ -161,6 +161,7 @@ export class AdminContestRender {
                             if (pj.Segmentation !== k) {
                                 continue
                             }
+
                             const enable = document.getElementById(roundKeyRoundEnable + pj.Cubes) as HTMLInputElement
                             if (enable === null) {
                                 continue
@@ -365,7 +366,6 @@ export class AdminContestRender {
             this.ctx.Contests = value
         })
     }
-
 
 
     render() {

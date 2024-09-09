@@ -21,7 +21,7 @@ import {
     GetRelativeSor,
     GetPlayerRelativeSor,
     GetAvgRelativeSor,
-    GetPlayerNemesisResponse, GetContestStaticsResponse,
+    GetPlayerNemesisResponse, GetContestStaticsResponse, GetGaoXiaoStaticsResponse,
 } from './api_model';
 import {Request} from "./api_error";
 import {API} from "./api";
@@ -256,6 +256,12 @@ export class apiCore {
 
     async GetContestStatics(): Promise<GetContestStaticsResponse> {
         let uri = this.uri + "/report/contests/statics"
+        const result = await Request.get(uri, {headers: {Accept: 'application/json'}})
+        return result.data
+    }
+
+    async GetGaoXiaoStatics(): Promise<GetGaoXiaoStaticsResponse>{
+        let uri = this.uri + "/stat/gaoxiao_results"
         const result = await Request.get(uri, {headers: {Accept: 'application/json'}})
         return result.data
     }

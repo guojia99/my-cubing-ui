@@ -31,6 +31,7 @@ const Projects = React.lazy(() => import('./pages/about/Projects'))
 const Sudoku = React.lazy(() => import('./games/sudoku/Sudoku'))
 const Images = React.lazy(() => import("./pages/statistics/Images"))
 const Digit = React.lazy(() => import("./games/digit/Digit"))
+const GaoXiao = React.lazy(() => import("./pages/statistics/GaoXiao"))
 
 const Random = React.lazy(() => import("./pages/tools/Random"))
 const SQ1Drawer = React.lazy(() => import("./pages/tools/SQ1_drawer"))
@@ -83,6 +84,7 @@ const url: Url[] = [
         }
     },
     {Uri: "/projects", Comp: Projects},
+    {Uri: "/gz_gaoxiao", Comp: GaoXiao},
 
 
     {Uri: "/game/sudoku", Comp: Sudoku},
@@ -133,6 +135,7 @@ root.render(
                         <ul className="dropdown-menu">
                             <li><NavLink className="dropdown-item" to="/statistics/images">图表</NavLink></li>
                             <li><NavLink className="dropdown-item" to="/statistics/record">纪录</NavLink></li>
+                            <li><NavLink className="dropdown-item" to="/gz_gaoxiao">广州高校记录</NavLink></li>
                             <li><NavLink className="dropdown-item" to="/statistics/sor">Sor排位</NavLink></li>
                             <li><NavLink className="dropdown-item" to="/statistics/relative_sor">排位分数(兔兔版)</NavLink></li>
                             <li><NavLink className="dropdown-item" to="/statistics/podiums">奖牌榜单</NavLink></li>
