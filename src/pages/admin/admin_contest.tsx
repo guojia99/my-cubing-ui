@@ -10,7 +10,7 @@ import {Sleep} from "../../components/utils/async";
 import {GetLocationQueryParams} from "../../components/utils/utils";
 import {PageNav, PageNavValue} from "../../components/utils/page";
 import {WaitToast, WarnToast} from "../../components/utils/alert";
-import {CubesAttributesList, SegmentationType, SegmentationTypeList} from "../../components/cube/cube_map";
+import {Cubes, CubesAttributesList, SegmentationType, SegmentationTypeList} from "../../components/cube/cube_map";
 import {CubeIcon} from "../../components/icon/cube_icon";
 // import * as wasi from "wasi";
 
