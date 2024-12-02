@@ -10,25 +10,30 @@ import {Sleep} from "../../components/utils/async";
 import {GetLocationQueryParams} from "../../components/utils/utils";
 import {PageNav, PageNavValue} from "../../components/utils/page";
 import {WaitToast, WarnToast} from "../../components/utils/alert";
-import {Cubes, CubesAttributesList, SegmentationType, SegmentationTypeList} from "../../components/cube/cube_map";
+import {CubesAttributesList, SegmentationType, SegmentationTypeList} from "../../components/cube/cube_map";
 import {CubeIcon} from "../../components/icon/cube_icon";
 // import * as wasi from "wasi";
 
 type AdminContestDataCtx = {
     Contests: GetContestsResponse | null,
     EndContestID: number,
+    UpdateContestUpGroupID: number,
+    UpdateContestDefaultGroupID: string;
     UpdateHandle: callback,
 }
 
 
 const createContestTarget = "create_contest"
 const endContestTarget = "end_contest"
+const updateContentGroupTarget = "update_content_group"
 
 export class AdminContestRender {
 
     ctx: AdminContestDataCtx = {
         Contests: null,
         EndContestID: -1,
+        UpdateContestUpGroupID: -1,
+        UpdateContestDefaultGroupID: "",
         UpdateHandle: () => {
         }
     }
@@ -46,10 +51,15 @@ export class AdminContestRender {
         let items: JSX.Element[] = []
         for (let i = 0; i < this.ctx.Contests.Contests.length; i++) {
             const c = this.ctx.Contests.Contests[i]
-
-            let bt = <>已结束</>
+            let bt_update_group = <></>
+            let bt_del = <>已结束</>
             if (!c.IsEnd) {
-                bt = ModalButton("结束", endContestTarget, () => {
+                bt_update_group = ModalButton("修改群组", updateContentGroupTarget, () => {
+                    this.ctx.UpdateContestUpGroupID = c.ID
+                    this.ctx.UpdateContestDefaultGroupID = c.GroupID
+                }, "btn-sm btn-success");
+
+                bt_del = ModalButton("结束", endContestTarget, () => {
                     this.ctx.EndContestID = c.ID
                 }, "btn-danger btn-sm")
             }
@@ -60,7 +70,18 @@ export class AdminContestRender {
                     <td>{convertDateString(c.EndTime)}</td>
                     <td>{ContestTypeCn(c.Type)}</td>
                     <td><Link to={"/contest?id=" + c.ID}>{c.Name}</Link></td>
-                    <td>{bt}</td>
+                    <td
+                        style={{
+                            width: "150px",
+                            maxWidth: "150px",
+                            overflow: "hidden",
+                            textOverflow: "ellipsis",
+                            whiteSpace: "nowrap",
+                        }}
+                    >
+                        {c.GroupID}
+                    </td>
+                    <td>{bt_update_group} <i style={{marginLeft: 10}}></i>{bt_del}</td>
                 </tr>
             )
         }
@@ -73,6 +94,7 @@ export class AdminContestRender {
                     <th scope="col">结束时间</th>
                     <th scope="col">形式</th>
                     <th scope="col">比赛名称</th>
+                    <th scope="col">群ID</th>
                     <th scope="col">操作</th>
                 </tr>
                 </thead>
@@ -107,6 +129,36 @@ export class AdminContestRender {
         return CreateModal("结束", bodyHandle, endContestTarget, endContestHandle)
     }
 
+    private GetUpdateGroupModal = () => {
+        const Id = "GetUpdateGroupModal_update_group_id_key"
+        const bodyHandle = () => {
+
+            return <div>
+                <div className="mb-3">
+                    <label className="form-label" htmlFor={Id}>群ID</label>
+                    <input type="text" className="form-control" defaultValue={this.ctx.UpdateContestDefaultGroupID}
+                           id={Id}/>
+                </div>
+            </div>
+        }
+        const endContestHandle = async () => {
+            const inputElement = document.getElementById(Id) as HTMLInputElement;
+            await WaitToast(
+                AuthAPI.UpdateContestGroup(this.ctx.UpdateContestUpGroupID, inputElement.value),
+                (<p>等待更新比赛</p>),
+                (<p>更新比赛成功</p>),
+                (<p>更新比赛失败</p>),
+            )
+
+
+            await Sleep(1000).then(() => {
+                window.location.reload()
+            })
+        }
+
+        return CreateModal("修改群组ID", bodyHandle, updateContentGroupTarget, endContestHandle)
+    }
+
     // 创建弹窗
     private GetCreateContestModal = () => {
 
@@ -128,8 +180,10 @@ export class AdminContestRender {
                     <tr key={"create_contest_pj_item_" + pj}>
                         <td>
                             <div className="form-check form-switch">
-                                <input className="form-check-input" type="checkbox" role="switch" id={roundKeyRoundEnable + pj} defaultChecked={true}/>
-                                <label className="form-check-label" htmlFor={roundKeyRoundEnable + pj}>  {CubeIcon(pj)} {CubesCn(pj)}</label>
+                                <input className="form-check-input" type="checkbox" role="switch"
+                                       id={roundKeyRoundEnable + pj} defaultChecked={true}/>
+                                <label className="form-check-label"
+                                       htmlFor={roundKeyRoundEnable + pj}>  {CubeIcon(pj)} {CubesCn(pj)}</label>
                             </div>
                         </td>
                         <td>
@@ -154,21 +208,22 @@ export class AdminContestRender {
             SegmentationTypeList().forEach((k: SegmentationType, v: number) => {
                 const id = SegmentationTypeID + k
                 checkBoxList.push(<div className="form-check form-switch form-check-inline" key={id}>
-                    <input className="form-check-input" type="checkbox" id={id} role="switch" defaultChecked={true} onChange={() => {
-                        const check = document.getElementById(id) as HTMLInputElement
-                        for (let i = 0; i < CubesAttributesList.length; i++) {
-                            const pj = CubesAttributesList[i]
-                            if (pj.Segmentation !== k) {
-                                continue
-                            }
+                    <input className="form-check-input" type="checkbox" id={id} role="switch" defaultChecked={true}
+                           onChange={() => {
+                               const check = document.getElementById(id) as HTMLInputElement
+                               for (let i = 0; i < CubesAttributesList.length; i++) {
+                                   const pj = CubesAttributesList[i]
+                                   if (pj.Segmentation !== k) {
+                                       continue
+                                   }
 
-                            const enable = document.getElementById(roundKeyRoundEnable + pj.Cubes) as HTMLInputElement
-                            if (enable === null) {
-                                continue
-                            }
-                            enable.checked = check.checked
-                        }
-                    }}/>
+                                   const enable = document.getElementById(roundKeyRoundEnable + pj.Cubes) as HTMLInputElement
+                                   if (enable === null) {
+                                       continue
+                                   }
+                                   enable.checked = check.checked
+                               }
+                           }}/>
                     <label className="form-check-label" htmlFor={id}>{k}</label>
                 </div>)
             })
@@ -177,7 +232,8 @@ export class AdminContestRender {
             // 全选
             const checkAllBoxID = "GetCreateContestModal_select_all_pj"
             checkBoxList.push(<div className="form-check form-switch form-check-inline" key={checkAllBoxID}>
-                <input className="form-check-input" type="checkbox" id={checkAllBoxID} role="switch" defaultChecked={true} onChange={() => {
+                <input className="form-check-input" type="checkbox" id={checkAllBoxID} role="switch"
+                       defaultChecked={true} onChange={() => {
                     const check = document.getElementById(checkAllBoxID) as HTMLInputElement
                     for (let i = 0; i < allPj.length; i++) {
                         const pj = allPj[i]
@@ -372,6 +428,7 @@ export class AdminContestRender {
         return (
             <div>
                 {this.GetEndModal()}
+                {this.GetUpdateGroupModal()}
                 {this.GetCreateContestModal()}
                 <p style={{marginTop: "10px", float: "right"}}>
                     {ModalButton("创建", createContestTarget, EmptyHandle, "btn-primary")}

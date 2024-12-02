@@ -8,6 +8,7 @@ export type Contest = {
     Description: string;
     Type: string;
     RoundIdsVal: number[] | null;
+    GroupID: string;
     StartTime: string;
     EndTime: string;
     Rounds: Round[],

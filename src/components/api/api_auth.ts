@@ -34,7 +34,10 @@ export class authApiCore {
     async GetToken(user: string, password: string): Promise<GetTokenResponse> {
         try {
             let uri = this.apiCore.uri + "/auth/token"
-            const value = await Request.post(uri, {user_name: user, password: password}, {headers: {Accept: 'application/json'}})
+            const value = await Request.post(uri, {
+                user_name: user,
+                password: password
+            }, {headers: {Accept: 'application/json'}})
             this.token = value.data as GetTokenResponse
             if (this.token.Token !== "") {
                 Cookies.set(this.key, JSON.stringify(this.token), {expires: 2})
@@ -148,6 +151,11 @@ export class authApiCore {
         return await this.checkResp("put", uri, {ContestID: id})
     }
 
+    async UpdateContestGroup(id: number, groups: string) {
+        let uri = this.apiCore.uri + "/contest/update_group"
+        return await this.checkResp("put", uri, {ContestID: id, groups: groups})
+    }
+
     async AddPlayer(req: Player): Promise<void> {
         let uri = this.apiCore.uri + "/player"
         return await this.checkResp("post", uri, req)
@@ -208,7 +216,7 @@ export class authApiCore {
         return await this.checkResp("put", uri, req)
     }
 
-    async ResetRecords() :Promise<any>{
+    async ResetRecords(): Promise<any> {
         let uri = this.apiCore.uri + "/score/reset_records"
         const req = {}
         return await this.checkResp("post", uri, req)
