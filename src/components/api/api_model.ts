@@ -311,3 +311,17 @@ export type GetContestStatic = Contest & {
 }
 
 export type GetContestStaticsResponse = GetContestStatic[]
+
+
+export type GaoXiaoWCAResult = {
+    BestRank: number,
+    BestStr: string,
+    BestPersonName: string,
+    BestPersonWCAID: string
+    AvgRank: number,
+    AvgStr: string,
+    AvgPersonName: string,
+    AvgPersonWCAID: string,
+}
+
+export type GetGaoXiaoStaticsResponse = any; // map[string]GaoXiaoWCAResult[]

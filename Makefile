@@ -13,8 +13,8 @@ build_x:
 	cp -r build /data/workspace/mycube-ui
 
 run:
-	make build_x
-	serve -s /data/workspace/mycube-ui/build
+	npm run build
+	serve -s ./build
 
 run_go:
 	make build_x

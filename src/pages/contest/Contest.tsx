@@ -17,6 +17,7 @@ import {RecordSpanValue} from "../../components/cube/components/cube_record";
 import {CubeIcon} from "../../components/icon/cube_icon";
 import TableLoader from "../../components/loading/DashboardLoader";
 import CustomerTestimonialLoader from "../../components/loading/CustomerTestimonialLoader";
+import {SortScores} from "../../components/api/utils";
 
 class ContestPage extends React.Component {
     state = {
@@ -44,14 +45,13 @@ class ContestPage extends React.Component {
             this.setState({contest: value})
         })
         API.GetContestScore(id).then(value => {
-            this.setState({score: value})
-
             const s = value as GetContestScoreResponse
             if (s.Scores === undefined) {
                 return
             }
-
             const pjList = AllProjectList()
+            let scoreResponse = new Map<Cubes, RoutesScores[]>()
+
             for (let i = 0; i < pjList.length; i++) {
                 const pj = pjList[i]
                 let score = s.Scores[pj] as RoutesScores[]
@@ -59,6 +59,77 @@ class ContestPage extends React.Component {
                     continue
                 }
 
+                let continuePj = true
+                for (let j = 0; j < score.length; j++) {
+                    if (score[j].Scores === undefined || score[j].Scores.length === 0) {
+                        continue
+                    }
+                    continuePj = false
+                    break
+                }
+                if (continuePj){
+                    continue
+                }
+
+                // 合并系列赛
+                let bfGroupKey = Cubes.Cube333
+                switch (pj) {
+                    case Cubes.BFGroup333BF1:
+                    case Cubes.BFGroup333BF2:
+                    case Cubes.BFGroup333BF3:
+                    case Cubes.BFGroup333BF4:
+                    case Cubes.BFGroup333BF5:
+                    case Cubes.BFGroup333BF6:
+                    case Cubes.BFGroup333BF7:
+                        bfGroupKey = Cubes.BFGroup333BF
+                        break
+                    case Cubes.BFGroup444BF1:
+                    case Cubes.BFGroup444BF2:
+                    case Cubes.BFGroup444BF3:
+                    case Cubes.BFGroup444BF4:
+                        bfGroupKey = Cubes.BFGroup444BF
+                        break
+                    case Cubes.BFGroup555BF1:
+                    case Cubes.BFGroup555BF2:
+                    case Cubes.BFGroup555BF3:
+                    case Cubes.BFGroup555BF4:
+                        bfGroupKey = Cubes.BFGroup555BF
+                        break
+                    case Cubes.BFGroup333MBF1:
+                    case Cubes.BFGroup333MBF2:
+                    case Cubes.BFGroup333MBF3:
+                    case Cubes.BFGroup333MBF4:
+                        bfGroupKey = Cubes.BFGroup333MBF
+                        break
+                    default:
+                        bfGroupKey = Cubes.Cube333
+                        break
+                }
+
+                if (bfGroupKey !== Cubes.Cube333) {
+                    let bfGroupBf = scoreResponse.get(bfGroupKey)
+                    if (bfGroupBf === undefined) {
+                        scoreResponse.set(bfGroupKey, score)
+                    } else {
+                        let bfGroupBf1 = bfGroupBf[0]
+
+                        for (let i = 0; i < score.length; i++) {
+                            if (score[i].Scores === undefined) {
+                                continue
+                            }
+                            bfGroupBf1.Round.push(...score[i].Round)
+                            bfGroupBf1.Scores.push(...score[i].Scores)
+                        }
+
+                        bfGroupBf1.Scores = SortScores(bfGroupBf1.Scores)
+                        bfGroupBf[0] = bfGroupBf1
+                        scoreResponse.set(bfGroupKey, bfGroupBf)
+                    }
+                } else {
+                    scoreResponse.set(pj, score)
+                }
+
+                // 玩家数据
                 for (let i = 0; i < score.length; i++) {
                     const ss = score[i].Scores
                     if (ss === undefined || ss.length === 0) {
@@ -72,6 +143,12 @@ class ContestPage extends React.Component {
                     }
                 }
             }
+
+            let out: GetContestScoreResponse = {
+                Scores: scoreResponse
+            }
+            console.log(out)
+            this.setState({score: out})
         })
         API.GetContestSor(id).then(value => {
             this.setState({sor: value})
@@ -155,13 +232,21 @@ class ContestPage extends React.Component {
         const pjList = AllProjectList()
         for (let i = 0; i < pjList.length; i++) {
             const pj = pjList[i]
-            let score = s.Scores[pj] as RoutesScores[]
+            let score = s.Scores.get(pj) as RoutesScores[]
+
             if (score === undefined || score.length === 0) {
                 continue
             }
-
-            const routes: RoutesScores = score[0]
-            if (routes === undefined || routes === null || routes.Scores === undefined || routes.Scores.length === 0) {
+            // 跳过完全没有成绩的项目
+            let continuePj = true
+            for (let j = 0; j < score.length; j++){
+                const routes: RoutesScores = score[j]
+                if (routes === undefined || routes === null || routes.Scores === undefined || routes.Scores.length === 0) {
+                    continue
+                }
+                continuePj = false
+            }
+            if (continuePj){
                 continue
             }
 
@@ -185,11 +270,10 @@ class ContestPage extends React.Component {
             return <TableLoader/>
         }
 
-
         let items: JSX.Element[] = []
 
         AllProjectList().forEach((value) => {
-            const scores = s.Scores[value] as RoutesScores[]
+            const scores = s.Scores.get(value) as RoutesScores[]
             if (scores === undefined) {
                 return
             }

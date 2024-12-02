@@ -2,7 +2,7 @@ import React from "react";
 import {Header} from "./layout/Header";
 import "./Digit.css"
 import {Value} from "./layout/value";
-import {useSudokuContext} from "../sudoku/context/SudokuContext";
+// import {useSudokuContext} from "../sudoku/context/SudokuContext";
 import {GameMode, useDigitContext} from "./context/digitContext";
 
 
@@ -10,7 +10,7 @@ import {GameMode, useDigitContext} from "./context/digitContext";
 export const Game: React.FC<{}> = () => {
 
     let {
-        mode, valueMode, data, dataLength
+        mode,data, dataLength
     } = useDigitContext();
 
 

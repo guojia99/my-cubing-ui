@@ -70,6 +70,10 @@
     content: "\ea0d" !important;
 }
 
+.cubing-icon.cubing-icon-333mbf_unlimited:before {
+    content: "\ea4e" !important;
+}
+
 .cubing-icon.cubing-icon-222bf:before {
     content: "\ea1e" !important;
 }
@@ -382,51 +386,23 @@
     content: "\ea4e" !important;
 }
 
-.cubing-icon.cubing-icon-digit_very_easy:before {
+.cubing-icon.cubing-icon-digit:before {
     content: "\ea4e" !important;
 }
 
-.cubing-icon.cubing-icon-digit_easy:before {
+.cubing-icon.cubing-icon-digit_num:before {
     content: "\ea4e" !important;
 }
 
-.cubing-icon.cubing-icon-digit_moderate:before {
+.cubing-icon.cubing-icon-digit_uppercase:before {
     content: "\ea4e" !important;
 }
 
-.cubing-icon.cubing-icon-digit_advanced:before {
+.cubing-icon.cubing-icon-digit_num_uppercase:before {
     content: "\ea4e" !important;
 }
 
-.cubing-icon.cubing-icon-digit_hard:before {
-    content: "\ea4e" !important;
-}
-
-.cubing-icon.cubing-icon-digit_master:before {
-    content: "\ea4e" !important;
-}
-
-.cubing-icon.cubing-icon-digit_num_very_easy:before {
-    content: "\ea4e" !important;
-}
-
-.cubing-icon.cubing-icon-digit_num_easy:before {
-    content: "\ea4e" !important;
-}
-
-.cubing-icon.cubing-icon-digit_num_moderate:before {
-    content: "\ea4e" !important;
-}
-
-.cubing-icon.cubing-icon-digit_num_advanced:before {
-    content: "\ea4e" !important;
-}
-
-.cubing-icon.cubing-icon-digit_num_hard:before {
-    content: "\ea4e" !important;
-}
-
-.cubing-icon.cubing-icon-digit_num_master:before {
+.cubing-icon.cubing-icon-puke:before {
     content: "\ea4e" !important;
 }
 
@@ -488,5 +464,97 @@
 
 .cubing-icon.cubing-icon-o_cola:before {
     content: "\ea4e" !important;
+}
+
+.cubing-icon.cubing-icon-3bf:before {
+    content: "\ea0b" !important;
+}
+
+.cubing-icon.cubing-icon-3bf1:before {
+    content: "\ea0b" !important;
+}
+
+.cubing-icon.cubing-icon-3bf2:before {
+    content: "\ea0b" !important;
+}
+
+.cubing-icon.cubing-icon-3bf3:before {
+    content: "\ea0b" !important;
+}
+
+.cubing-icon.cubing-icon-3bf4:before {
+    content: "\ea0b" !important;
+}
+
+.cubing-icon.cubing-icon-3bf5:before {
+    content: "\ea0b" !important;
+}
+
+.cubing-icon.cubing-icon-3bf6:before {
+    content: "\ea0b" !important;
+}
+
+.cubing-icon.cubing-icon-3bf7:before {
+    content: "\ea0b" !important;
+}
+
+.cubing-icon.cubing-icon-4bf:before {
+    content: "\ea12" !important;
+}
+
+.cubing-icon.cubing-icon-4bf1:before {
+    content: "\ea12" !important;
+}
+
+.cubing-icon.cubing-icon-4bf2:before {
+    content: "\ea12" !important;
+}
+
+.cubing-icon.cubing-icon-4bf3:before {
+    content: "\ea12" !important;
+}
+
+.cubing-icon.cubing-icon-4bf4:before {
+    content: "\ea12" !important;
+}
+
+.cubing-icon.cubing-icon-5bf:before {
+    content: "\ea14" !important;
+}
+
+.cubing-icon.cubing-icon-5bf1:before {
+    content: "\ea14" !important;
+}
+
+.cubing-icon.cubing-icon-5bf2:before {
+    content: "\ea14" !important;
+}
+
+.cubing-icon.cubing-icon-5bf3:before {
+    content: "\ea14" !important;
+}
+
+.cubing-icon.cubing-icon-5bf4:before {
+    content: "\ea14" !important;
+}
+
+.cubing-icon.cubing-icon-3mbf:before {
+    content: "\ea0e" !important;
+}
+
+.cubing-icon.cubing-icon-3mbf1:before {
+    content: "\ea0e" !important;
+}
+
+.cubing-icon.cubing-icon-3mbf2:before {
+    content: "\ea0e" !important;
+}
+
+.cubing-icon.cubing-icon-3mbf3:before {
+    content: "\ea0e" !important;
+}
+
+.cubing-icon.cubing-icon-3mbf4:before {
+    content: "\ea0e" !important;
 }
 

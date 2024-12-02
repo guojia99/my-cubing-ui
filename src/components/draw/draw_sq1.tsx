@@ -2,14 +2,14 @@ import {Circle, DrawPolygon, hsq3, Rotate, Transform} from "./utils";
 import React, {JSX} from "react";
 
 
-type drawCache = {
-    ep: number[][];
-    cp: number[][];
-    cpR: number[][];
-    cpL: number[][];
-    eps: number[][];
-    cps: number[][];
-}
+// type drawCache = {
+//     ep: number[][];
+//     cp: number[][];
+//     cpR: number[][];
+//     cpL: number[][];
+//     eps: number[][];
+//     cps: number[][];
+// }
 
 function RegExpExecArrayToNumberArray(regexExecArray: RegExpExecArray | null): number[] {
     if (!regexExecArray) {
@@ -164,7 +164,7 @@ export class SQ1CubeDrawerUtils {
 
     drawWithCSP(ctx: CanvasRenderingContext2D, seq: string, width: number){
         this.colors = this.csp_color
-        const [posit, mid] = this.genPositAndMid(seq)
+        const [posit] = this.genPositAndMid(seq)
         for (let i = 0; i < 24; i++) {
             let trans = i < 12 ? [width, 2.7, 2.7] : [width, 2.7, 2.7 + 5.4]
             this.drawFace(ctx, posit, i, trans)

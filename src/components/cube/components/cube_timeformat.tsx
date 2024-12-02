@@ -21,7 +21,7 @@ export function FormatTime(result: number, pj: Cubes, isAvg: boolean) {
     }
 
     let attr = CubesAttributesMap.get(pj) as CubesAttributes
-    if (pj === Cubes.Cube333FM || attr.Segmentation == SegmentationType.XCubeFm) {
+    if (pj === Cubes.Cube333FM || attr.Segmentation === SegmentationType.XCubeFm) {
         if (isAvg) {
             return result.toFixed(2)
         }
